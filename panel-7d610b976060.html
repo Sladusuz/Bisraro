@@ -1554,7 +1554,8 @@ function ghPut(path, data, token){
       var body = {message: 'Admin paneldan yangilandi: ' + path,
                   content: b64(JSON.stringify(data, null, 2) + '\n'), branch: GH_BRANCH};
       if(cur && cur.sha) body.sha = cur.sha;
-      return fetch(url, {method: 'PUT', headers: h, body: JSON.stringify(body)});
+      return fetch(url, {method: 'PUT', headers: Object.assign({'Content-Type': 'application/json'}, h),
+                          body: JSON.stringify(body)});
     })
     .then(function(r){
       if(r.status === 401 || r.status === 403 || r.status === 404) throw new Error('auth');
