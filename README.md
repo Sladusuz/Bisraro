@@ -33,17 +33,16 @@ Barcha qiymatlar `:root` ichida — bitta joydan o'zgartiriladi.
 
 Shriftlar: sarlavhalar — **Fraunces**, matn — **Manrope** (Google Fonts orqali yuklanadi).
 
-## Mahsulot boshqaruvi — `admin.html`
+## Mahsulot boshqaruvi
 
-Katalogga mahsulot qo'shish uchun alohida sahifa: **`admin.html`** (footerdagi "Boshqaruv paneli" havolasi
-orqali ham ochiladi). Katalog aynan shu paneldagi baza bilan ishlaydi — saqlaganingiz zahoti
+Katalogga mahsulot qo'shish uchun alohida, yashirin manzildagi sahifa bor (manzil va kirish kodi
+faqat egasida saqlanadi, bu yerda yozilmaydi). Katalog aynan shu paneldagi baza bilan ishlaydi — saqlaganingiz zahoti
 `#/katalog` sahifasida ko'rinadi.
 
 Panelda ikkita bo'lim bor: **Mahsulotlar** va **Mukofot va sertifikatlar**.
 
-**Kirish kodi:** `bisraro2026` — `admin.html` ichidagi `var PIN = 'bisraro2026'` qatoridan o'zgartiriladi.
-Bu faqat oddiy to'siq; haqiqiy himoya uchun panelni server tomonida parol bilan yoping
-(masalan Apache `.htpasswd` yoki Netlify "password protection").
+Kirish kodi faylda ochiq holda emas, faqat SHA-256 xeshi (`PIN_HASH`) sifatida saqlanadi. Kodni
+almashtirish uchun yangi kodning SHA-256 xeshini hisoblab, `PIN_HASH` qiymatiga qo'ying.
 
 **Panelda bor:** qo'shish, tahrirlash, o'chirish, tartibni almashtirish (↑ ↓), qidiruv, turkum bo'yicha
 filtr, rasm yuklash (avtomatik siqiladi va WebP'ga o'tkaziladi), xususiyatlar jadvali,
