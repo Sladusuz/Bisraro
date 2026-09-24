@@ -45,6 +45,14 @@ Panelda ikkita bo'lim bor: **Mahsulotlar** va **Mukofot va sertifikatlar**.
 tepadagi **"Saytga chiqarish"** tugmasini bosing — panel `products.json` va `awards.json` fayllarini
 GitHub'ga yozadi va sayt 1–2 daqiqada yangilanadi. Buning uchun bir marta GitHub tokeni kiritiladi
 (fine-grained token, faqat shu repo, *Contents: Read and write*). Token faqat brauzerda saqlanadi.
+Paneldan yuklangan rasmlar chiqarishda `img/mahsulot/` va `img/mukofot/` papkalariga alohida fayl
+bo'lib yoziladi, `sitemap.xml` (rasmlar ro'yxati bilan) ham avtomatik yangilanadi.
+
+## Rasmlar
+
+Barcha rasmlar `img/` papkasida alohida WebP fayllar: `img/mahsulot/` (katalog), `img/mukofot/`,
+`img/kolleksiya/`, `img/bisraro-logo.webp`. `img/mahsulot/zaxira/` — `products.json` yuklanmasa
+ishlatiladigan standart rasmlar. Alohida fayllar Google Rasmlar'da indekslanadi.
 
 Kirish kodi faylda ochiq holda emas, faqat SHA-256 xeshi (`PIN_HASH`) sifatida saqlanadi. Kodni
 almashtirish uchun yangi kodning SHA-256 xeshini hisoblab, `PIN_HASH` qiymatiga qo'ying.

@@ -1032,6 +1032,35 @@ var CATS = {
   premium:  {tag:'BISRARO', art:'art-box',     label:'BISRARO premium'}
 };
 
+/* Saytdagi standart rasmlar (index.html dagi IMG bilan bir xil) */
+var IMG_PATHS = {
+  'logo': 'img/bisraro-logo.webp',
+  'medal': 'img/mukofot/prodexpo-2023-oltin-medal.webp',
+  'diplom': 'img/mukofot/prodexpo-2023-laureat-diplomi.webp',
+  'plaque': 'img/mukofot/f-istanbul-plaketa.webp',
+  'guvohnoma': 'img/mukofot/davlat-guvohnomasi.webp',
+  'c_konfet': 'img/kolleksiya/bisraro-konfetlar.webp',
+  'c_plitka': 'img/kolleksiya/bisraro-shokolad-plitka.webp',
+  'c_premium': 'img/kolleksiya/bisraro-premium-sovga.webp',
+  'p_bisraro-buni': 'img/mahsulot/zaxira/bisraro-buni.webp',
+  'p_bisraro': 'img/mahsulot/zaxira/bisraro.webp',
+  'p_dorro': 'img/mahsulot/zaxira/dorro.webp',
+  'p_duo-milk': 'img/mahsulot/zaxira/sladus-duo-milk.webp',
+  'p_fantos': 'img/mahsulot/zaxira/bunibi-fantos.webp',
+  'p_issimo': 'img/mahsulot/zaxira/sladus-issimo.webp',
+  'p_kvadro': 'img/mahsulot/zaxira/sladus-kvadro.webp',
+  'p_lactic': 'img/mahsulot/zaxira/sladus-lactic.webp',
+  'p_larus': 'img/mahsulot/zaxira/bunibi-larus.webp',
+  'p_liya': 'img/mahsulot/zaxira/bisraro-liya.webp',
+  'p_morning': 'img/mahsulot/zaxira/sladus-morning.webp',
+  'p_nitro': 'img/mahsulot/zaxira/nitro.webp',
+  'p_one-bite': 'img/mahsulot/zaxira/one-bite.webp',
+  'p_one-milk': 'img/mahsulot/zaxira/sladus-one-milk.webp',
+  'p_sladus-duo': 'img/mahsulot/zaxira/sladus-duo.webp',
+  'p_yaza': 'img/mahsulot/zaxira/yaza.webp'
+};
+function imgSrc(v){ return IMG_PATHS[v] || v || ''; }
+
 /* ---------- Saqlash ---------- */
 var storageOK = true;
 function read(){
@@ -1182,7 +1211,7 @@ function edit(id){
   $('#tag').value   = p.tag || '';
   $('#short').value = p.short || '';
   $('#desc').value  = p.desc || '';
-  if(p.img && p.img.indexOf('data:') === 0){ setImage(p.img, 'Saqlangan rasm'); }
+  if(p.img && (p.img.indexOf('data:') === 0 || p.img.indexOf('/') > -1)){ setImage(p.img, 'Saqlangan rasm'); }
   else { setImage('', p.img ? 'Saytdagi asl rasm saqlanadi' : ''); currentImg = p.img || ''; }
   renderSpecs(p.specs || []);
   $('#formTitle').textContent = 'Mahsulotni tahrirlash';
@@ -1246,7 +1275,7 @@ function render(){
   $('#count').textContent = products.length + ' mahsulot';
   $('#list').innerHTML = view.length ? view.map(function(p){
     var i = products.indexOf(p);
-    var vis = p.img ? '<img src="'+esc(p.img)+'" alt="">'
+    var vis = p.img ? '<img src="'+esc(imgSrc(p.img))+'" alt="">'
       : '<svg><use href="#'+esc(p.art || 'art-truffle')+'"/></svg>';
     return '<div class="item" data-id="'+esc(p.id)+'">'
       + '<span class="th">'+vis+'</span>'
@@ -1441,8 +1470,8 @@ $('#aForm').addEventListener('submit', function(e){
 
 function renderAwards(){
   $('#aList').innerHTML = awards.length ? awards.map(function(a, i){
-    var vis = a.img && a.img.indexOf('data:') === 0
-      ? '<img src="'+esc(a.img)+'" alt="">'
+    var vis = a.img
+      ? '<img src="'+esc(imgSrc(a.img))+'" alt="">'
       : '<svg><use href="#seal-mini"/></svg>';
     return '<div class="item" data-id="'+esc(a.id)+'">'
       + '<span class="th">'+vis+'</span>'
@@ -1516,16 +1545,44 @@ function markDirty(on){
 }
 function hasLocal(k){ try{ return localStorage.getItem(k) !== null; }catch(e){ return true; } }
 
+/* Brauzerdagi "data:" rasmlar serverdagi fayl bilan bir xil bo'lsa — fayl manziliga
+   almashtiramiz (aks holda keyingi chiqarishda rasmlar qayta yuklanib ketadi) */
+function bufToB64(buf){
+  var bin = '', bytes = new Uint8Array(buf), i, step = 0x8000;
+  for(i = 0; i < bytes.length; i += step) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + step));
+  return btoa(bin);
+}
+function relinkImages(key, serverArr, apply){
+  var local; try{ local = JSON.parse(localStorage.getItem(key) || 'null'); }catch(e){ return; }
+  if(!Array.isArray(local)) return;
+  var byId = {}; serverArr.forEach(function(x){ byId[x.id] = x; });
+  var jobs = local.map(function(it){
+    var srv = byId[it.id], m = /^data:image\/\w+;base64,(.*)$/.exec(it.img || '');
+    if(!m || !srv || !srv.img || srv.img.indexOf('data:') === 0) return Promise.resolve(false);
+    return fetch(srv.img, {cache: 'no-store'})
+      .then(function(r){ return r.ok ? r.arrayBuffer() : null; })
+      .then(function(buf){
+        if(buf && bufToB64(buf) === m[1]){ it.img = srv.img; return true; }
+        return false;
+      }).catch(function(){ return false; });
+  });
+  Promise.all(jobs).then(function(res){
+    if(res.indexOf(true) < 0) return;
+    try{ localStorage.setItem(key, JSON.stringify(local)); }catch(e){ return; }
+    apply(local);
+  });
+}
+
 /* Bu brauzerda hali ma'lumot bo'lmasa — saytdagi joriy ro'yxatni olamiz */
 function pullServer(){
   if(!window.fetch) return;
   [['products.json', STORE_KEY, function(a){ products = a; render(); }],
    ['awards.json',   AWARDS_KEY, function(a){ awards = a; renderAwards(); }]].forEach(function(x){
-    if(hasLocal(x[1])) return;
     fetch(x[0] + '?t=' + Date.now(), {cache:'no-store'})
       .then(function(r){ return r.ok ? r.json() : null; })
       .then(function(arr){
-        if(!Array.isArray(arr) || !arr.length || hasLocal(x[1])) return;
+        if(!Array.isArray(arr) || !arr.length) return;
+        if(hasLocal(x[1])){ relinkImages(x[1], arr, x[2]); return; }
         try{ localStorage.setItem(x[1], JSON.stringify(arr)); }catch(e){}
         x[2](arr);
       }).catch(function(){});
@@ -1542,7 +1599,7 @@ function ghToken(ask){
   return t;
 }
 function b64(str){ return btoa(unescape(encodeURIComponent(str))); }
-function ghPut(path, data, token){
+function ghPut(path, data, token, rawB64){
   var url = 'https://api.github.com/repos/' + GH_REPO + '/contents/' + path;
   var h = {'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json'};
   return fetch(url + '?ref=' + GH_BRANCH + '&t=' + Date.now(), {headers: h, cache: 'no-store'})
@@ -1552,7 +1609,7 @@ function ghPut(path, data, token){
     })
     .then(function(cur){
       var body = {message: 'Admin paneldan yangilandi: ' + path,
-                  content: b64(JSON.stringify(data, null, 2) + '\n'), branch: GH_BRANCH};
+                  content: rawB64 || b64(JSON.stringify(data, null, 2) + '\n'), branch: GH_BRANCH};
       if(cur && cur.sha) body.sha = cur.sha;
       return fetch(url, {method: 'PUT', headers: Object.assign({'Content-Type': 'application/json'}, h),
                           body: JSON.stringify(body)});
@@ -1599,12 +1656,61 @@ function ghDiagnose(token){
     .catch(function(){ return {msg: "GitHub bilan bog'lanib bo'lmadi. Internetni tekshiring."}; });
 }
 
+/* Paneldan yuklangan rasmlar (data:...) alohida fayl qilib GitHub'ga yoziladi —
+   shunda Google Rasmlar ularni indekslay oladi va sayt tezroq ochiladi */
+var SITE_URL = 'http://bisraro.uz/';
+function fileSlug(t){
+  var s = (t || '').toLowerCase().replace(/[\u2018\u2019'`]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return s || 'rasm';
+}
+function uploadImages(list, folder, token){
+  var chain = Promise.resolve(), changed = false;
+  list.forEach(function(it){
+    var m = /^data:image\/(\w+);base64,(.*)$/.exec(it.img || '');
+    if(!m) return;
+    chain = chain.then(function(){
+      var ext = m[1] === 'jpeg' ? 'jpg' : m[1];
+      var path = folder + fileSlug(it.title || it.id) + '-' + Date.now().toString(36) + '.' + ext;
+      return ghPut(path, null, token, m[2]).then(function(){ it.img = path; changed = true; });
+    });
+  });
+  return chain.then(function(){ return changed; });
+}
+function xmlEsc(t){ return String(t || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function buildSitemap(prods, awds){
+  var imgs = [], seen = {};
+  function add(src, title){
+    src = imgSrc(src);
+    if(!src || src.indexOf('data:') === 0 || seen[src]) return;
+    seen[src] = 1;
+    imgs.push('    <image:image>\n      <image:loc>' + xmlEsc(SITE_URL + src.replace(/^\/+/, '')) + '</image:loc>\n'
+      + '      <image:title>' + xmlEsc(title) + '</image:title>\n    </image:image>');
+  }
+  add('logo', 'BISRARO logotipi');
+  add('c_konfet', 'BISRARO konfetlari'); add('c_plitka', 'BISRARO shokolad plitkalari'); add('c_premium', "BISRARO premium sovg'a to'plamlari");
+  prods.forEach(function(p){ add(p.img, p.title + ' — BISRARO shokolad mahsuloti'); });
+  awds.forEach(function(a){ add(a.img, a.title + ' — BISRARO'); });
+  return '<?xml version="1.0" encoding="UTF-8"?>\n'
+    + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+    + '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
+    + '  <url>\n    <loc>' + SITE_URL + '</loc>\n'
+    + '    <lastmod>' + new Date().toISOString().slice(0, 10) + '</lastmod>\n'
+    + '    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n'
+    + imgs.join('\n') + (imgs.length ? '\n' : '') + '  </url>\n</urlset>\n';
+}
+
 $('#publishBtn').addEventListener('click', function(){
   var btn = this, token = ghToken(true);
   if(!token){ toast('Token kiritilmadi', true); return; }
   btn.disabled = true; btn.textContent = 'Chiqarilmoqda…'; ghLastError = '';
-  ghPut('products.json', read(), token)
-    .then(function(){ return ghPut('awards.json', readAwards(), token); })
+  var prods = read(), awds = readAwards();
+  uploadImages(prods, 'img/mahsulot/', token)
+    .then(function(ch){ if(ch){ products = prods; write(prods); render(); } })
+    .then(function(){ return uploadImages(awds, 'img/mukofot/', token); })
+    .then(function(ch){ if(ch){ awards = awds; writeAwards(awds); renderAwards(); } })
+    .then(function(){ return ghPut('products.json', prods, token); })
+    .then(function(){ return ghPut('awards.json', awds, token); })
+    .then(function(){ return ghPut('sitemap.xml', null, token, b64(buildSitemap(prods, awds))); })
     .then(function(){
       markDirty(false);
       toast('Saytga chiqarildi! 1–2 daqiqada hamma uchun yangilanadi.');
