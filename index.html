@@ -1910,7 +1910,9 @@ var DEFAULT_AWARDS = [
    title:'Davlat guvohnomasi', org:'Toshkent shahri, Yangihayot tumani DXM',
    desc:'«HEALTHY FOOD PRODUCTION» MCHJ — ro\u2019yxat raqami 005186-06, STIR 303 901 102.'}
 ];
+var SERVER_AWARDS = null;   /* serverdagi awards.json (admin paneldan chiqariladi) */
 function loadAwards(){
+  if(SERVER_AWARDS && SERVER_AWARDS.length) return SERVER_AWARDS.slice();
   try{
     var raw = localStorage.getItem(AWARDS_KEY);
     if(raw){ var a = JSON.parse(raw); if(Array.isArray(a) && a.length) return a; }
@@ -2603,14 +2605,14 @@ var DEFAULT_PRODUCTS = [
 var STORE_KEY = 'hfp_products_v1';
 var SERVER_PRODUCTS = null;   /* serverdagi products.json (agar mavjud bo'lsa) */
 
-/* Mahsulotlar localStorage'dan o'qiladi. Admin panelda o'zgartirilgan zahoti
-   shu yerdagi katalog ham yangilanadi (bitta domen — bitta baza). */
+/* Asosiy manba — serverdagi products.json (admin paneldagi "Saytga chiqarish"
+   tugmasi uni yangilaydi). U yuklanmasa localStorage, keyin standart ro'yxat. */
 function loadProducts(){
+  if(SERVER_PRODUCTS && SERVER_PRODUCTS.length) return SERVER_PRODUCTS.slice();
   try{
     var raw = localStorage.getItem(STORE_KEY);
     if(raw){ var arr = JSON.parse(raw); if(Array.isArray(arr) && arr.length) return arr; }
   }catch(e){}
-  if(SERVER_PRODUCTS && SERVER_PRODUCTS.length) return SERVER_PRODUCTS;
   return DEFAULT_PRODUCTS.slice();
 }
 
@@ -2618,9 +2620,13 @@ function loadProducts(){
    Admin panelda "JSON yuklab olish" tugmasi orqali olingan faylni sayt papkasiga tashlash kifoya. */
 function syncFromServer(){
   if(!window.fetch) return;
-  fetch('products.json', {cache:'no-store'})
+  fetch('products.json?t=' + Date.now(), {cache:'no-store'})
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(arr){ if(Array.isArray(arr) && arr.length){ SERVER_PRODUCTS = arr; renderProducts(); } })
+    .catch(function(){});
+  fetch('awards.json?t=' + Date.now(), {cache:'no-store'})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(arr){ if(Array.isArray(arr) && arr.length){ SERVER_AWARDS = arr; renderAwards(); } })
     .catch(function(){});
 }
 

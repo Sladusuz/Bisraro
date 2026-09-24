@@ -41,6 +41,11 @@ faqat egasida saqlanadi, bu yerda yozilmaydi). Katalog aynan shu paneldagi baza 
 
 Panelda ikkita bo'lim bor: **Mahsulotlar** va **Mukofot va sertifikatlar**.
 
+**Saytga chiqarish:** panel o'zgarishlarni avval shu brauzerga saqlaydi. Hamma ko'rishi uchun
+tepadagi **"Saytga chiqarish"** tugmasini bosing — panel `products.json` va `awards.json` fayllarini
+GitHub'ga yozadi va sayt 1–2 daqiqada yangilanadi. Buning uchun bir marta GitHub tokeni kiritiladi
+(fine-grained token, faqat shu repo, *Contents: Read and write*). Token faqat brauzerda saqlanadi.
+
 Kirish kodi faylda ochiq holda emas, faqat SHA-256 xeshi (`PIN_HASH`) sifatida saqlanadi. Kodni
 almashtirish uchun yangi kodning SHA-256 xeshini hisoblab, `PIN_HASH` qiymatiga qo'ying.
 
