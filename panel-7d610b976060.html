@@ -1558,10 +1558,15 @@ function ghPut(path, data, token){
                           body: JSON.stringify(body)});
     })
     .then(function(r){
-      if(r.status === 401 || r.status === 403 || r.status === 404) throw new Error('auth');
-      if(!r.ok) throw new Error('HTTP ' + r.status);
+      if(r.ok) return;
+      return r.json().catch(function(){ return {}; }).then(function(j){
+        ghLastError = path + ': ' + r.status + ' — ' + ((j && j.message) || r.statusText || '');
+        if(r.status === 401 || r.status === 403 || r.status === 404) throw new Error('auth');
+        throw new Error('HTTP ' + r.status + ((j && j.message) ? ': ' + j.message : ''));
+      });
     });
 }
+var ghLastError = '';
 
 /* Token nima uchun ishlamayotganini aniqlab, tushunarli sabab qaytaradi */
 function ghDiagnose(token){
@@ -1597,7 +1602,7 @@ function ghDiagnose(token){
 $('#publishBtn').addEventListener('click', function(){
   var btn = this, token = ghToken(true);
   if(!token){ toast('Token kiritilmadi', true); return; }
-  btn.disabled = true; btn.textContent = 'Chiqarilmoqda…';
+  btn.disabled = true; btn.textContent = 'Chiqarilmoqda…'; ghLastError = '';
   ghPut('products.json', read(), token)
     .then(function(){ return ghPut('awards.json', readAwards(), token); })
     .then(function(){
@@ -1609,7 +1614,8 @@ $('#publishBtn').addEventListener('click', function(){
         try{ localStorage.removeItem(GH_TOKEN_KEY); }catch(e){}
         return ghDiagnose(token).then(function(d){
           toast("Saytga chiqarilmadi — token muammosi", true);
-          alert('Saytga chiqarilmadi.\n\nSabab: ' + d.msg + '\n\nTokenni tuzatib, "Saytga chiqarish" ni qayta bosing.');
+          alert('Saytga chiqarilmadi.\n\nSabab: ' + d.msg
+            + (ghLastError ? '\n\nGitHub javobi: ' + ghLastError : '') + '\n\nTokenni tuzatib, "Saytga chiqarish" ni qayta bosing.');
         });
       } else {
         toast("Chiqarib bo'lmadi (" + err.message + "). Internetni tekshiring.", true);
