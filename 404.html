@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<title>Sahifa topilmadi — BISRARO</title>
+<script>
+/* Masalan /katalog/ yoki /Katalog kabi manzillarni to'g'ri sahifaga yo'naltiradi */
+(function(){
+  var pages = ['biz-haqimizda', 'katalog', 'yutuqlarimiz', 'kontakt'];
+  var first = location.pathname.toLowerCase().replace(/\.html$/, '').split('/').filter(Boolean)[0] || '';
+  location.replace(pages.indexOf(first) > -1 ? '/' + first : '/');
+})();
+</script>
+</head>
+<body style="background:#1A120B;color:#F5E9DA;font-family:sans-serif;text-align:center;padding-top:20vh">
+<p>Sahifa topilmadi. <a href="/" style="color:#C9A24B">Bosh sahifaga o'tish</a></p>
+</body>
+</html>

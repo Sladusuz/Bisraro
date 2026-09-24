@@ -22,6 +22,12 @@
       <image:loc>http://bisraro.uz/img/kolleksiya/bisraro-premium-sovga.webp</image:loc>
       <image:title>BISRARO premium sovg'a to'plamlari</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>http://bisraro.uz/katalog</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
     <image:image>
       <image:loc>http://bisraro.uz/img/mahsulot/nitro.webp</image:loc>
       <image:title>NITRO — BISRARO shokolad mahsuloti</image:title>
@@ -86,6 +92,12 @@
       <image:loc>http://bisraro.uz/img/mahsulot/bisraro-liya.webp</image:loc>
       <image:title>BISRARO Liya — BISRARO shokolad mahsuloti</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>http://bisraro.uz/yutuqlarimiz</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
     <image:image>
       <image:loc>http://bisraro.uz/img/mukofot/davlat-guvohnomasi.webp</image:loc>
       <image:title>Davlat guvohnomasi — BISRARO</image:title>
@@ -102,5 +114,17 @@
       <image:loc>http://bisraro.uz/img/mukofot/f-istanbul-plaketa.webp</image:loc>
       <image:title>F İstanbul ko’rgazmasi — BISRARO</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>http://bisraro.uz/biz-haqimizda</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>http://bisraro.uz/kontakt</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

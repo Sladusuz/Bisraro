@@ -260,3 +260,10 @@ sayt yengilroq yuklanadi va rasmlar brauzerda keshlanadi.
 
 Chrome, Edge, Safari, Firefox (oxirgi 2 versiya). Silliq scroll va maxsus kursor faqat sichqonchali
 qurilmalarda ishlaydi; mobilda tizimning o'z scrolli qoladi.
+
+## Sahifa manzillari
+
+Bo'limlar oddiy manzillarda ochiladi: `/katalog`, `/biz-haqimizda`, `/yutuqlarimiz`, `/kontakt`
+(eski `#/katalog` havolalari avtomatik yangisiga o'tadi). Har bir bo'lim uchun `katalog.html` va h.k.
+fayllar `index.html` dan **`python3 build_pages.py`** bilan yaratiladi — `index.html` o'zgarsa,
+shu buyruqni qayta ishga tushiring. `404.html` noto'g'ri manzillarni to'g'ri sahifaga yo'naltiradi.

@@ -194,7 +194,7 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
       <span><b>BISRARO</b><small>MAHSULOT BOSHQARUVI</small></span>
     </span>
     <span class="count" id="count">0 mahsulot</span>
-    <a class="btn ghost sm" href="index.html#/katalog" target="_blank" rel="noopener">Katalogni ochish</a>
+    <a class="btn ghost sm" href="/katalog" target="_blank" rel="noopener">Katalogni ochish</a>
     <button class="btn sm" id="publishBtn" title="O'zgarishlarni hamma uchun saytga chiqarish">Saytga chiqarish</button>
     <button class="btn ghost sm" id="tokenBtn" title="GitHub tokenini kiritish yoki almashtirish">Token</button>
     <button class="btn ghost sm" id="logout">Chiqish</button>
@@ -1678,25 +1678,28 @@ function uploadImages(list, folder, token){
 }
 function xmlEsc(t){ return String(t || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 function buildSitemap(prods, awds){
-  var imgs = [], seen = {};
-  function add(src, title){
+  var seen = {}, today = new Date().toISOString().slice(0, 10);
+  function img(src, title){
     src = imgSrc(src);
-    if(!src || src.indexOf('data:') === 0 || seen[src]) return;
+    if(!src || src.indexOf('data:') === 0 || seen[src]) return '';
     seen[src] = 1;
-    imgs.push('    <image:image>\n      <image:loc>' + xmlEsc(SITE_URL + src.replace(/^\/+/, '')) + '</image:loc>\n'
-      + '      <image:title>' + xmlEsc(title) + '</image:title>\n    </image:image>');
+    return '    <image:image>\n      <image:loc>' + xmlEsc(SITE_URL + src.replace(/^\/+/, '')) + '</image:loc>\n'
+      + '      <image:title>' + xmlEsc(title) + '</image:title>\n    </image:image>\n';
   }
-  add('logo', 'BISRARO logotipi');
-  add('c_konfet', 'BISRARO konfetlari'); add('c_plitka', 'BISRARO shokolad plitkalari'); add('c_premium', "BISRARO premium sovg'a to'plamlari");
-  prods.forEach(function(p){ add(p.img, p.title + ' — BISRARO shokolad mahsuloti'); });
-  awds.forEach(function(a){ add(a.img, a.title + ' — BISRARO'); });
+  function page(path, prio, images){
+    return '  <url>\n    <loc>' + SITE_URL + path + '</loc>\n    <lastmod>' + today + '</lastmod>\n'
+      + '    <changefreq>weekly</changefreq>\n    <priority>' + prio + '</priority>\n' + images + '  </url>\n';
+  }
+  var home = img('logo', 'BISRARO logotipi') + img('c_konfet', 'BISRARO konfetlari')
+    + img('c_plitka', 'BISRARO shokolad plitkalari') + img('c_premium', "BISRARO premium sovg'a to'plamlari");
+  var cat = prods.map(function(p){ return img(p.img, p.title + ' — BISRARO shokolad mahsuloti'); }).join('');
+  var aw  = awds.map(function(a){ return img(a.img, a.title + ' — BISRARO'); }).join('');
   return '<?xml version="1.0" encoding="UTF-8"?>\n'
     + '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
     + '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
-    + '  <url>\n    <loc>' + SITE_URL + '</loc>\n'
-    + '    <lastmod>' + new Date().toISOString().slice(0, 10) + '</lastmod>\n'
-    + '    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n'
-    + imgs.join('\n') + (imgs.length ? '\n' : '') + '  </url>\n</urlset>\n';
+    + page('', '1.0', home) + page('katalog', '0.9', cat) + page('yutuqlarimiz', '0.7', aw)
+    + page('biz-haqimizda', '0.7', '') + page('kontakt', '0.8', '')
+    + '</urlset>\n';
 }
 
 $('#publishBtn').addEventListener('click', function(){
