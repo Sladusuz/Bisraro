@@ -271,7 +271,28 @@ shu buyruqni qayta ishga tushiring. `404.html` noto'g'ri manzillarni to'g'ri sah
 ## Murojaatlar (saytdagi formalar)
 
 Bosh sahifa va Kontakt formalaridan kelgan murojaatlar ikki joyga ketadi: pochtaga (FormSubmit,
-`MAIL_TO`) va Google jadvalga — admin panelning **"Murojaatlar"** bo'limida ko'rinadi
-(yangi/bajarildi, o'chirish). Google jadval tomoni — `google-apps-script.gs` (o'rnatish yo'riqnomasi
-fayl boshida va panelda). Script manzili `site-config.js` da saqlanadi, panel uni o'zi yangilaydi.
-Panel kirish kodi almashtirilsa, `google-apps-script.gs` dagi `KEY_HASH` ni ham yangilang.
+`MAIL_TO`) va admin panelning **"Murojaatlar"** bo'limiga (yangi/bajarildi, o'chirish).
+Hech qanday tashqi xizmatda ro'yxatdan o'tish kerak emas.
+
+**Qanday ishlaydi:**
+
+1. Forma yuborilganda murojaat tashrifchi brauzerida **tweetnacl** (`js/nacl-fast.min.js`,
+   `nacl.box`) bilan panelning ochiq kaliti orqali shifrlanadi va **ntfy.sh** dagi yashirin kanalga
+   yuboriladi. Ochiq kalit va kanal nomi `site-config.js` da turadi.
+2. Admin panel kanalni o'qiydi, murojaatni maxfiy kalit bilan ochadi va `murojaatlar.json` ga
+   GitHub API orqali saqlaydi. Fayl ham shifrlangan (`nacl.secretbox`), repoda ochiq ma'lumot yo'q.
+3. Maxfiy kalit faylga yozilmaydi: u panel kirish kodidan (tasodifiy tuz + SHA-512 × 200 000)
+   hosil qilinadi va faqat panel ochiq turgan sessiyada vaqtincha eslab qolinadi.
+
+**Birinchi marta yoqish:** panel → "Murojaatlar" → **"Murojaatlarni yoqish"** (GitHub tokeni kerak).
+Panel kanal va kalit yaratib, `site-config.js` va `murojaatlar.json` ni yozadi; 1–2 daqiqada formalar
+murojaatlarni yubora boshlaydi.
+
+**Muhim:**
+
+- ntfy.sh xabarlarni **12 soat** saqlaydi. Panelni kuniga kamida bir marta oching (ochiq tursa,
+  har 2 daqiqada o'zi tekshiradi). Shu sababli pochta nusxasi (FormSubmit) ham qoldirilgan.
+- **Kirish kodini almashtirsangiz** (`PIN_HASH`), kalit ham o'zgaradi: eski murojaatlar ochilmay
+  qoladi. Kodni almashtirgandan keyin "Sozlash" → "Qayta ulash" ni bosing.
+- Himoya kirish kodining kuchiga bog'liq — uzun, taxmin qilib bo'lmaydigan kod tanlang.
+- Xabar 4 KB dan oshmasligi uchun juda uzun matn qisqartiriladi (≈2500 belgidan keyin).

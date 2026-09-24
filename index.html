@@ -1602,6 +1602,7 @@ Biz zamonaviy ishlab chiqarish texnologiyalari va sifatli xomashyo asosida shoko
   </div>
 </div>
 
+<script src="js/nacl-fast.min.js"></script>
 <script src="site-config.js"></script>
 <script>
 /* ============================================================
@@ -2815,13 +2816,27 @@ document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeO
 
 /* ---------- 13. Formalar ---------- */
 var MAIL_TO = 'chempme@gmail.com';   /* <-- xabarlar shu pochtaga tushadi */
-var FORMS_URL = (window.BISRARO_CONFIG || {}).formsUrl || '';   /* admin panel murojaatlari (site-config.js) */
+var LEADS = (window.BISRARO_CONFIG || {}).leads || null;   /* admin panel murojaatlari (site-config.js) */
+function b64(u8){ var s = '', i; for(i = 0; i < u8.length; i++) s += String.fromCharCode(u8[i]); return btoa(s); }
+function unb64(str){ var s = atob(str), u = new Uint8Array(s.length), i; for(i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u; }
+/* Murojaat panelning ochiq kaliti bilan shifrlanadi (nacl.box, har safar yangi vaqtinchalik kalit).
+   Ochish uchun maxfiy kalit faqat admin panelda bor. ntfy.sh xabari 4 KB dan oshmasligi kerak. */
+function sealLead(lead){
+  var pk = unb64(LEADS.publicKey), msg = lead.message, out;
+  for(;;){
+    var eph = nacl.box.keyPair(), nonce = nacl.randomBytes(24);
+    var plain = new TextEncoder().encode(JSON.stringify(Object.assign({}, lead, {message: msg})));
+    out = 'b1.' + b64(eph.publicKey) + '.' + b64(nonce) + '.' + b64(nacl.box(plain, nonce, pk, eph.secretKey));
+    if(out.length <= 3900 || !msg) return out;
+    msg = msg.slice(0, Math.floor(msg.length * 0.85)) + '…';
+  }
+}
 function sendToPanel(lead){
-  if(!FORMS_URL) return Promise.reject('no-url');
-  /* text/plain — Google Apps Script CORS so'rovisiz qabul qiladi */
-  return fetch(FORMS_URL, {method:'POST', body: JSON.stringify(lead)})
-    .then(function(r){ return r.json(); })
-    .then(function(j){ return j && j.ok ? j : Promise.reject(j); });
+  if(!LEADS || !LEADS.topic || !LEADS.publicKey || !window.nacl || !window.TextEncoder) return Promise.reject('no-config');
+  var body; try{ body = sealLead(lead); }catch(e){ return Promise.reject(e); }
+  /* text/plain — ntfy.sh CORS so'rovisiz qabul qiladi, ro'yxatdan o'tish kerak emas */
+  return fetch('https://ntfy.sh/' + encodeURIComponent(LEADS.topic), {method:'POST', body: body})
+    .then(function(r){ return r.ok ? r : Promise.reject(r.status); });
 }
 function anySuccess(list){
   return new Promise(function(res, rej){
@@ -2864,7 +2879,7 @@ function validate(form){
     var label = btn.textContent;
     btn.textContent = 'Yuborilmoqda…'; btn.disabled = true;
 
-    /* 1) Admin panelga (Google jadval orqali)  2) pochtaga (FormSubmit).
+    /* 1) Admin panelga (shifrlangan, ntfy.sh orqali)  2) pochtaga (FormSubmit).
        Ikkalasidan biri muvaffaqiyatli bo'lsa — xabar yuborilgan hisoblanadi. */
     var toPanel = sendToPanel(lead);
     var toMail = fetch('https://formsubmit.co/ajax/' + MAIL_TO, {
