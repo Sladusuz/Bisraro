@@ -1843,7 +1843,7 @@ function loadLeads(silent){
     .then(function(j){
       if(!j || !j.ok){
         if(j && j.error === 'auth') throw new Error('Google Script\u2019dagi kod bu panel kodiga mos emas. Kodni qaytadan nusxalab joylang.');
-        throw new Error('Javob noto\u2019g\u2019ri');
+        throw new Error(j && j.error === 'script' ? 'Google Script xatosi: ' + (j.message || '') : 'Javob noto\u2019g\u2019ri');
       }
       leads = j.items || []; leadsLoaded = true; renderLeads();
     })
@@ -1913,6 +1913,7 @@ $('#connectForms').addEventListener('click', function(){
   fetch(url + (url.indexOf('?') > -1 ? '&' : '?') + 'action=list&key=' + encodeURIComponent(key))
     .then(function(r){ return r.json(); })
     .then(function(j){
+      if(j && j.error === 'script') throw new Error('script:' + (j.message || ''));
       if(!j || !j.ok) throw new Error(j && j.error === 'auth' ? 'auth' : 'bad');
       try{ localStorage.setItem(FORMS_URL_KEY, url); }catch(e){}
       var token = ghToken(true);
@@ -1931,13 +1932,19 @@ $('#connectForms').addEventListener('click', function(){
     })
     .catch(function(err){
       var m = err && err.message;
-      if(m === 'auth') alert('Google Script ishlayapti, lekin undagi kod eski yoki boshqa. "Kodni nusxalash" bilan qaytadan joylab, yangi Deploy qiling.');
+      if(m && m.indexOf('script:') === 0) alert('Google Script ishga tushdi, lekin ichida xato bor:\n\n' + m.slice(7)
+        + '\n\n"Kodni nusxalash" bilan eng yangi kodni qayta joylang va yangi Deploy qiling.');
+      else if(m === 'auth') alert('Google Script ishlayapti, lekin undagi kod eski yoki boshqa. "Kodni nusxalash" bilan qaytadan joylab, yangi Deploy qiling.');
       else if(m === 'token') toast('GitHub token kiritilmadi', true);
       else if(m === 'ghauth'){
         try{ localStorage.removeItem(GH_TOKEN_KEY); }catch(e){}
         alert("Google Script ishlayapti, lekin saytga yozib bo'lmadi: GitHub token noto'g'ri. \"Token\" tugmasi bilan qayta kiriting.");
       }
-      else if(m === 'bad' || err instanceof TypeError) alert("Bu manzildan javob kelmadi. Tekshiring:\n\n\u2022 URL oxiri /exec bilan tugaydimi\n\u2022 Deploy'da \"Who has access: Anyone\" tanlanganmi");
+      else if(m === 'bad' || err instanceof TypeError) alert("Bu manzildan javob kelmadi. Tekshiring:\n\n"
+        + "\u2022 Manzil /exec bilan tugashi kerak (/dev yoki /edit emas)\n"
+        + "\u2022 Deploy'da \"Who has access: Anyone\" tanlangan bo'lishi kerak\n"
+        + "\u2022 Kod o'zgargan bo'lsa: Deploy \u2192 New deployment qilib, YANGI manzilni qo'ying\n"
+        + "\u2022 Manzilni brauzerda alohida ochib ko'ring: {\"ok\":true,...} chiqishi kerak");
       else toast("Ulab bo'lmadi: " + (m || 'xato'), true);
     })
     .then(function(){ btn.disabled = false; btn.textContent = 'Saytga ulash'; });

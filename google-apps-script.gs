@@ -20,8 +20,20 @@ var NOTIFY_EMAIL = false;
 var HEADERS = ['id', 'Sana', 'Ism', 'Telefon', 'Email', 'Kompaniya', 'Xabar', 'Forma', 'Sahifa', 'Holat'];
 var LIMITS  = {name: 120, phone: 40, email: 120, company: 160, message: 3000, form: 20, page: 60};
 
-function sheet_() {
+// Jadval: skript jadval ichidan ochilgan bo'lsa — o'sha jadval; aks holda
+// (script.google.com'da alohida yaratilgan bo'lsa) "BISRARO murojaatlar" jadvali avtomatik yaratiladi.
+function spreadsheet_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (ss) return ss;
+  var props = PropertiesService.getScriptProperties(), id = props.getProperty('SHEET_ID');
+  if (id) { try { return SpreadsheetApp.openById(id); } catch (err) {} }
+  ss = SpreadsheetApp.create('BISRARO murojaatlar');
+  props.setProperty('SHEET_ID', ss.getId());
+  return ss;
+}
+
+function sheet_() {
+  var ss = spreadsheet_();
   var sh = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
   if (sh.getLastRow() === 0) {
     sh.appendRow(HEADERS);
@@ -69,6 +81,10 @@ function findRow_(sh, id) {
 
 // Admin panel: murojaatlar ro'yxati
 function doGet(e) {
+  try { return handleGet_(e); }
+  catch (err) { return json_({ok: false, error: 'script', message: String(err && err.message || err)}); }
+}
+function handleGet_(e) {
   var p = (e && e.parameter) || {};
   if (p.action === 'list') {
     if (!authorized_(p.key)) return json_({ok: false, error: 'auth'});
@@ -79,6 +95,10 @@ function doGet(e) {
 
 // Sayt: yangi murojaat · Admin panel: holatni o'zgartirish / o'chirish
 function doPost(e) {
+  try { return handlePost_(e); }
+  catch (err) { return json_({ok: false, error: 'script', message: String(err && err.message || err)}); }
+}
+function handlePost_(e) {
   var d = {};
   try { d = JSON.parse((e && e.postData && e.postData.contents) || '{}'); } catch (err) { d = (e && e.parameter) || {}; }
 
