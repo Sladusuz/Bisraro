@@ -1,57 +1,17 @@
 [
   {
-    "id": "nitro",
-    "cat": "plitka",
-    "art": "art-bar",
-    "title": "NITRO",
-    "tag": "NITRO",
-    "short": "Sutli ta'mli botonchalar — ProdExpo 2023 oltin medali",
-    "desc": "ProdExpo 2023 xalqaro ko'rgazmasida «Eng yaxshi mahsulot — 2023» tanlovining oltin medaliga sazovor bo'lgan liniya. Bolalar uchun avtomobil shaklidagi shokolad figuralari bilan.",
-    "img": "img/mahsulot/nitro.webp",
+    "id": "liya",
+    "cat": "premium",
+    "art": "art-box",
+    "title": "BISRARO Liya",
+    "tag": "BISRARO",
+    "short": "Gulli naqshli premium qadoq, shokolad to'ldirmasi",
+    "desc": "Gulli naqshli uch rangdagi qadoq va shokolad to'ldirma. Bayram sovg'alari uchun eng ko'p tanlanadigan mahsulot.",
+    "img": "img/mahsulot/bisraro-liya.webp",
     "specs": [
       [
         "Katalog ID",
-        "1.17"
-      ],
-      [
-        "Netto vazn",
-        "1 kg"
-      ],
-      [
-        "Qutida, dona",
-        "125±3%"
-      ],
-      [
-        "Quti o'lchami",
-        "300x170x70"
-      ],
-      [
-        "Quti hajmi",
-        "0.004 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806310000"
-      ]
-    ]
-  },
-  {
-    "id": "sladus-duo",
-    "cat": "plitka",
-    "art": "art-bar",
-    "title": "Sladus DUO",
-    "tag": "Sladus",
-    "short": "Kakao ta'mli to'ldirmali ikki qatlamli botonchik",
-    "desc": "Ikki qatlamli botonchik — kakao ta'mli to'ldirma bilan. Sovg'abop quti variantida ham chiqariladi.",
-    "img": "img/mahsulot/sladus-duo.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.19"
+        "1.22"
       ],
       [
         "Netto vazn",
@@ -59,447 +19,7 @@
       ],
       [
         "Qutida, dona",
-        "133±2%"
-      ],
-      [
-        "Quti o'lchami",
-        "290x195x120"
-      ],
-      [
-        "Quti hajmi",
-        "0.0096 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806310000"
-      ]
-    ]
-  },
-  {
-    "id": "duo-milk",
-    "cat": "plitka",
-    "art": "art-bar",
-    "title": "Sladus Duo Milk",
-    "tag": "Sladus",
-    "short": "Sutli to'ldirmali botonchik, tabiiy tarkib",
-    "desc": "Sutli to'ldirma va yengil vafli qatlam. «Natural ingredients» liniyasi — sut va kakao asosida.",
-    "img": "img/mahsulot/sladus-duo-milk.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.19-2"
-      ],
-      [
-        "Netto vazn",
-        "2 kg"
-      ],
-      [
-        "Qutida, dona",
-        "250±3%"
-      ],
-      [
-        "Quti o'lchami",
-        "250x190x110"
-      ],
-      [
-        "Quti hajmi",
-        "0.005 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806310000"
-      ]
-    ]
-  },
-  {
-    "id": "one-milk",
-    "cat": "plitka",
-    "art": "art-bar",
-    "title": "Sladus One Milk",
-    "tag": "Sladus",
-    "short": "Maxi milk — sut to'ldirmasi ko'p bo'lgan botonchik",
-    "desc": "Sut to'ldirmasi oshirilgan botonchik. To'rt xil qadoq dizaynida chiqariladi.",
-    "img": "img/mahsulot/sladus-one-milk.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.10"
-      ],
-      [
-        "Netto vazn",
-        "1 kg"
-      ],
-      [
-        "Qutida, dona",
-        "125±3%"
-      ],
-      [
-        "Quti o'lchami",
-        "300x170x70"
-      ],
-      [
-        "Quti hajmi",
-        "0.004 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806310000"
-      ]
-    ]
-  },
-  {
-    "id": "kvadro",
-    "cat": "plitka",
-    "art": "art-bar",
-    "title": "Sladus KVADRO",
-    "tag": "Sladus",
-    "short": "To'rt bo'lakli sutli shokolad plitkasi",
-    "desc": "Sutli shokolad plitkasi, to'rt kvadrat bo'lakka bo'lingan. Chakana savdo va sovg'a to'plamlari uchun.",
-    "img": "img/mahsulot/sladus-kvadro.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.20"
-      ],
-      [
-        "Netto vazn",
-        "2 kg"
-      ],
-      [
-        "Qutida, dona",
-        "250±3%"
-      ],
-      [
-        "Quti o'lchami",
-        "250x190x110"
-      ],
-      [
-        "Quti hajmi",
-        "0.005 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806310000"
-      ]
-    ]
-  },
-  {
-    "id": "lactic",
-    "cat": "plitka",
-    "art": "art-bar",
-    "title": "Sladus LACTIC",
-    "tag": "Sladus",
-    "short": "Sutli to'ldirmali konfet-botonchik, +milk maximilk",
-    "desc": "Sut to'ldirmasi ko'paytirilgan liniya. Yumshoq korpus va sutli shokolad qobiq.",
-    "img": "img/mahsulot/sladus-lactic.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.14"
-      ],
-      [
-        "Netto vazn",
-        "2 kg"
-      ],
-      [
-        "Qutida, dona",
-        "250±1%"
-      ],
-      [
-        "Quti o'lchami",
-        "310x220x100"
-      ],
-      [
-        "Quti hajmi",
-        "0.0096 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806901900"
-      ]
-    ]
-  },
-  {
-    "id": "larus",
-    "cat": "konfet",
-    "art": "art-truffle",
-    "title": "Bunibi Larus",
-    "tag": "Bunibi",
-    "short": "Kakao ta'mli to'ldirmali konfet, besh xil qadoqda",
-    "desc": "Kakao ta'mli to'ldirma bilan. Besh xil rangdagi qadoq — chakana savdo javonida yaqqol ko'rinadi.",
-    "img": "img/mahsulot/bunibi-larus.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.6"
-      ],
-      [
-        "Netto vazn",
-        "2 kg"
-      ],
-      [
-        "Qutida, dona",
-        "250±3%"
-      ],
-      [
-        "Quti o'lchami",
-        "250x190x110"
-      ],
-      [
-        "Quti hajmi",
-        "0.005 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806310000"
-      ]
-    ]
-  },
-  {
-    "id": "dorro",
-    "cat": "konfet",
-    "art": "art-truffle",
-    "title": "Dorro",
-    "tag": "Bunibi",
-    "short": "Dollar dizaynidagi qadoq, kakao to'ldirmasi",
-    "desc": "Esda qoladigan dollar naqshli qadoq va kakao ta'mli to'ldirma. Bayram savatlari uchun ko'p buyurtma qilinadi.",
-    "img": "img/mahsulot/dorro.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.7"
-      ],
-      [
-        "Netto vazn",
-        "2 kg"
-      ],
-      [
-        "Qutida, dona",
-        "250±3%"
-      ],
-      [
-        "Quti o'lchami",
-        "250x190x110"
-      ],
-      [
-        "Quti hajmi",
-        "0.005 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806310000"
-      ]
-    ]
-  },
-  {
-    "id": "fantos",
-    "cat": "konfet",
-    "art": "art-truffle",
-    "title": "Bunibi Fantos",
-    "tag": "Bunibi",
-    "short": "Kakao ta'mli to'ldirmali konfet",
-    "desc": "Klassik kakao ta'mli to'ldirma. Ikki rangdagi qadoq varianti mavjud.",
-    "img": "img/mahsulot/bunibi-fantos.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.09"
-      ],
-      [
-        "Netto vazn",
-        "2 kg"
-      ],
-      [
-        "Qutida, dona",
-        "250±3%"
-      ],
-      [
-        "Quti o'lchami",
-        "250x190x110"
-      ],
-      [
-        "Quti hajmi",
-        "0.005 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806310000"
-      ]
-    ]
-  },
-  {
-    "id": "issimo",
-    "cat": "konfet",
-    "art": "art-truffle",
-    "title": "Sladus Issimo",
-    "tag": "Sladus",
-    "short": "Kakaoli konfet — kichik format",
-    "desc": "Kakao ta'mli to'ldirmali konfet. 1 kg lik qadoqda, kichik formatli quti bilan.",
-    "img": "img/mahsulot/sladus-issimo.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.15"
-      ],
-      [
-        "Netto vazn",
-        "1 kg"
-      ],
-      [
-        "Qutida, dona",
-        "125±3%"
-      ],
-      [
-        "Quti o'lchami",
-        "300x170x70"
-      ],
-      [
-        "Quti hajmi",
-        "0.004 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806310000"
-      ]
-    ]
-  },
-  {
-    "id": "morning",
-    "cat": "konfet",
-    "art": "art-truffle",
-    "title": "Sladus Morning",
-    "tag": "Sladus",
-    "short": "Oltin rangli qadoq, kakao to'ldirmasi",
-    "desc": "Oltin rangli folga qadoq va kakao to'ldirmasi. Sovg'a to'plamlari uchun mos.",
-    "img": "img/mahsulot/sladus-morning.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.21"
-      ],
-      [
-        "Netto vazn",
-        "2 kg"
-      ],
-      [
-        "Qutida, dona",
-        "210±3%"
-      ],
-      [
-        "Quti o'lchami",
-        "250x190x110"
-      ],
-      [
-        "Quti hajmi",
-        "0.005 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806310000"
-      ]
-    ]
-  },
-  {
-    "id": "yaza",
-    "cat": "konfet",
-    "art": "art-truffle",
-    "title": "YaZa",
-    "tag": "Bunibi",
-    "short": "Bite size — bir tishlamli kichik konfet",
-    "desc": "«Bite size, big taste» — bir tishlamda yeyiladigan kichik konfet, sutli to'ldirma bilan.",
-    "img": "img/mahsulot/yaza.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.08"
-      ],
-      [
-        "Netto vazn",
-        "2 kg"
-      ],
-      [
-        "Qutida, dona",
-        "325±3%"
-      ],
-      [
-        "Quti o'lchami",
-        "290x195x120"
-      ],
-      [
-        "Quti hajmi",
-        "0.0096 m³"
-      ],
-      [
-        "Saqlash muddati",
-        "9 oy"
-      ],
-      [
-        "TN VED kodi",
-        "1806901900"
-      ]
-    ]
-  },
-  {
-    "id": "one-bite",
-    "cat": "konfet",
-    "art": "art-truffle",
-    "title": "One Bite",
-    "tag": "Sladus",
-    "short": "To'rt rangli qadoq, shokolad to'ldirmasi",
-    "desc": "To'rt xil rangdagi qadoqda chiqariladigan kichik konfet. Qutida eng ko'p dona — 375 ta.",
-    "img": "img/mahsulot/one-bite.webp",
-    "specs": [
-      [
-        "Katalog ID",
-        "1.21"
-      ],
-      [
-        "Netto vazn",
-        "2 kg"
-      ],
-      [
-        "Qutida, dona",
-        "375±3%"
+        "105±3%"
       ],
       [
         "Quti o'lchami",
@@ -600,18 +120,58 @@
     ]
   },
   {
-    "id": "liya",
-    "cat": "premium",
-    "art": "art-box",
-    "title": "BISRARO Liya",
-    "tag": "BISRARO",
-    "short": "Gulli naqshli premium qadoq, shokolad to'ldirmasi",
-    "desc": "Gulli naqshli uch rangdagi qadoq va shokolad to'ldirma. Bayram sovg'alari uchun eng ko'p tanlanadigan mahsulot.",
-    "img": "img/mahsulot/bisraro-liya.webp",
+    "id": "one-milk",
+    "cat": "plitka",
+    "art": "art-bar",
+    "title": "Sladus One Milk",
+    "tag": "Sladus",
+    "short": "Maxi milk — sut to'ldirmasi ko'p bo'lgan botonchik",
+    "desc": "Sut to'ldirmasi oshirilgan botonchik. To'rt xil qadoq dizaynida chiqariladi.",
+    "img": "img/mahsulot/sladus-one-milk.webp",
     "specs": [
       [
         "Katalog ID",
-        "1.22"
+        "1.10"
+      ],
+      [
+        "Netto vazn",
+        "1 kg"
+      ],
+      [
+        "Qutida, dona",
+        "125±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "300x170x70"
+      ],
+      [
+        "Quti hajmi",
+        "0.004 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "kvadro",
+    "cat": "plitka",
+    "art": "art-bar",
+    "title": "Sladus KVADRO",
+    "tag": "Sladus",
+    "short": "To'rt bo'lakli sutli shokolad plitkasi",
+    "desc": "Sutli shokolad plitkasi, to'rt kvadrat bo'lakka bo'lingan. Chakana savdo va sovg'a to'plamlari uchun.",
+    "img": "img/mahsulot/sladus-kvadro.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.20"
       ],
       [
         "Netto vazn",
@@ -619,7 +179,7 @@
       ],
       [
         "Qutida, dona",
-        "105±3%"
+        "250±3%"
       ],
       [
         "Quti o'lchami",
@@ -636,6 +196,446 @@
       [
         "TN VED kodi",
         "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "larus",
+    "cat": "konfet",
+    "art": "art-truffle",
+    "title": "Bunibi Larus",
+    "tag": "Bunibi",
+    "short": "Kakao ta'mli to'ldirmali konfet, besh xil qadoqda",
+    "desc": "Kakao ta'mli to'ldirma bilan. Besh xil rangdagi qadoq — chakana savdo javonida yaqqol ko'rinadi.",
+    "img": "img/mahsulot/bunibi-larus.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.6"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "lactic",
+    "cat": "plitka",
+    "art": "art-bar",
+    "title": "Sladus LACTIC",
+    "tag": "Sladus",
+    "short": "Sutli to'ldirmali konfet-botonchik, +milk maximilk",
+    "desc": "Sut to'ldirmasi ko'paytirilgan liniya. Yumshoq korpus va sutli shokolad qobiq.",
+    "img": "img/mahsulot/sladus-lactic.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.14"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±1%"
+      ],
+      [
+        "Quti o'lchami",
+        "310x220x100"
+      ],
+      [
+        "Quti hajmi",
+        "0.0096 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806901900"
+      ]
+    ]
+  },
+  {
+    "id": "dorro",
+    "cat": "konfet",
+    "art": "art-truffle",
+    "title": "Dorro",
+    "tag": "Bunibi",
+    "short": "Dollar dizaynidagi qadoq, kakao to'ldirmasi",
+    "desc": "Esda qoladigan dollar naqshli qadoq va kakao ta'mli to'ldirma. Bayram savatlari uchun ko'p buyurtma qilinadi.",
+    "img": "img/mahsulot/dorro.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.7"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "nitro",
+    "cat": "plitka",
+    "art": "art-bar",
+    "title": "NITRO",
+    "tag": "NITRO",
+    "short": "Sutli ta'mli botonchalar — ProdExpo 2023 oltin medali",
+    "desc": "ProdExpo 2023 xalqaro ko'rgazmasida «Eng yaxshi mahsulot — 2023» tanlovining oltin medaliga sazovor bo'lgan liniya. Bolalar uchun avtomobil shaklidagi shokolad figuralari bilan.",
+    "img": "img/mahsulot/nitro.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.17"
+      ],
+      [
+        "Netto vazn",
+        "1 kg"
+      ],
+      [
+        "Qutida, dona",
+        "125±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "300x170x70"
+      ],
+      [
+        "Quti hajmi",
+        "0.004 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "fantos",
+    "cat": "konfet",
+    "art": "art-truffle",
+    "title": "Bunibi Fantos",
+    "tag": "Bunibi",
+    "short": "Kakao ta'mli to'ldirmali konfet",
+    "desc": "Klassik kakao ta'mli to'ldirma. Ikki rangdagi qadoq varianti mavjud.",
+    "img": "img/mahsulot/bunibi-fantos.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.09"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "duo-milk",
+    "cat": "plitka",
+    "art": "art-bar",
+    "title": "Sladus Duo Milk",
+    "tag": "Sladus",
+    "short": "Sutli to'ldirmali botonchik, tabiiy tarkib",
+    "desc": "Sutli to'ldirma va yengil vafli qatlam. «Natural ingredients» liniyasi — sut va kakao asosida.",
+    "img": "img/mahsulot/sladus-duo-milk.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.19-2"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "sladus-duo",
+    "cat": "plitka",
+    "art": "art-bar",
+    "title": "Sladus DUO",
+    "tag": "Sladus",
+    "short": "Kakao ta'mli to'ldirmali ikki qatlamli botonchik",
+    "desc": "Ikki qatlamli botonchik — kakao ta'mli to'ldirma bilan. Sovg'abop quti variantida ham chiqariladi.",
+    "img": "img/mahsulot/sladus-duo.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.19"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "133±2%"
+      ],
+      [
+        "Quti o'lchami",
+        "290x195x120"
+      ],
+      [
+        "Quti hajmi",
+        "0.0096 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "issimo",
+    "cat": "konfet",
+    "art": "art-truffle",
+    "title": "Sladus Issimo",
+    "tag": "Sladus",
+    "short": "Kakaoli konfet — kichik format",
+    "desc": "Kakao ta'mli to'ldirmali konfet. 1 kg lik qadoqda, kichik formatli quti bilan.",
+    "img": "img/mahsulot/sladus-issimo.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.15"
+      ],
+      [
+        "Netto vazn",
+        "1 kg"
+      ],
+      [
+        "Qutida, dona",
+        "125±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "300x170x70"
+      ],
+      [
+        "Quti hajmi",
+        "0.004 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "morning",
+    "cat": "konfet",
+    "art": "art-truffle",
+    "title": "Sladus Morning",
+    "tag": "Sladus",
+    "short": "Oltin rangli qadoq, kakao to'ldirmasi",
+    "desc": "Oltin rangli folga qadoq va kakao to'ldirmasi. Sovg'a to'plamlari uchun mos.",
+    "img": "img/mahsulot/sladus-morning.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.21"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "210±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "one-bite",
+    "cat": "konfet",
+    "art": "art-truffle",
+    "title": "One Bite",
+    "tag": "Sladus",
+    "short": "To'rt rangli qadoq, shokolad to'ldirmasi",
+    "desc": "To'rt xil rangdagi qadoqda chiqariladigan kichik konfet. Qutida eng ko'p dona — 375 ta.",
+    "img": "img/mahsulot/one-bite.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.21"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "375±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ]
+  },
+  {
+    "id": "yaza",
+    "cat": "konfet",
+    "art": "art-truffle",
+    "title": "YaZa",
+    "tag": "Bunibi",
+    "short": "Bite size — bir tishlamli kichik konfet",
+    "desc": "«Bite size, big taste» — bir tishlamda yeyiladigan kichik konfet, sutli to'ldirma bilan.",
+    "img": "img/mahsulot/yaza.webp",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.08"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "325±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "290x195x120"
+      ],
+      [
+        "Quti hajmi",
+        "0.0096 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806901900"
       ]
     ]
   }
