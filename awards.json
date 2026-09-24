@@ -1,0 +1,38 @@
+[
+  {
+    "id": "prodexpo-medal",
+    "img": "medal",
+    "year": "2023",
+    "place": "Moskva",
+    "title": "Oltin medal",
+    "org": "«Лучший продукт — 2023» · ProdExpo, Moskva",
+    "desc": "«Eng yaxshi mahsulot — 2023» xalqaro tanlovida NITRO shokolad plitkalari uchun berilgan oltin medal."
+  },
+  {
+    "id": "prodexpo-diplom",
+    "img": "diplom",
+    "year": "2023",
+    "place": "Rossiya",
+    "title": "Laureat diplomi",
+    "org": "RF Qishloq xo’jaligi vazirligi · Rosselxoznadzor · 6–10-fevral 2023",
+    "desc": "Xalqaro tanlov laureati diplomi. Mukofot sababi: «За сладкие плитки NITRO» — NITRO plitkalari uchun."
+  },
+  {
+    "id": "f-istanbul",
+    "img": "plaque",
+    "year": "2023",
+    "place": "Istanbul",
+    "title": "F İstanbul ko’rgazmasi",
+    "org": "F İstanbul Gıda ve İçecek Fuarı · Istanbul, Turkiya",
+    "desc": "Oziq-ovqat va ichimliklar ko’rgazmasida ishtirok etganimiz uchun tashkilotchilar plaketasi."
+  },
+  {
+    "id": "guvohnoma",
+    "img": "guvohnoma",
+    "year": "14.04.2016",
+    "place": "Toshkent",
+    "title": "Davlat guvohnomasi",
+    "org": "Toshkent shahri, Yangihayot tumani DXM",
+    "desc": "«HEALTHY FOOD PRODUCTION» MCHJ — ro’yxat raqami 005186-06, STIR 303 901 102."
+  }
+]
