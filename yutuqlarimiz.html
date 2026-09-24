@@ -1193,6 +1193,7 @@ Biz zamonaviy ishlab chiqarish texnologiyalari va sifatli xomashyo asosida shoko
 
       <div data-reveal="right">
         <form id="leadForm" novalidate>
+          <div class="field" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true"><input name="website" type="text" tabindex="-1" autocomplete="off"></div>
           <div class="field"><input id="f-name" name="name" type="text" placeholder=" " required>
             <label for="f-name">Ism va familiya</label><span class="err">Ismingizni kiriting</span></div>
           <div class="field"><input id="f-phone" name="phone" type="tel" placeholder=" " required>
@@ -1442,6 +1443,7 @@ Biz zamonaviy ishlab chiqarish texnologiyalari va sifatli xomashyo asosida shoko
 
       <div data-reveal="right">
         <form id="contactForm" novalidate>
+          <div class="field" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true"><input name="website" type="text" tabindex="-1" autocomplete="off"></div>
           <div class="field"><input id="c-name" name="name" type="text" placeholder=" " required>
             <label for="c-name">Ism va familiya</label><span class="err">Ismingizni kiriting</span></div>
           <div class="field"><input id="c-comp" name="company" type="text" placeholder=" ">
@@ -1601,6 +1603,7 @@ Biz zamonaviy ishlab chiqarish texnologiyalari va sifatli xomashyo asosida shoko
   </div>
 </div>
 
+<script src="site-config.js"></script>
 <script>
 /* ============================================================
    BISRARO — interaktivlik
@@ -2813,6 +2816,20 @@ document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeO
 
 /* ---------- 13. Formalar ---------- */
 var MAIL_TO = 'chempme@gmail.com';   /* <-- xabarlar shu pochtaga tushadi */
+var FORMS_URL = (window.BISRARO_CONFIG || {}).formsUrl || '';   /* admin panel murojaatlari (site-config.js) */
+function sendToPanel(lead){
+  if(!FORMS_URL) return Promise.reject('no-url');
+  /* text/plain — Google Apps Script CORS so'rovisiz qabul qiladi */
+  return fetch(FORMS_URL, {method:'POST', body: JSON.stringify(lead)})
+    .then(function(r){ return r.json(); })
+    .then(function(j){ return j && j.ok ? j : Promise.reject(j); });
+}
+function anySuccess(list){
+  return new Promise(function(res, rej){
+    var left = list.length;
+    list.forEach(function(p){ p.then(res, function(){ if(--left === 0) rej(); }); });
+  });
+}
 function validate(form){
   var ok = true;
   $$('.field', form).forEach(function(f){
@@ -2837,17 +2854,26 @@ function validate(form){
        Qabul qiluvchi manzilni o'zgartirish uchun MAIL_TO qiymatini almashtiring. */
     var fd = {};
     $$('input, textarea', form).forEach(function(i){ if(i.name) fd[i.name] = i.value.trim(); });
+    if(fd.website) return;                       /* spam-bot */
+    delete fd.website;
+    var lead = {name: fd.name, phone: fd.phone, email: fd.email || '', company: fd.company || '',
+                message: fd.message || '', form: form.id === 'leadForm' ? 'bosh sahifa' : 'kontakt',
+                page: location.pathname};
     fd._subject = 'Saytdan yangi so\u2019rov — BISRARO';
     fd._template = 'table';
     var btn = form.querySelector('button[type=submit]');
     var label = btn.textContent;
     btn.textContent = 'Yuborilmoqda…'; btn.disabled = true;
 
-    fetch('https://formsubmit.co/ajax/' + MAIL_TO, {
+    /* 1) Admin panelga (Google jadval orqali)  2) pochtaga (FormSubmit).
+       Ikkalasidan biri muvaffaqiyatli bo'lsa — xabar yuborilgan hisoblanadi. */
+    var toPanel = sendToPanel(lead);
+    var toMail = fetch('https://formsubmit.co/ajax/' + MAIL_TO, {
       method:'POST',
       headers:{'Content-Type':'application/json', 'Accept':'application/json'},
       body: JSON.stringify(fd)
-    }).then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
+    }).then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); });
+    anySuccess([toPanel, toMail])
       .then(function(){
         form.style.display = 'none';
         sent.classList.add('show');

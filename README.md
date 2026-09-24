@@ -267,3 +267,11 @@ Bo'limlar oddiy manzillarda ochiladi: `/katalog`, `/biz-haqimizda`, `/yutuqlarim
 (eski `#/katalog` havolalari avtomatik yangisiga o'tadi). Har bir bo'lim uchun `katalog.html` va h.k.
 fayllar `index.html` dan **`python3 build_pages.py`** bilan yaratiladi — `index.html` o'zgarsa,
 shu buyruqni qayta ishga tushiring. `404.html` noto'g'ri manzillarni to'g'ri sahifaga yo'naltiradi.
+
+## Murojaatlar (saytdagi formalar)
+
+Bosh sahifa va Kontakt formalaridan kelgan murojaatlar ikki joyga ketadi: pochtaga (FormSubmit,
+`MAIL_TO`) va Google jadvalga — admin panelning **"Murojaatlar"** bo'limida ko'rinadi
+(yangi/bajarildi, o'chirish). Google jadval tomoni — `google-apps-script.gs` (o'rnatish yo'riqnomasi
+fayl boshida va panelda). Script manzili `site-config.js` da saqlanadi, panel uni o'zi yangilaydi.
+Panel kirish kodi almashtirilsa, `google-apps-script.gs` dagi `KEY_HASH` ni ham yangilang.

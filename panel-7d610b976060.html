@@ -139,6 +139,27 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
 .tab:hover{color:var(--cream);border-color:var(--gold)}
 .tab.active{background:var(--foil);color:#20170E;border-color:transparent;font-weight:600}
 
+/* Murojaatlar */
+.tab .badge{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;margin-left:6px;
+  border-radius:999px;background:var(--bad);color:#fff;font-size:.7rem;font-weight:700;vertical-align:1px}
+.tab .badge:empty{display:none}
+.leads-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.leads-bar select{width:auto}
+.lead{background:var(--ink-3);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:8px}
+.lead.new{border-color:rgba(201,162,75,.6);box-shadow:0 0 0 1px rgba(201,162,75,.25) inset}
+.lead-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.lead-head b{font-family:var(--serif);font-size:1.12rem;font-weight:400}
+.lead-head .when{font-size:.76rem;color:var(--muted);margin-left:auto}
+.pill{font-size:.66rem;letter-spacing:.08em;padding:.2rem .6rem;border-radius:999px;border:1px solid var(--line);color:var(--gold)}
+.pill.new{background:var(--foil);color:#20170E;border-color:transparent;font-weight:700}
+.lead-contacts{display:flex;gap:6px 18px;flex-wrap:wrap;font-size:.88rem}
+.lead-contacts a{text-decoration:none}
+.lead-msg{margin:0;font-size:.9rem;white-space:pre-wrap;word-break:break-word;color:var(--cream)}
+.lead-foot{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:.74rem;color:var(--muted)}
+.lead-foot .sp{margin-right:auto}
+.setup ol{padding-left:1.2rem;margin:0 0 18px;display:grid;gap:8px;font-size:.9rem}
+.setup code{background:var(--ink-3);border:1px solid var(--line);border-radius:6px;padding:.05rem .4rem;font-size:.82rem}
+.empty-leads{text-align:center;color:var(--muted);padding:40px 10px}
 .warn{background:rgba(224,120,95,.12);border:1px solid rgba(224,120,95,.4);color:#F0B4A3;border-radius:12px;
   padding:14px 16px;font-size:.84rem;margin-bottom:18px;display:none}
 .warn.show{display:block}
@@ -205,6 +226,7 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
   <div class="tabs">
     <button class="tab active" data-tab="products">Mahsulotlar</button>
     <button class="tab" data-tab="awards">Mukofot va sertifikatlar</button>
+    <button class="tab" data-tab="leads">Murojaatlar<span class="badge" id="leadBadge"></span></button>
   </div>
 </div>
 
@@ -346,7 +368,43 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
   </section>
 </div>
 
+<div class="wrap" id="tab-leads" style="display:none;padding-top:22px;padding-bottom:60px">
+  <!-- Ulanmagan bo'lsa: sozlash -->
+  <section class="panel setup" id="leadsSetup" style="display:none;max-width:760px">
+    <h2>Murojaatlarni ulash</h2>
+    <p class="hint">Saytdagi formalardan kelgan murojaatlar Google jadvalingizga yoziladi va shu yerda ko'rinadi. Bir marta sozlanadi (5 daqiqa).</p>
+    <ol>
+      <li><a href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a> — yangi Google jadval oching (nomi: <code>BISRARO murojaatlar</code>).</li>
+      <li>Menyudan <b>Kengaytmalar → Apps Script</b> (Extensions → Apps Script) ni oching.</li>
+      <li>U yerdagi kodni o'chirib, pastdagi <b>"Kodni nusxalash"</b> tugmasi bilan olingan kodni joylang va 💾 saqlang.</li>
+      <li><b>Deploy → New deployment</b> → ⚙ belgisidan <b>Web app</b> ni tanlang. <b>Execute as: Me</b>, <b>Who has access: Anyone</b> → <b>Deploy</b>. Ruxsat so'ralsa: hisobingizni tanlang → <i>Advanced → Go to ... (unsafe)</i> → <b>Allow</b>.</li>
+      <li>Chiqqan <b>Web app URL</b> ni nusxalab, pastga qo'ying va <b>"Saytga ulash"</b> ni bosing.</li>
+    </ol>
+    <p style="display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px">
+      <button class="btn ghost sm" id="copyScript" type="button">Kodni nusxalash</button>
+    </p>
+    <input type="text" id="formsUrlInput" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+    <p style="margin:14px 0 0"><button class="btn" id="connectForms" type="button">Saytga ulash</button></p>
+  </section>
+
+  <!-- Ro'yxat -->
+  <section id="leadsView" style="display:none">
+    <div class="leads-bar">
+      <select id="leadFilter">
+        <option value="all">Barchasi</option>
+        <option value="yangi">Faqat yangilari</option>
+        <option value="bajarildi">Bajarilganlar</option>
+      </select>
+      <button class="btn ghost sm" id="leadsRefresh" type="button">Yangilash</button>
+      <span class="count" id="leadCount" style="margin-left:auto"></span>
+      <button class="btn ghost sm" id="leadsSettings" type="button" title="Google Script manzilini almashtirish">Sozlash</button>
+    </div>
+    <div class="list" id="leadList"></div>
+  </section>
+</div>
+
 <div class="toast" id="toast"></div>
+<script src="site-config.js"></script>
 <script>
 var DEFAULT_PRODUCTS = [
   {
@@ -1097,12 +1155,15 @@ function unlock(){
   pullServer();
 }
 $('#pinBtn').addEventListener('click', function(){
-  if(sha256($('#pin').value.trim()) === PIN_HASH){ try{ sessionStorage.setItem('hfp_admin','1'); }catch(e){} unlock(); }
+  if(sha256($('#pin').value.trim()) === PIN_HASH){
+    try{ sessionStorage.setItem('hfp_admin','1'); sessionStorage.setItem('hfp_pin', $('#pin').value.trim()); }catch(e){}
+    unlock();
+  }
   else { toast('Kod noto\u2019g\u2019ri', true); $('#pin').value = ''; }
 });
 $('#pin').addEventListener('keydown', function(e){ if(e.key === 'Enter') $('#pinBtn').click(); });
 $('#logout').addEventListener('click', function(){
-  try{ sessionStorage.removeItem('hfp_admin'); }catch(e){}
+  try{ sessionStorage.removeItem('hfp_admin'); sessionStorage.removeItem('hfp_pin'); }catch(e){}
   location.reload();
 });
 try{ if(sessionStorage.getItem('hfp_admin') === '1') unlock(); }catch(e){}
@@ -1389,7 +1450,9 @@ $$('.tab').forEach(function(t){
     $$('.tab').forEach(function(x){ x.classList.toggle('active', x === t); });
     $('#tab-products').style.display = t.dataset.tab === 'products' ? '' : 'none';
     $('#tab-awards').style.display   = t.dataset.tab === 'awards'   ? '' : 'none';
+    $('#tab-leads').style.display    = t.dataset.tab === 'leads'    ? '' : 'none';
     if(t.dataset.tab === 'awards'){ awards = readAwards(); renderAwards(); }
+    if(t.dataset.tab === 'leads') openLeads();
   });
 });
 
@@ -1739,6 +1802,150 @@ $('#tokenBtn').addEventListener('click', function(){
   toast(t.trim() ? 'Token saqlandi' : "Token o'chirildi");
 });
 try{ markDirty(localStorage.getItem(DIRTY_KEY) === '1'); }catch(e){}
+
+/* ---------- Murojaatlar (Google Apps Script orqali) ---------- */
+var FORMS_URL_KEY = 'hfp_forms_url';
+var leads = [], leadsLoaded = false;
+function formsUrl(){
+  var u = '';
+  try{ u = localStorage.getItem(FORMS_URL_KEY) || ''; }catch(e){}
+  return u || (window.BISRARO_CONFIG || {}).formsUrl || '';
+}
+function adminKey(){
+  var k = '';
+  try{ k = sessionStorage.getItem('hfp_pin') || ''; }catch(e){}
+  if(!k){
+    k = (prompt('Murojaatlarni ko\u2019rish uchun kirish kodini qayta kiriting:') || '').trim();
+    if(k && sha256(k) === PIN_HASH){ try{ sessionStorage.setItem('hfp_pin', k); }catch(e){} }
+    else { if(k) toast('Kod noto\u2019g\u2019ri', true); k = ''; }
+  }
+  return k;
+}
+function leadsApi(body){
+  return fetch(formsUrl(), {method: 'POST', body: JSON.stringify(body)}).then(function(r){ return r.json(); });
+}
+function showLeadsSetup(on){
+  $('#leadsSetup').style.display = on ? '' : 'none';
+  $('#leadsView').style.display = on ? 'none' : '';
+  if(on) $('#formsUrlInput').value = formsUrl();
+}
+function openLeads(){
+  if(!formsUrl()){ showLeadsSetup(true); return; }
+  showLeadsSetup(false);
+  loadLeads();
+}
+function loadLeads(silent){
+  var url = formsUrl(), key = url && adminKey();
+  if(!url || !key) return;
+  if(!silent) $('#leadList').innerHTML = '<p class="empty-leads">Yuklanmoqda…</p>';
+  fetch(url + (url.indexOf('?') > -1 ? '&' : '?') + 'action=list&key=' + encodeURIComponent(key) + '&t=' + Date.now())
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(!j || !j.ok){
+        if(j && j.error === 'auth') throw new Error('Google Script\u2019dagi kod bu panel kodiga mos emas. Kodni qaytadan nusxalab joylang.');
+        throw new Error('Javob noto\u2019g\u2019ri');
+      }
+      leads = j.items || []; leadsLoaded = true; renderLeads();
+    })
+    .catch(function(err){
+      if(!silent) $('#leadList').innerHTML = '<p class="empty-leads">Murojaatlarni yuklab bo\u2019lmadi. '
+        + esc(err && err.message && err.message.length > 20 ? err.message : 'Internetni yoki Google Script manzilini tekshiring.') + '</p>';
+    });
+}
+function fmtDate(iso){
+  var d = new Date(iso); if(isNaN(d)) return iso || '';
+  var p = function(n){ return (n < 10 ? '0' : '') + n; };
+  return p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function renderLeads(){
+  var f = $('#leadFilter').value, fresh = leads.filter(function(l){ return l.status !== 'bajarildi'; }).length;
+  $('#leadBadge').textContent = fresh ? fresh : '';
+  $('#leadCount').textContent = leads.length + ' ta murojaat' + (fresh ? ' · ' + fresh + ' ta yangi' : '');
+  var view = leads.filter(function(l){ return f === 'all' || (f === 'yangi' ? l.status !== 'bajarildi' : l.status === 'bajarildi'); });
+  $('#leadList').innerHTML = view.length ? view.map(function(l){
+    var isNew = l.status !== 'bajarildi', tel = String(l.phone || '').replace(/[^\d+]/g, '');
+    return '<article class="lead' + (isNew ? ' new' : '') + '" data-id="' + esc(l.id) + '">'
+      + '<div class="lead-head"><b>' + esc(l.name) + '</b>'
+      + '<span class="pill' + (isNew ? ' new' : '') + '">' + (isNew ? 'YANGI' : 'BAJARILDI') + '</span>'
+      + (l.company ? '<span class="pill">' + esc(l.company) + '</span>' : '')
+      + '<span class="when">' + esc(fmtDate(l.date)) + '</span></div>'
+      + '<div class="lead-contacts"><a href="tel:' + esc(tel) + '">📞 ' + esc(l.phone) + '</a>'
+      + (l.email ? '<a href="mailto:' + esc(l.email) + '">✉ ' + esc(l.email) + '</a>' : '') + '</div>'
+      + (l.message ? '<p class="lead-msg">' + esc(l.message) + '</p>' : '')
+      + '<div class="lead-foot"><span class="sp">Forma: ' + esc(l.form || '—') + '</span>'
+      + '<button class="btn ghost sm" data-toggle type="button">' + (isNew ? '✓ Bajarildi' : 'Yangi deb belgilash') + '</button>'
+      + '<button class="iconbtn del" data-del type="button" title="O\u2019chirish">&times;</button></div>'
+      + '</article>';
+  }).join('') : '<p class="empty-leads">' + (leads.length ? 'Bu bo\u2019limda murojaat yo\u2019q.' : 'Hozircha murojaat yo\u2019q. Saytdagi forma to\u2019ldirilganda shu yerda paydo bo\u2019ladi.') + '</p>';
+  $$('#leadList .lead').forEach(function(el){
+    var id = el.dataset.id, l = leads.filter(function(x){ return x.id === id; })[0];
+    el.querySelector('[data-toggle]').addEventListener('click', function(){
+      var st = l.status === 'bajarildi' ? 'yangi' : 'bajarildi', key = adminKey(); if(!key) return;
+      leadsApi({action: 'status', id: id, status: st, key: key}).then(function(j){
+        if(!j.ok) throw 0; l.status = st; renderLeads();
+      }).catch(function(){ toast("O'zgartirib bo'lmadi", true); });
+    });
+    el.querySelector('[data-del]').addEventListener('click', function(){
+      if(!confirm('"' + l.name + '" murojaatini o\u2019chirasizmi?')) return;
+      var key = adminKey(); if(!key) return;
+      leadsApi({action: 'delete', id: id, key: key}).then(function(j){
+        if(!j.ok) throw 0; leads = leads.filter(function(x){ return x.id !== id; }); renderLeads(); toast("O'chirildi");
+      }).catch(function(){ toast("O'chirib bo'lmadi", true); });
+    });
+  });
+}
+$('#leadFilter').addEventListener('change', renderLeads);
+$('#leadsRefresh').addEventListener('click', function(){ loadLeads(); });
+$('#leadsSettings').addEventListener('click', function(){ showLeadsSetup(true); });
+$('#copyScript').addEventListener('click', function(){
+  fetch('google-apps-script.gs?t=' + Date.now()).then(function(r){ return r.text(); }).then(function(code){
+    var done = function(){ toast('Kod nusxalandi — Apps Script oynasiga joylang'); };
+    if(navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(code).then(done);
+    var ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); ta.remove(); done();
+  }).catch(function(){ toast("Kodni olib bo'lmadi", true); });
+});
+$('#connectForms').addEventListener('click', function(){
+  var btn = this, url = $('#formsUrlInput').value.trim(), key = adminKey();
+  if(!/^https:\/\/script\.google(usercontent)?\.com\/.+/.test(url)){ toast('Manzil https://script.google.com/... bilan boshlanishi kerak', true); return; }
+  if(!key) return;
+  btn.disabled = true; btn.textContent = 'Tekshirilmoqda…';
+  fetch(url + (url.indexOf('?') > -1 ? '&' : '?') + 'action=list&key=' + encodeURIComponent(key))
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      if(!j || !j.ok) throw new Error(j && j.error === 'auth' ? 'auth' : 'bad');
+      try{ localStorage.setItem(FORMS_URL_KEY, url); }catch(e){}
+      var token = ghToken(true);
+      if(!token) throw new Error('token');
+      btn.textContent = 'Saytga ulanmoqda…';
+      var cfg = '/* Sayt sozlamalari \u2014 admin paneldagi "Murojaatlar \u2192 Saytga ulash" tugmasi yangilaydi */\n'
+        + 'window.BISRARO_CONFIG = {\n  formsUrl: ' + JSON.stringify(url) + '\n};\n';
+      return ghPut('site-config.js', null, token, b64(cfg)).catch(function(e){
+        throw new Error(e && e.message === 'auth' ? 'ghauth' : (e && e.message) || 'github');
+      });
+    })
+    .then(function(){
+      window.BISRARO_CONFIG = {formsUrl: url};
+      toast('Ulandi! 1–2 daqiqada saytdagi formalar murojaatlarni shu yerga yuboradi.');
+      openLeads();
+    })
+    .catch(function(err){
+      var m = err && err.message;
+      if(m === 'auth') alert('Google Script ishlayapti, lekin undagi kod eski yoki boshqa. "Kodni nusxalash" bilan qaytadan joylab, yangi Deploy qiling.');
+      else if(m === 'token') toast('GitHub token kiritilmadi', true);
+      else if(m === 'ghauth'){
+        try{ localStorage.removeItem(GH_TOKEN_KEY); }catch(e){}
+        alert("Google Script ishlayapti, lekin saytga yozib bo'lmadi: GitHub token noto'g'ri. \"Token\" tugmasi bilan qayta kiriting.");
+      }
+      else if(m === 'bad' || err instanceof TypeError) alert("Bu manzildan javob kelmadi. Tekshiring:\n\n\u2022 URL oxiri /exec bilan tugaydimi\n\u2022 Deploy'da \"Who has access: Anyone\" tanlanganmi");
+      else toast("Ulab bo'lmadi: " + (m || 'xato'), true);
+    })
+    .then(function(){ btn.disabled = false; btn.textContent = 'Saytga ulash'; });
+});
+/* Yangi murojaatlar sonini tabda ko'rsatish */
+function pollLeads(){ var k = ''; try{ k = sessionStorage.getItem('hfp_pin'); }catch(e){} if(formsUrl() && k) loadLeads(true); }
+setTimeout(pollLeads, 1500);
+setInterval(pollLeads, 120000);
 
 })();
 </script>
