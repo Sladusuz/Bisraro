@@ -8,3 +8,5 @@
 
 `.nojekyll` fayli sayt o'zgarmasdan ko'rsatilishi uchun kerak — o'chirmang.
 Sayt: https://sladusuz.github.io/Bisraro/
+
+Oxirgi yangilanish: 2026-09-24
