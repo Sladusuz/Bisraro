@@ -380,8 +380,12 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
       <li><b>Deploy → New deployment</b> → ⚙ belgisidan <b>Web app</b> ni tanlang. <b>Execute as: Me</b>, <b>Who has access: Anyone</b> → <b>Deploy</b>. Ruxsat so'ralsa: hisobingizni tanlang → <i>Advanced → Go to ... (unsafe)</i> → <b>Allow</b>.</li>
       <li>Chiqqan <b>Web app URL</b> ni nusxalab, pastga qo'ying va <b>"Saytga ulash"</b> ni bosing.</li>
     </ol>
-    <p style="display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px">
+    <textarea id="scriptCode" readonly rows="6" spellcheck="false"
+      style="font-family:ui-monospace,monospace;font-size:.72rem;line-height:1.45;margin-bottom:10px;white-space:pre"
+      placeholder="Kod yuklanmoqda…"></textarea>
+    <p style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 18px">
       <button class="btn ghost sm" id="copyScript" type="button">Kodni nusxalash</button>
+      <span style="font-size:.78rem;color:var(--muted)">Ishlamasa: maydonni bosing → Ctrl+A → Ctrl+C</span>
     </p>
     <input type="text" id="formsUrlInput" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
     <p style="margin:14px 0 0"><button class="btn" id="connectForms" type="button">Saytga ulash</button></p>
@@ -1827,7 +1831,14 @@ function leadsApi(body){
 function showLeadsSetup(on){
   $('#leadsSetup').style.display = on ? '' : 'none';
   $('#leadsView').style.display = on ? 'none' : '';
-  if(on) $('#formsUrlInput').value = formsUrl();
+  if(on){
+    $('#formsUrlInput').value = formsUrl();
+    if(!$('#scriptCode').value){
+      fetch('google-apps-script.gs?t=' + Date.now()).then(function(r){ return r.text(); })
+        .then(function(code){ $('#scriptCode').value = code; })
+        .catch(function(){ $('#scriptCode').placeholder = "Kodni yuklab bo'lmadi — sahifani yangilang"; });
+    }
+  }
 }
 function openLeads(){
   if(!formsUrl()){ showLeadsSetup(true); return; }
@@ -1897,13 +1908,18 @@ function renderLeads(){
 $('#leadFilter').addEventListener('change', renderLeads);
 $('#leadsRefresh').addEventListener('click', function(){ loadLeads(); });
 $('#leadsSettings').addEventListener('click', function(){ showLeadsSetup(true); });
+/* Nusxalash bosish paytida (sinxron) bajariladi — aks holda http sahifada brauzer ruxsat bermaydi */
 $('#copyScript').addEventListener('click', function(){
-  fetch('google-apps-script.gs?t=' + Date.now()).then(function(r){ return r.text(); }).then(function(code){
-    var done = function(){ toast('Kod nusxalandi — Apps Script oynasiga joylang'); };
-    if(navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(code).then(done);
-    var ta = document.createElement('textarea'); ta.value = code; document.body.appendChild(ta);
-    ta.select(); document.execCommand('copy'); ta.remove(); done();
-  }).catch(function(){ toast("Kodni olib bo'lmadi", true); });
+  var ta = $('#scriptCode');
+  if(!ta.value){ toast('Kod hali yuklanmadi, bir soniyadan keyin qayta bosing', true); return; }
+  ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length);
+  var ok = false;
+  try{ ok = document.execCommand('copy'); }catch(e){}
+  if(ok) toast('Kod nusxalandi — Apps Script oynasiga joylang');
+  else if(navigator.clipboard && window.isSecureContext)
+    navigator.clipboard.writeText(ta.value).then(function(){ toast('Kod nusxalandi — Apps Script oynasiga joylang'); },
+      function(){ toast("Nusxalanmadi — maydonni bosib Ctrl+A, Ctrl+C qiling", true); });
+  else toast("Nusxalanmadi — kod belgilandi, Ctrl+C bosing", true);
 });
 $('#connectForms').addEventListener('click', function(){
   var btn = this, url = $('#formsUrlInput').value.trim(), key = adminKey();
