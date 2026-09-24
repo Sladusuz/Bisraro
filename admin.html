@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Boshqaruv paneli — BISRARO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A120B; --ink-2:#1C1410; --ink-3:#241A12;
+  --gold:#C9A24B; --gold-light:#E8CD82; --cream:#F5E9DA;
+  --line:rgba(201,162,75,.22); --muted:rgba(245,233,218,.6);
+  --foil:linear-gradient(135deg,#C9A24B 0%,#E8CD82 38%,#C9A24B 64%,#8F6E2E 100%);
+  --serif:"Fraunces",Georgia,serif; --sans:"Manrope",ui-sans-serif,system-ui,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1); --ok:#6FBF8B; --bad:#E0785F;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--cream);font-family:var(--sans);font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;line-height:1.15}
+img{display:block;max-width:100%}
+a{color:var(--gold)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1320px;margin:0 auto;padding:0 clamp(16px,3vw,34px)}
+
+/* Header */
+.top{position:sticky;top:0;z-index:50;background:rgba(20,14,9,.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-block:14px}
+.logo{display:flex;align-items:center;gap:11px;margin-right:auto}
+.logo svg{width:34px;height:34px}
+.logo b{font-family:var(--serif);letter-spacing:.18em;font-size:1rem;background:var(--foil);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.logo small{display:block;font-size:.58rem;letter-spacing:.22em;color:var(--muted)}
+.count{font-size:.8rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem}
+
+/* Tugmalar */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.72rem 1.35rem;border:0;border-radius:999px;
+  background:var(--foil);color:#20170E;font-weight:600;font-size:.86rem;cursor:pointer;font-family:inherit;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.btn:hover{box-shadow:0 12px 26px -14px rgba(201,162,75,.9)}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--gold);box-shadow:inset 0 0 0 1px var(--line)}
+.btn.ghost:hover{background:rgba(201,162,75,.1);box-shadow:inset 0 0 0 1px var(--gold)}
+.btn.danger{background:transparent;color:var(--bad);box-shadow:inset 0 0 0 1px rgba(224,120,95,.45)}
+.btn.danger:hover{background:rgba(224,120,95,.1)}
+.btn.sm{padding:.5rem 1rem;font-size:.78rem}
+
+/* Layout */
+.grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:clamp(18px,2.4vw,34px);
+  padding-block:clamp(20px,3vw,38px);align-items:start}
+@media (max-width:980px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--ink-2);border:1px solid var(--line);border-radius:16px;padding:clamp(18px,2.2vw,28px)}
+.panel h2{font-size:1.35rem;margin-bottom:4px}
+.panel .hint{font-size:.82rem;color:var(--muted);margin:0 0 22px}
+form.sticky{align-self:start}
+
+/* Forma */
+label.lb{display:block;font-size:.74rem;letter-spacing:.12em;color:var(--gold);margin:18px 0 7px;font-weight:600}
+input[type=text],input[type=password],textarea,select{width:100%;background:var(--ink-3);border:1px solid var(--line);
+  color:var(--cream);border-radius:10px;padding:.72rem .9rem;font:inherit;font-size:.92rem;transition:border-color .3s}
+textarea{resize:vertical;min-height:78px}
+input:focus,textarea:focus,select:focus{outline:0;border-color:var(--gold)}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--gold) 50%),
+  linear-gradient(135deg,var(--gold) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 55%,calc(100% - 12px) 55%;background-size:6px 6px;background-repeat:no-repeat}
+.err{display:none;color:var(--bad);font-size:.78rem;margin-top:6px}
+.invalid input,.invalid textarea{border-color:var(--bad)}
+.invalid .err{display:block}
+
+/* Rasm yuklash */
+.drop{border:1px dashed var(--line);border-radius:12px;padding:22px;text-align:center;cursor:pointer;
+  transition:border-color .3s,background .3s;color:var(--muted);font-size:.86rem}
+.drop:hover,.drop.over{border-color:var(--gold);background:rgba(201,162,75,.06)}
+.preview{position:relative;margin-top:12px;border-radius:12px;overflow:hidden;border:1px solid var(--line);display:none}
+.preview.show{display:block}
+.preview img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.preview button{position:absolute;top:10px;right:10px}
+.filesize{font-size:.75rem;color:var(--muted);margin-top:8px}
+
+/* Xususiyatlar */
+.spec-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px}
+.spec-row button{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:transparent;
+  color:var(--bad);cursor:pointer;font-size:1.1rem;line-height:1}
+.spec-row button:hover{background:rgba(224,120,95,.1)}
+
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+
+/* Mahsulotlar ro'yxati */
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+.tools .search{flex:1;min-width:180px}
+.list{display:grid;gap:12px}
+.item{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:16px;align-items:center;
+  background:var(--ink-3);border:1px solid var(--line);border-radius:12px;padding:12px;
+  transition:border-color .3s,transform .3s var(--ease)}
+.item:hover{border-color:rgba(201,162,75,.5)}
+.item.editing{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.item .th{width:86px;height:70px;border-radius:8px;overflow:hidden;background:linear-gradient(150deg,#2A1D13,#150E09);
+  display:grid;place-items:center}
+.item .th img{width:100%;height:100%;object-fit:cover}
+.item .th svg{width:62%;height:62%;stroke:var(--gold);fill:none;stroke-width:2;opacity:.75}
+.item b{display:block;font-family:var(--serif);font-size:1.05rem;font-weight:400}
+.item p{margin:3px 0 0;font-size:.82rem;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .cat{display:inline-block;margin-top:6px;font-size:.68rem;letter-spacing:.08em;color:var(--gold);
+  border:1px solid var(--line);border-radius:999px;padding:.2rem .6rem}
+.item .ops{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.iconbtn{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--gold);
+  cursor:pointer;display:grid;place-items:center;font-size:.9rem;transition:background .3s,color .3s,border-color .3s}
+.iconbtn:hover{background:rgba(201,162,75,.12)}
+.iconbtn.del{color:var(--bad);border-color:rgba(224,120,95,.35)}
+.iconbtn.del:hover{background:rgba(224,120,95,.12)}
+.empty{padding:40px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}
+
+/* Kirish ekrani */
+.gate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--ink);padding:24px}
+.gate .box{width:min(380px,100%);text-align:center}
+.gate h1{font-size:1.7rem;margin-bottom:8px}
+.gate p{color:var(--muted);font-size:.88rem;margin:0 0 22px}
+.gate input{text-align:center;letter-spacing:.2em;margin-bottom:12px}
+.gate .btn{width:100%;justify-content:center}
+.gate .note{font-size:.74rem;color:rgba(245,233,218,.4);margin-top:18px;line-height:1.5}
+
+/* Bildirishnoma */
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,120%);z-index:200;
+  background:var(--ink-3);border:1px solid var(--gold);border-radius:999px;padding:.8rem 1.5rem;font-size:.86rem;
+  transition:transform .5s var(--ease);box-shadow:0 20px 40px -24px #000}
+.toast.show{transform:translate(-50%,0)}
+.toast.bad{border-color:var(--bad);color:var(--bad)}
+
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{padding:.7rem 1.4rem;border-radius:999px;border:1px solid var(--line);background:transparent;
+  color:var(--muted);font:inherit;font-size:.88rem;cursor:pointer;transition:background .3s,color .3s,border-color .3s}
+.tab:hover{color:var(--cream);border-color:var(--gold)}
+.tab.active{background:var(--foil);color:#20170E;border-color:transparent;font-weight:600}
+
+.warn{background:rgba(224,120,95,.12);border:1px solid rgba(224,120,95,.4);color:#F0B4A3;border-radius:12px;
+  padding:14px 16px;font-size:.84rem;margin-bottom:18px;display:none}
+.warn.show{display:block}
+.meter{font-size:.76rem;color:var(--muted);margin-top:14px}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="gFoil" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#C9A24B"/><stop offset=".4" stop-color="#E8CD82"/>
+    <stop offset=".7" stop-color="#C9A24B"/><stop offset="1" stop-color="#8F6E2E"/></linearGradient>
+  <symbol id="art-truffle" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="3">
+    <path d="M22 66c0-16 12-28 28-28s28 12 28 28z"/><ellipse cx="50" cy="66" rx="28" ry="6"/>
+    <circle cx="50" cy="30" r="5"/></g></symbol>
+  <symbol id="art-draje" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="3">
+    <ellipse cx="50" cy="50" rx="16" ry="12"/><ellipse cx="26" cy="62" rx="13" ry="10"/>
+    <ellipse cx="74" cy="62" rx="13" ry="10"/><ellipse cx="36" cy="34" rx="11" ry="8"/>
+    <ellipse cx="66" cy="34" rx="11" ry="8"/></g></symbol>
+  <symbol id="art-bar" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="3">
+    <path d="M24 30h52v46H24z"/><path d="M24 30l8-8h52l-8 8M76 30l8-8v46l-8 8" opacity=".7"/>
+    <path d="M24 45h52M24 61h52M41 30v46M59 30v46" stroke-width="1.6" opacity=".6"/></g></symbol>
+  <symbol id="seal-mini" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="4">
+    <circle cx="50" cy="42" r="24"/><path d="M50 30l5 10 11 1.6-8 7.6 2 11L50 55l-10 5.2 2-11-8-7.6L45 40z"/>
+    <path d="M36 64l-6 24 20-10 20 10-6-24"/></g></symbol>
+  <symbol id="art-box" viewBox="0 0 100 100"><g fill="none" stroke="currentColor" stroke-width="3">
+    <path d="M24 44h52v34H24z"/><path d="M20 32h60v12H20z"/><path d="M50 32v46"/>
+    <path d="M50 32c-9 0-15-3-15-8s10-4 15 8c5-12 15-13 15-8s-6 8-15 8z"/></g></symbol>
+</defs></svg>
+
+<!-- Kirish ekrani -->
+<div class="gate" id="gate">
+  <div class="box">
+    <h1>Boshqaruv paneli</h1>
+    <p>Davom etish uchun kod kiriting</p>
+    <input type="password" id="pin" placeholder="••••••" autocomplete="current-password">
+    <button class="btn" id="pinBtn">Kirish</button>
+    <p class="note">Bu oddiy himoya — kod brauzerda tekshiriladi. Jiddiy himoya uchun panelni
+      server tomonida parol bilan yopish kerak (masalan, .htpasswd).</p>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+<header class="top">
+  <div class="wrap">
+    <span class="logo">
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <rect x="1.5" y="1.5" width="45" height="45" rx="10" fill="none" stroke="url(#gFoil)" stroke-width="1.4"/>
+        <g fill="none" stroke="url(#gFoil)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9.5 32V16M9.5 24h7.5M17 32V16"/>
+          <path d="M21.5 32V16h6.5M21.5 24.5h5"/>
+          <path d="M32 32V16h4.4a4.2 4.2 0 010 8.4H32"/>
+        </g>
+      </svg>
+      <span><b>BISRARO</b><small>MAHSULOT BOSHQARUVI</small></span>
+    </span>
+    <span class="count" id="count">0 mahsulot</span>
+    <a class="btn ghost sm" href="index.html#/katalog" target="_blank" rel="noopener">Katalogni ochish</a>
+    <button class="btn ghost sm" id="logout">Chiqish</button>
+  </div>
+</header>
+
+<div class="wrap" style="padding-top:22px">
+  <div class="tabs">
+    <button class="tab active" data-tab="products">Mahsulotlar</button>
+    <button class="tab" data-tab="awards">Mukofot va sertifikatlar</button>
+  </div>
+</div>
+
+<div class="wrap grid" id="tab-products">
+  <!-- CHAP: forma -->
+  <form class="panel sticky" id="form" novalidate>
+    <h2 id="formTitle">Yangi mahsulot</h2>
+    <p class="hint" id="formHint">Maydonlarni to'ldiring va saqlang — katalogda darhol paydo bo'ladi.</p>
+
+    <div class="fld">
+      <label class="lb" for="title">MAHSULOT NOMI *</label>
+      <input type="text" id="title" placeholder="Masalan: Qora Marvarid">
+      <span class="err">Nomni kiriting</span>
+    </div>
+
+    <label class="lb" for="cat">TURKUM *</label>
+    <select id="cat">
+      <option value="konfet">Ichi to'ldirilgan konfetlar</option>
+      <option value="plitka">Shokolad plitkalari va botonchalar</option>
+      <option value="premium">BISRARO premium liniyasi</option>
+    </select>
+
+    <label class="lb" for="tag">YORLIQ (rasm ustidagi yozuv)</label>
+    <input type="text" id="tag" placeholder="Ichi to'ldirilgan">
+
+    <div class="fld">
+      <label class="lb" for="short">QISQA TAVSIF *</label>
+      <input type="text" id="short" placeholder="Bodomli praline, qora shokolad qobiq">
+      <span class="err">Qisqa tavsifni kiriting</span>
+    </div>
+
+    <label class="lb" for="desc">TO'LIQ TAVSIF (modal oynada ko'rinadi)</label>
+    <textarea id="desc" placeholder="Mahsulot haqida 1–3 gap"></textarea>
+
+    <label class="lb">RASM</label>
+    <div class="drop" id="drop">
+      Rasmni shu yerga tashlang yoki bosing<br>
+      <span style="font-size:.76rem">JPG / PNG / WebP — avtomatik siqiladi</span>
+    </div>
+    <input type="file" id="file" accept="image/*" hidden>
+    <div class="preview" id="preview">
+      <img id="previewImg" alt="">
+      <button type="button" class="btn danger sm" id="removeImg">O'chirish</button>
+    </div>
+    <p class="filesize" id="filesize"></p>
+    <p class="filesize">Rasm qo'yilmasa, turkumga mos chizma (SVG) ko'rsatiladi.</p>
+
+    <label class="lb">XUSUSIYATLAR (nomi va qiymati)</label>
+    <div id="specs"></div>
+    <button type="button" class="btn ghost sm" id="addSpec">+ Qator qo'shish</button>
+
+    <div class="actions">
+      <button type="submit" class="btn" id="saveBtn">Saqlash</button>
+      <button type="button" class="btn ghost" id="resetBtn">Tozalash</button>
+    </div>
+  </form>
+
+  <!-- O'NG: ro'yxat -->
+  <section class="panel">
+    <h2>Mahsulotlar</h2>
+    <p class="hint">Tartibni strelkalar bilan o'zgartiring — katalogdagi ketma-ketlik ham shunday bo'ladi.</p>
+    <div class="warn" id="warn"></div>
+
+    <div class="tools">
+      <input class="search" type="text" id="search" placeholder="Nom bo'yicha qidirish">
+      <select id="catFilter" style="width:auto">
+        <option value="all">Barcha turkumlar</option>
+        <option value="konfet">Konfetlar</option>
+        <option value="plitka">Plitka va botonchik</option>
+        <option value="premium">BISRARO premium</option>
+      </select>
+      <button class="btn ghost sm" id="exportBtn">JSON yuklab olish</button>
+      <button class="btn ghost sm" id="importBtn">JSON yuklash</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+      <button class="btn danger sm" id="resetAll">Boshlang'ich holat</button>
+    </div>
+
+    <div class="list" id="list"></div>
+    <p class="meter" id="meter"></p>
+  </section>
+</div>
+</div>
+
+<!-- ============ MUKOFOTLAR ============ -->
+<div class="wrap grid" id="tab-awards" style="display:none">
+  <form class="panel" id="aForm" novalidate>
+    <h2 id="aFormTitle">Yangi mukofot</h2>
+    <p class="hint" id="aFormHint">Sertifikat, diplom, medal yoki rasmiy hujjat qo'shing — saytning «Yutuqlarimiz» bo'limida darhol chiqadi.</p>
+
+    <div class="fld">
+      <label class="lb" for="aTitle">NOMI *</label>
+      <input type="text" id="aTitle" placeholder="Masalan: ISO 22000 sertifikati">
+      <span class="err">Nomni kiriting</span>
+    </div>
+
+    <label class="lb" for="aYear">YIL YOKI SANA</label>
+    <input type="text" id="aYear" placeholder="2025 yoki 14.04.2016">
+
+    <label class="lb" for="aPlace">JOY (ixtiyoriy)</label>
+    <input type="text" id="aPlace" placeholder="Toshkent">
+
+    <label class="lb" for="aOrg">KIM BERGAN</label>
+    <input type="text" id="aOrg" placeholder="Masalan: Xalqaro sertifikatlashtirish organi">
+
+    <div class="fld">
+      <label class="lb" for="aDesc">TAVSIF *</label>
+      <textarea id="aDesc" placeholder="Hujjat nima uchun berilgani haqida 1–2 gap"></textarea>
+      <span class="err">Tavsifni kiriting</span>
+    </div>
+
+    <label class="lb">RASM (sertifikat yoki medal fotosi)</label>
+    <div class="drop" id="aDrop">
+      Rasmni shu yerga tashlang yoki bosing<br>
+      <span style="font-size:.76rem">Foto avtomatik siqiladi</span>
+    </div>
+    <input type="file" id="aFile" accept="image/*" hidden>
+    <div class="preview" id="aPreview">
+      <img id="aPreviewImg" alt="">
+      <button type="button" class="btn danger sm" id="aRemoveImg">O'chirish</button>
+    </div>
+    <p class="filesize" id="aFilesize"></p>
+
+    <div class="actions">
+      <button type="submit" class="btn" id="aSaveBtn">Saqlash</button>
+      <button type="button" class="btn ghost" id="aResetBtn">Tozalash</button>
+    </div>
+  </form>
+
+  <section class="panel">
+    <h2>Mukofotlar ro'yxati</h2>
+    <p class="hint">Tartib saytdagi ketma-ketlikni belgilaydi.</p>
+    <div class="tools">
+      <button class="btn ghost sm" id="aExport">JSON yuklab olish</button>
+      <button class="btn ghost sm" id="aImport">JSON yuklash</button>
+      <input type="file" id="aImportFile" accept="application/json" hidden>
+      <button class="btn danger sm" id="aResetAll">Boshlang'ich holat</button>
+    </div>
+    <div class="list" id="aList"></div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+var DEFAULT_PRODUCTS = [
+  {
+    "id": "nitro",
+    "cat": "plitka",
+    "img": "p_nitro",
+    "title": "NITRO",
+    "tag": "NITRO",
+    "short": "Sutli ta'mli botonchalar — ProdExpo 2023 oltin medali",
+    "desc": "ProdExpo 2023 xalqaro ko'rgazmasida «Eng yaxshi mahsulot — 2023» tanlovining oltin medaliga sazovor bo'lgan liniya. Bolalar uchun avtomobil shaklidagi shokolad figuralari bilan.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.17"
+      ],
+      [
+        "Netto vazn",
+        "1 kg"
+      ],
+      [
+        "Qutida, dona",
+        "125±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "300x170x70"
+      ],
+      [
+        "Quti hajmi",
+        "0.004 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "sladus-duo",
+    "cat": "plitka",
+    "img": "p_sladus-duo",
+    "title": "Sladus DUO",
+    "tag": "Sladus",
+    "short": "Kakao ta'mli to'ldirmali ikki qatlamli botonchik",
+    "desc": "Ikki qatlamli botonchik — kakao ta'mli to'ldirma bilan. Sovg'abop quti variantida ham chiqariladi.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.19"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "133±2%"
+      ],
+      [
+        "Quti o'lchami",
+        "290x195x120"
+      ],
+      [
+        "Quti hajmi",
+        "0.0096 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "duo-milk",
+    "cat": "plitka",
+    "img": "p_duo-milk",
+    "title": "Sladus Duo Milk",
+    "tag": "Sladus",
+    "short": "Sutli to'ldirmali botonchik, tabiiy tarkib",
+    "desc": "Sutli to'ldirma va yengil vafli qatlam. «Natural ingredients» liniyasi — sut va kakao asosida.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.19-2"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "one-milk",
+    "cat": "plitka",
+    "img": "p_one-milk",
+    "title": "Sladus One Milk",
+    "tag": "Sladus",
+    "short": "Maxi milk — sut to'ldirmasi ko'p bo'lgan botonchik",
+    "desc": "Sut to'ldirmasi oshirilgan botonchik. To'rt xil qadoq dizaynida chiqariladi.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.10"
+      ],
+      [
+        "Netto vazn",
+        "1 kg"
+      ],
+      [
+        "Qutida, dona",
+        "125±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "300x170x70"
+      ],
+      [
+        "Quti hajmi",
+        "0.004 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "kvadro",
+    "cat": "plitka",
+    "img": "p_kvadro",
+    "title": "Sladus KVADRO",
+    "tag": "Sladus",
+    "short": "To'rt bo'lakli sutli shokolad plitkasi",
+    "desc": "Sutli shokolad plitkasi, to'rt kvadrat bo'lakka bo'lingan. Chakana savdo va sovg'a to'plamlari uchun.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.20"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "lactic",
+    "cat": "plitka",
+    "img": "p_lactic",
+    "title": "Sladus LACTIC",
+    "tag": "Sladus",
+    "short": "Sutli to'ldirmali konfet-botonchik, +milk maximilk",
+    "desc": "Sut to'ldirmasi ko'paytirilgan liniya. Yumshoq korpus va sutli shokolad qobiq.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.14"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±1%"
+      ],
+      [
+        "Quti o'lchami",
+        "310x220x100"
+      ],
+      [
+        "Quti hajmi",
+        "0.0096 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806901900"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "larus",
+    "cat": "konfet",
+    "img": "p_larus",
+    "title": "Bunibi Larus",
+    "tag": "Bunibi",
+    "short": "Kakao ta'mli to'ldirmali konfet, besh xil qadoqda",
+    "desc": "Kakao ta'mli to'ldirma bilan. Besh xil rangdagi qadoq — chakana savdo javonida yaqqol ko'rinadi.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.6"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "dorro",
+    "cat": "konfet",
+    "img": "p_dorro",
+    "title": "Dorro",
+    "tag": "Bunibi",
+    "short": "Dollar dizaynidagi qadoq, kakao to'ldirmasi",
+    "desc": "Esda qoladigan dollar naqshli qadoq va kakao ta'mli to'ldirma. Bayram savatlari uchun ko'p buyurtma qilinadi.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.7"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "fantos",
+    "cat": "konfet",
+    "img": "p_fantos",
+    "title": "Bunibi Fantos",
+    "tag": "Bunibi",
+    "short": "Kakao ta'mli to'ldirmali konfet",
+    "desc": "Klassik kakao ta'mli to'ldirma. Ikki rangdagi qadoq varianti mavjud.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.09"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "250±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "issimo",
+    "cat": "konfet",
+    "img": "p_issimo",
+    "title": "Sladus Issimo",
+    "tag": "Sladus",
+    "short": "Kakaoli konfet — kichik format",
+    "desc": "Kakao ta'mli to'ldirmali konfet. 1 kg lik qadoqda, kichik formatli quti bilan.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.15"
+      ],
+      [
+        "Netto vazn",
+        "1 kg"
+      ],
+      [
+        "Qutida, dona",
+        "125±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "300x170x70"
+      ],
+      [
+        "Quti hajmi",
+        "0.004 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "morning",
+    "cat": "konfet",
+    "img": "p_morning",
+    "title": "Sladus Morning",
+    "tag": "Sladus",
+    "short": "Oltin rangli qadoq, kakao to'ldirmasi",
+    "desc": "Oltin rangli folga qadoq va kakao to'ldirmasi. Sovg'a to'plamlari uchun mos.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.21"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "210±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "yaza",
+    "cat": "konfet",
+    "img": "p_yaza",
+    "title": "YaZa",
+    "tag": "Bunibi",
+    "short": "Bite size — bir tishlamli kichik konfet",
+    "desc": "«Bite size, big taste» — bir tishlamda yeyiladigan kichik konfet, sutli to'ldirma bilan.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.08"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "325±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "290x195x120"
+      ],
+      [
+        "Quti hajmi",
+        "0.0096 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806901900"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "one-bite",
+    "cat": "konfet",
+    "img": "p_one-bite",
+    "title": "One Bite",
+    "tag": "Sladus",
+    "short": "To'rt rangli qadoq, shokolad to'ldirmasi",
+    "desc": "To'rt xil rangdagi qadoqda chiqariladigan kichik konfet. Qutida eng ko'p dona — 375 ta.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.21"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "375±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "bisraro",
+    "cat": "premium",
+    "img": "p_bisraro",
+    "title": "BISRARO",
+    "tag": "BISRARO",
+    "short": "Premium liniya — yong'oq-praline to'ldirmasi",
+    "desc": "Brendning asosiy premium konfeti: shokolad ta'mli to'ldirma va besh rangli folga qadoq. Sovg'a to'plamlarining o'zagi.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.16"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "220±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "bisraro-buni",
+    "cat": "premium",
+    "img": "p_bisraro-buni",
+    "title": "BISRARO Buni",
+    "tag": "BISRARO",
+    "short": "Oq va pastel qadoqdagi premium konfet",
+    "desc": "Nafis oq-pastel qadoq. Qutida 325 ta dona — korporativ buyurtmalar uchun qulay format.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.18"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "325±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "290x195x120"
+      ],
+      [
+        "Quti hajmi",
+        "0.0096 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806901900"
+      ]
+    ],
+    "art": "art-truffle"
+  },
+  {
+    "id": "liya",
+    "cat": "premium",
+    "img": "p_liya",
+    "title": "BISRARO Liya",
+    "tag": "BISRARO",
+    "short": "Gulli naqshli premium qadoq, shokolad to'ldirmasi",
+    "desc": "Gulli naqshli uch rangdagi qadoq va shokolad to'ldirma. Bayram sovg'alari uchun eng ko'p tanlanadigan mahsulot.",
+    "specs": [
+      [
+        "Katalog ID",
+        "1.22"
+      ],
+      [
+        "Netto vazn",
+        "2 kg"
+      ],
+      [
+        "Qutida, dona",
+        "105±3%"
+      ],
+      [
+        "Quti o'lchami",
+        "250x190x110"
+      ],
+      [
+        "Quti hajmi",
+        "0.005 m³"
+      ],
+      [
+        "Saqlash muddati",
+        "9 oy"
+      ],
+      [
+        "TN VED kodi",
+        "1806310000"
+      ]
+    ],
+    "art": "art-truffle"
+  }
+];
+
+/* ============================================================
+   BISRARO — mahsulot boshqaruv paneli
+   Ma'lumotlar brauzerning localStorage'ida saqlanadi va
+   index.html dagi katalog aynan shu bazadan o'qiydi.
+   ============================================================ */
+(function(){
+'use strict';
+var STORE_KEY = 'hfp_products_v1', PIN = 'bisraro2026';   // <-- kodni shu yerdan o'zgartiring
+var $  = function(s){ return document.querySelector(s); };
+var $$ = function(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); };
+
+var CATS = {
+  konfet:   {tag:'Bunibi',  art:'art-truffle', label:"Ichi to'ldirilgan konfetlar"},
+  plitka:   {tag:'Sladus',  art:'art-bar',     label:'Plitka va botonchik'},
+  premium:  {tag:'BISRARO', art:'art-box',     label:'BISRARO premium'}
+};
+
+/* ---------- Saqlash ---------- */
+var storageOK = true;
+function read(){
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(raw){ var a = JSON.parse(raw); if(Array.isArray(a)) return a; }
+  }catch(e){ storageOK = false; }
+  return DEFAULT_PRODUCTS.slice();
+}
+function write(arr){
+  try{
+    localStorage.setItem(STORE_KEY, JSON.stringify(arr));
+    return true;
+  }catch(e){
+    toast("Saqlab bo'lmadi — xotira to'lgan bo'lishi mumkin. Rasmlarni kichikroq qiling.", true);
+    return false;
+  }
+}
+var products = [];
+
+/* ---------- Kirish ekrani ---------- */
+function unlock(){
+  $('#gate').style.display = 'none';
+  $('#app').style.display = '';
+  products = read();
+  if(!storageOK){
+    $('#warn').classList.add('show');
+    $('#warn').textContent = "Brauzer xotirasi (localStorage) mavjud emas — o'zgarishlar saqlanmaydi. "
+      + "Saytni oddiy hostingda yoki to'g'ridan-to'g'ri brauzerda oching.";
+  }
+  render(); renderSpecs([]);
+  awards = readAwards(); renderAwards();
+}
+$('#pinBtn').addEventListener('click', function(){
+  if($('#pin').value.trim() === PIN){ try{ sessionStorage.setItem('hfp_admin','1'); }catch(e){} unlock(); }
+  else { toast('Kod noto\u2019g\u2019ri', true); $('#pin').value = ''; }
+});
+$('#pin').addEventListener('keydown', function(e){ if(e.key === 'Enter') $('#pinBtn').click(); });
+$('#logout').addEventListener('click', function(){
+  try{ sessionStorage.removeItem('hfp_admin'); }catch(e){}
+  location.reload();
+});
+try{ if(sessionStorage.getItem('hfp_admin') === '1') unlock(); }catch(e){}
+
+/* ---------- Bildirishnoma ---------- */
+var toastEl = $('#toast'), toastT;
+function toast(msg, bad){
+  toastEl.textContent = msg;
+  toastEl.classList.toggle('bad', !!bad);
+  toastEl.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(function(){ toastEl.classList.remove('show'); }, 2800);
+}
+
+/* ---------- Xususiyatlar qatorlari ---------- */
+function specRow(k, v){
+  var row = document.createElement('div');
+  row.className = 'spec-row';
+  row.innerHTML = '<input type="text" placeholder="Vazni" value="">'
+                + '<input type="text" placeholder="14 g (dona)" value="">'
+                + '<button type="button" title="Qatorni o\u2019chirish">&times;</button>';
+  row.children[0].value = k || '';
+  row.children[1].value = v || '';
+  row.children[2].addEventListener('click', function(){ row.remove(); });
+  return row;
+}
+function renderSpecs(list){
+  var box = $('#specs'); box.innerHTML = '';
+  (list && list.length ? list : [['',''],['','']]).forEach(function(r){ box.appendChild(specRow(r[0], r[1])); });
+}
+$('#addSpec').addEventListener('click', function(){ $('#specs').appendChild(specRow('','')); });
+
+/* ---------- Rasm yuklash va siqish ---------- */
+var currentImg = '';
+function setImage(dataUrl, sizeText){
+  currentImg = dataUrl || '';
+  $('#preview').classList.toggle('show', !!currentImg);
+  if(currentImg) $('#previewImg').src = currentImg;
+  $('#filesize').textContent = sizeText || '';
+}
+function compress(file){
+  return new Promise(function(res, rej){
+    var reader = new FileReader();
+    reader.onload = function(){
+      var img = new Image();
+      img.onload = function(){
+        var max = 1100, w = img.width, h = img.height;
+        if(w > max || h > max){ var k = Math.min(max/w, max/h); w = Math.round(w*k); h = Math.round(h*k); }
+        var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+        cv.getContext('2d').drawImage(img, 0, 0, w, h);
+        var out = cv.toDataURL('image/webp', 0.78);
+        if(out.indexOf('data:image/webp') !== 0) out = cv.toDataURL('image/jpeg', 0.82);
+        res({data:out, w:w, h:h});
+      };
+      img.onerror = rej; img.src = reader.result;
+    };
+    reader.onerror = rej; reader.readAsDataURL(file);
+  });
+}
+function handleFile(file){
+  if(!file || file.type.indexOf('image/') !== 0){ toast('Faqat rasm fayli', true); return; }
+  compress(file).then(function(r){
+    var kb = Math.round(r.data.length * 0.75 / 1024);
+    setImage(r.data, r.w + '×' + r.h + ' px · ~' + kb + ' KB');
+    if(kb > 400) toast('Rasm kattaroq chiqdi — ' + kb + ' KB', true);
+  }).catch(function(){ toast("Rasmni o'qib bo'lmadi", true); });
+}
+$('#drop').addEventListener('click', function(){ $('#file').click(); });
+$('#file').addEventListener('change', function(e){ handleFile(e.target.files[0]); });
+['dragenter','dragover'].forEach(function(ev){
+  $('#drop').addEventListener(ev, function(e){ e.preventDefault(); $('#drop').classList.add('over'); });
+});
+['dragleave','drop'].forEach(function(ev){
+  $('#drop').addEventListener(ev, function(e){ e.preventDefault(); $('#drop').classList.remove('over'); });
+});
+$('#drop').addEventListener('drop', function(e){ handleFile(e.dataTransfer.files[0]); });
+$('#removeImg').addEventListener('click', function(){ setImage('', ''); $('#file').value = ''; });
+
+/* Turkum o'zgarsa — yorliq avtomatik to'ldiriladi */
+$('#cat').addEventListener('change', function(){
+  var t = $('#tag');
+  if(!t.value || Object.keys(CATS).some(function(k){ return CATS[k].tag === t.value; })) t.value = CATS[$('#cat').value].tag;
+});
+
+/* ---------- Formani boshqarish ---------- */
+var editingId = null;
+function clearForm(){
+  editingId = null;
+  $('#form').reset();
+  $('#formTitle').textContent = 'Yangi mahsulot';
+  $('#formHint').textContent = "Maydonlarni to'ldiring va saqlang — katalogda darhol paydo bo'ladi.";
+  $('#saveBtn').textContent = 'Saqlash';
+  $('#tag').value = CATS[$('#cat').value].tag;
+  setImage('', ''); renderSpecs([]);
+  Array.prototype.slice.call($('#form').querySelectorAll('.fld')).forEach(function(f){ f.classList.remove('invalid'); });
+  $$('.item').forEach(function(i){ i.classList.remove('editing'); });
+}
+$('#resetBtn').addEventListener('click', clearForm);
+
+function edit(id){
+  var p = products.filter(function(x){ return x.id === id; })[0];
+  if(!p) return;
+  editingId = id;
+  $('#title').value = p.title || '';
+  $('#cat').value   = p.cat || 'konfet';
+  $('#tag').value   = p.tag || '';
+  $('#short').value = p.short || '';
+  $('#desc').value  = p.desc || '';
+  if(p.img && p.img.indexOf('data:') === 0){ setImage(p.img, 'Saqlangan rasm'); }
+  else { setImage('', p.img ? 'Saytdagi asl rasm saqlanadi' : ''); currentImg = p.img || ''; }
+  renderSpecs(p.specs || []);
+  $('#formTitle').textContent = 'Mahsulotni tahrirlash';
+  $('#formHint').textContent = p.title;
+  $('#saveBtn').textContent = "O'zgarishni saqlash";
+  $$('.item').forEach(function(i){ i.classList.toggle('editing', i.dataset.id === id); });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function slug(t){
+  var s = (t||'').toLowerCase().replace(/[\u2018\u2019']/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9\-]/g,'');
+  return (s || 'mahsulot') + '-' + Date.now().toString(36).slice(-4);
+}
+
+$('#form').addEventListener('submit', function(e){
+  e.preventDefault();
+  var ok = true;
+  Array.prototype.slice.call($('#form').querySelectorAll('.fld')).forEach(function(f){
+    var inp = f.querySelector('input');
+    var bad = !inp.value.trim();
+    f.classList.toggle('invalid', bad);
+    if(bad) ok = false;
+  });
+  if(!ok){ toast("Majburiy maydonlarni to'ldiring", true); return; }
+
+  var specs = $$('#specs .spec-row').map(function(r){
+    return [r.children[0].value.trim(), r.children[1].value.trim()];
+  }).filter(function(r){ return r[0]; });
+
+  var cat = $('#cat').value;
+  var data = {
+    id: editingId || slug($('#title').value),
+    cat: cat,
+    art: CATS[cat].art,
+    title: $('#title').value.trim(),
+    tag: $('#tag').value.trim() || CATS[cat].tag,
+    short: $('#short').value.trim(),
+    desc: $('#desc').value.trim(),
+    img: currentImg,
+    specs: specs
+  };
+
+  if(editingId){
+    products = products.map(function(p){ return p.id === editingId ? data : p; });
+  } else {
+    products.unshift(data);
+  }
+  if(write(products)){ toast(editingId ? "O'zgarish saqlandi" : "Mahsulot qo'shildi"); clearForm(); render(); }
+});
+
+/* ---------- Ro'yxat ---------- */
+function esc(t){ return String(t == null ? '' : t)
+  .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function render(){
+  var q = $('#search').value.trim().toLowerCase(), cf = $('#catFilter').value;
+  var view = products.filter(function(p){
+    return (cf === 'all' || p.cat === cf) && (!q || (p.title||'').toLowerCase().indexOf(q) > -1);
+  });
+
+  $('#count').textContent = products.length + ' mahsulot';
+  $('#list').innerHTML = view.length ? view.map(function(p){
+    var i = products.indexOf(p);
+    var vis = p.img ? '<img src="'+esc(p.img)+'" alt="">'
+      : '<svg><use href="#'+esc(p.art || 'art-truffle')+'"/></svg>';
+    return '<div class="item" data-id="'+esc(p.id)+'">'
+      + '<span class="th">'+vis+'</span>'
+      + '<span><b>'+esc(p.title)+'</b><p>'+esc(p.short)+'</p>'
+      + '<span class="cat">'+esc((CATS[p.cat]||{}).label || p.cat)+'</span></span>'
+      + '<span class="ops">'
+      + '<button class="iconbtn" data-up title="Yuqoriga"'+(i===0?' disabled':'')+'>&uarr;</button>'
+      + '<button class="iconbtn" data-down title="Pastga"'+(i===products.length-1?' disabled':'')+'>&darr;</button>'
+      + '<button class="iconbtn" data-edit title="Tahrirlash">&#9998;</button>'
+      + '<button class="iconbtn del" data-del title="O\u2019chirish">&times;</button>'
+      + '</span></div>';
+  }).join('') : '<p class="empty">Mahsulot topilmadi.</p>';
+
+  $$('#list .item').forEach(function(el){
+    var id = el.dataset.id;
+    var q1 = function(sel){ return el.querySelector(sel); };
+    if(q1('[data-edit]')) q1('[data-edit]').addEventListener('click', function(){ edit(id); });
+    if(q1('[data-del]'))  q1('[data-del]').addEventListener('click', function(){ remove(id); });
+    if(q1('[data-up]'))   q1('[data-up]').addEventListener('click', function(){ move(id,-1); });
+    if(q1('[data-down]')) q1('[data-down]').addEventListener('click', function(){ move(id, 1); });
+  });
+
+  var bytes = 0;
+  try{ bytes = (localStorage.getItem(STORE_KEY) || '').length; }catch(e){}
+  $('#meter').textContent = 'Bazada ' + products.length + ' ta yozuv · ~' + Math.round(bytes/1024)
+    + ' KB ishlatilgan (taxminiy chegara 5000 KB)';
+}
+function remove(id){
+  var p = products.filter(function(x){ return x.id === id; })[0];
+  if(!p || !confirm('"' + p.title + '" o\u2019chirilsinmi?')) return;
+  products = products.filter(function(x){ return x.id !== id; });
+  if(write(products)){ toast("O'chirildi"); if(editingId === id) clearForm(); render(); }
+}
+function move(id, dir){
+  var i = products.findIndex(function(p){ return p.id === id; });
+  var j = i + dir;
+  if(i < 0 || j < 0 || j >= products.length) return;
+  var tmp = products[i]; products[i] = products[j]; products[j] = tmp;
+  if(write(products)) render();
+}
+$('#search').addEventListener('input', render);
+$('#catFilter').addEventListener('change', render);
+
+/* ---------- Export / Import / Reset ---------- */
+$('#exportBtn').addEventListener('click', function(){
+  var blob = new Blob([JSON.stringify(products, null, 2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'bisraro-mahsulotlar.json';
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  toast('JSON yuklab olindi');
+});
+$('#importBtn').addEventListener('click', function(){ $('#importFile').click(); });
+$('#importFile').addEventListener('change', function(e){
+  var f = e.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(){
+    try{
+      var arr = JSON.parse(r.result);
+      if(!Array.isArray(arr)) throw 0;
+      if(!confirm('Joriy ro\u2019yxat ' + arr.length + ' ta yozuv bilan almashtirilsinmi?')) return;
+      products = arr;
+      if(write(products)){ toast('Import qilindi'); render(); }
+    }catch(err){ toast("Fayl noto'g'ri", true); }
+  };
+  r.readAsText(f);
+  e.target.value = '';
+});
+$('#resetAll').addEventListener('click', function(){
+  if(!confirm("Barcha o'zgarishlar o'chib, boshlang'ich mahsulotlar ro'yxati tiklanadi. Davom etilsinmi?")) return;
+  products = DEFAULT_PRODUCTS.slice();
+  if(write(products)){ toast('Boshlang\u2019ich holat tiklandi'); clearForm(); render(); }
+});
+
+
+/* ============================================================
+   MUKOFOT VA SERTIFIKATLAR BO'LIMI
+   ============================================================ */
+var AWARDS_KEY = 'hfp_awards_v1';
+/* Saytdagi 4 ta boshlang'ich hujjat. img: 'medal' | 'diplom' | 'plaque' | 'guvohnoma'
+   — bular saytning o'zida saqlangan rasmlar. Yangi qo'shilganlar data-URI sifatida saqlanadi. */
+var DEFAULT_AWARDS = [
+  {id:'prodexpo-medal', img:'medal', year:'2023', place:'Moskva', title:'Oltin medal',
+   org:'«Лучший продукт — 2023» · ProdExpo, Moskva',
+   desc:'«Eng yaxshi mahsulot — 2023» xalqaro tanlovida NITRO shokolad plitkalari uchun berilgan oltin medal.'},
+  {id:'prodexpo-diplom', img:'diplom', year:'2023', place:'Rossiya', title:'Laureat diplomi',
+   org:'RF Qishloq xo\u2019jaligi vazirligi · Rosselxoznadzor · 6\u201310-fevral 2023',
+   desc:'Xalqaro tanlov laureati diplomi. Mukofot sababi: «За сладкие плитки NITRO» — NITRO plitkalari uchun.'},
+  {id:'f-istanbul', img:'plaque', year:'2023', place:'Istanbul', title:'F İstanbul ko\u2019rgazmasi',
+   org:'F İstanbul Gıda ve İçecek Fuarı · Istanbul, Turkiya',
+   desc:'Oziq-ovqat va ichimliklar ko\u2019rgazmasida ishtirok etganimiz uchun tashkilotchilar plaketasi.'},
+  {id:'guvohnoma', img:'guvohnoma', year:'14.04.2016', place:'Toshkent', title:'Davlat guvohnomasi',
+   org:'Toshkent shahri, Yangihayot tumani DXM',
+   desc:'«HEALTHY FOOD PRODUCTION» MCHJ — ro\u2019yxat raqami 005186-06, STIR 303 901 102.'}
+];
+var awards = [];
+function readAwards(){
+  try{ var raw = localStorage.getItem(AWARDS_KEY);
+    if(raw){ var a = JSON.parse(raw); if(Array.isArray(a)) return a; } }catch(e){}
+  return DEFAULT_AWARDS.slice();
+}
+function writeAwards(arr){
+  try{ localStorage.setItem(AWARDS_KEY, JSON.stringify(arr)); return true; }
+  catch(e){ toast("Saqlab bo'lmadi — rasm juda katta bo'lishi mumkin", true); return false; }
+}
+
+/* Tablar */
+$$('.tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    $$('.tab').forEach(function(x){ x.classList.toggle('active', x === t); });
+    $('#tab-products').style.display = t.dataset.tab === 'products' ? '' : 'none';
+    $('#tab-awards').style.display   = t.dataset.tab === 'awards'   ? '' : 'none';
+    if(t.dataset.tab === 'awards'){ awards = readAwards(); renderAwards(); }
+  });
+});
+
+/* Rasm */
+var aImg = '';
+function aSetImage(d, txt){
+  aImg = d || '';
+  $('#aPreview').classList.toggle('show', !!aImg);
+  if(aImg) $('#aPreviewImg').src = aImg;
+  $('#aFilesize').textContent = txt || '';
+}
+function aHandle(file){
+  if(!file || file.type.indexOf('image/') !== 0){ toast('Faqat rasm fayli', true); return; }
+  compress(file).then(function(r){
+    var kb = Math.round(r.data.length * 0.75 / 1024);
+    aSetImage(r.data, r.w + '×' + r.h + ' px · ~' + kb + ' KB');
+  }).catch(function(){ toast("Rasmni o'qib bo'lmadi", true); });
+}
+$('#aDrop').addEventListener('click', function(){ $('#aFile').click(); });
+$('#aFile').addEventListener('change', function(e){ aHandle(e.target.files[0]); });
+['dragenter','dragover'].forEach(function(ev){
+  $('#aDrop').addEventListener(ev, function(e){ e.preventDefault(); $('#aDrop').classList.add('over'); }); });
+['dragleave','drop'].forEach(function(ev){
+  $('#aDrop').addEventListener(ev, function(e){ e.preventDefault(); $('#aDrop').classList.remove('over'); }); });
+$('#aDrop').addEventListener('drop', function(e){ aHandle(e.dataTransfer.files[0]); });
+$('#aRemoveImg').addEventListener('click', function(){ aSetImage('', ''); $('#aFile').value = ''; });
+
+/* Forma */
+var aEditing = null;
+function aClear(){
+  aEditing = null; $('#aForm').reset(); aSetImage('', '');
+  $('#aFormTitle').textContent = 'Yangi mukofot';
+  $('#aSaveBtn').textContent = 'Saqlash';
+  $('#tab-awards').querySelectorAll('.fld').forEach(function(f){ f.classList.remove('invalid'); });
+  $$('#aList .item').forEach(function(i){ i.classList.remove('editing'); });
+}
+$('#aResetBtn').addEventListener('click', aClear);
+
+function aEdit(id){
+  var a = awards.filter(function(x){ return x.id === id; })[0];
+  if(!a) return;
+  aEditing = id;
+  $('#aTitle').value = a.title || ''; $('#aYear').value = a.year || '';
+  $('#aPlace').value = a.place || ''; $('#aOrg').value = a.org || '';
+  $('#aDesc').value = a.desc || '';
+  aSetImage(IMG_KEYS.indexOf(a.img) > -1 ? '' : (a.img || ''), IMG_KEYS.indexOf(a.img) > -1 ? 'Saytdagi asl rasm saqlanadi' : '');
+  if(IMG_KEYS.indexOf(a.img) > -1) aImg = a.img;
+  $('#aFormTitle').textContent = 'Mukofotni tahrirlash';
+  $('#aSaveBtn').textContent = "O'zgarishni saqlash";
+  $$('#aList .item').forEach(function(i){ i.classList.toggle('editing', i.dataset.id === id); });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+var IMG_KEYS = ['medal','diplom','plaque','guvohnoma'];
+
+$('#aForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var ok = true;
+  $('#tab-awards').querySelectorAll('.fld').forEach(function(f){
+    var inp = f.querySelector('input, textarea');
+    var bad = !inp.value.trim();
+    f.classList.toggle('invalid', bad);
+    if(bad) ok = false;
+  });
+  if(!ok){ toast("Nom va tavsifni to'ldiring", true); return; }
+  var data = {
+    id: aEditing || slug($('#aTitle').value),
+    img: aImg,
+    title: $('#aTitle').value.trim(),
+    year: $('#aYear').value.trim(),
+    place: $('#aPlace').value.trim(),
+    org: $('#aOrg').value.trim(),
+    desc: $('#aDesc').value.trim()
+  };
+  if(aEditing) awards = awards.map(function(x){ return x.id === aEditing ? data : x; });
+  else awards.unshift(data);
+  if(writeAwards(awards)){ toast(aEditing ? "O'zgarish saqlandi" : "Mukofot qo'shildi"); aClear(); renderAwards(); }
+});
+
+function renderAwards(){
+  $('#aList').innerHTML = awards.length ? awards.map(function(a, i){
+    var vis = a.img && a.img.indexOf('data:') === 0
+      ? '<img src="'+esc(a.img)+'" alt="">'
+      : '<svg><use href="#seal-mini"/></svg>';
+    return '<div class="item" data-id="'+esc(a.id)+'">'
+      + '<span class="th">'+vis+'</span>'
+      + '<span><b>'+esc(a.title)+'</b><p>'+esc(a.org || a.desc)+'</p>'
+      + '<span class="cat">'+esc(a.year || '—')+'</span></span>'
+      + '<span class="ops">'
+      + '<button class="iconbtn" data-up'+(i===0?' disabled':'')+'>&uarr;</button>'
+      + '<button class="iconbtn" data-down'+(i===awards.length-1?' disabled':'')+'>&darr;</button>'
+      + '<button class="iconbtn" data-edit>&#9998;</button>'
+      + '<button class="iconbtn del" data-del>&times;</button>'
+      + '</span></div>';
+  }).join('') : '<p class="empty">Hozircha mukofot yo\u2019q.</p>';
+
+  $$('#aList .item').forEach(function(el){
+    var id = el.dataset.id;
+    el.querySelector('[data-edit]').addEventListener('click', function(){ aEdit(id); });
+    el.querySelector('[data-del]').addEventListener('click', function(){
+      var a = awards.filter(function(x){ return x.id === id; })[0];
+      if(!a || !confirm('"' + a.title + '" o\u2019chirilsinmi?')) return;
+      awards = awards.filter(function(x){ return x.id !== id; });
+      if(writeAwards(awards)){ toast("O'chirildi"); aClear(); renderAwards(); }
+    });
+    el.querySelector('[data-up]').addEventListener('click', function(){ aMove(id, -1); });
+    el.querySelector('[data-down]').addEventListener('click', function(){ aMove(id, 1); });
+  });
+}
+function aMove(id, d){
+  var i = awards.findIndex(function(x){ return x.id === id; }), j = i + d;
+  if(i < 0 || j < 0 || j >= awards.length) return;
+  var t = awards[i]; awards[i] = awards[j]; awards[j] = t;
+  if(writeAwards(awards)) renderAwards();
+}
+
+$('#aExport').addEventListener('click', function(){
+  var blob = new Blob([JSON.stringify(awards, null, 2)], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'bisraro-mukofotlar.json'; a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  toast('JSON yuklab olindi');
+});
+$('#aImport').addEventListener('click', function(){ $('#aImportFile').click(); });
+$('#aImportFile').addEventListener('change', function(e){
+  var f = e.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(){
+    try{
+      var arr = JSON.parse(r.result);
+      if(!Array.isArray(arr)) throw 0;
+      awards = arr; if(writeAwards(awards)){ toast('Import qilindi'); renderAwards(); }
+    }catch(err){ toast("Fayl noto'g'ri", true); }
+  };
+  r.readAsText(f); e.target.value = '';
+});
+$('#aResetAll').addEventListener('click', function(){
+  if(!confirm("Mukofotlar ro'yxati boshlang'ich holatga qaytarilsinmi?")) return;
+  awards = DEFAULT_AWARDS.slice();
+  if(writeAwards(awards)){ toast('Tiklandi'); aClear(); renderAwards(); }
+});
+
+})();
+</script>
+</body>
+</html>
