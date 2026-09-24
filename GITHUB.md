@@ -7,6 +7,6 @@
    Admin panel: **https://sladusuz.github.io/bisraro/admin.html**
 
 `.nojekyll` fayli sayt o'zgarmasdan ko'rsatilishi uchun kerak — o'chirmang.
-Sayt: https://sladusuz.github.io/Bisraro/
+Sayt: https://bisraro.uz/
 
 Oxirgi yangilanish: 2026-09-24
