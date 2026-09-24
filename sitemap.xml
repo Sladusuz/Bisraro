@@ -29,56 +29,8 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/nitro.webp</image:loc>
-      <image:title>NITRO — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/sladus-duo.webp</image:loc>
-      <image:title>Sladus DUO — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/sladus-duo-milk.webp</image:loc>
-      <image:title>Sladus Duo Milk — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/sladus-one-milk.webp</image:loc>
-      <image:title>Sladus One Milk — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/sladus-kvadro.webp</image:loc>
-      <image:title>Sladus KVADRO — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/sladus-lactic.webp</image:loc>
-      <image:title>Sladus LACTIC — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/bunibi-larus.webp</image:loc>
-      <image:title>Bunibi Larus — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/dorro.webp</image:loc>
-      <image:title>Dorro — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/bunibi-fantos.webp</image:loc>
-      <image:title>Bunibi Fantos — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/sladus-issimo.webp</image:loc>
-      <image:title>Sladus Issimo — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/sladus-morning.webp</image:loc>
-      <image:title>Sladus Morning — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/yaza.webp</image:loc>
-      <image:title>YaZa — BISRARO shokolad mahsuloti</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/one-bite.webp</image:loc>
-      <image:title>One Bite — BISRARO shokolad mahsuloti</image:title>
+      <image:loc>http://bisraro.uz/img/mahsulot/bisraro-liya.webp</image:loc>
+      <image:title>BISRARO Liya — BISRARO shokolad mahsuloti</image:title>
     </image:image>
     <image:image>
       <image:loc>http://bisraro.uz/img/mahsulot/bisraro.webp</image:loc>
@@ -89,8 +41,56 @@
       <image:title>BISRARO Buni — BISRARO shokolad mahsuloti</image:title>
     </image:image>
     <image:image>
-      <image:loc>http://bisraro.uz/img/mahsulot/bisraro-liya.webp</image:loc>
-      <image:title>BISRARO Liya — BISRARO shokolad mahsuloti</image:title>
+      <image:loc>http://bisraro.uz/img/mahsulot/sladus-one-milk.webp</image:loc>
+      <image:title>Sladus One Milk — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/sladus-kvadro.webp</image:loc>
+      <image:title>Sladus KVADRO — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/bunibi-larus.webp</image:loc>
+      <image:title>Bunibi Larus — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/sladus-lactic.webp</image:loc>
+      <image:title>Sladus LACTIC — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/dorro.webp</image:loc>
+      <image:title>Dorro — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/nitro.webp</image:loc>
+      <image:title>NITRO — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/bunibi-fantos.webp</image:loc>
+      <image:title>Bunibi Fantos — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/sladus-duo-milk.webp</image:loc>
+      <image:title>Sladus Duo Milk — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/sladus-duo.webp</image:loc>
+      <image:title>Sladus DUO — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/sladus-issimo.webp</image:loc>
+      <image:title>Sladus Issimo — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/sladus-morning.webp</image:loc>
+      <image:title>Sladus Morning — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/one-bite.webp</image:loc>
+      <image:title>One Bite — BISRARO shokolad mahsuloti</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>http://bisraro.uz/img/mahsulot/yaza.webp</image:loc>
+      <image:title>YaZa — BISRARO shokolad mahsuloti</image:title>
     </image:image>
   </url>
   <url>
