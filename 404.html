@@ -7,7 +7,7 @@
 <script>
 /* Masalan /katalog/ yoki /Katalog kabi manzillarni to'g'ri sahifaga yo'naltiradi */
 (function(){
-  var pages = ['biz-haqimizda', 'katalog', 'yutuqlarimiz', 'kontakt'];
+  var pages = ['biz-haqimizda', 'katalog', 'yutuqlarimiz', 'kontakt', 'contacts'];
   var first = location.pathname.toLowerCase().replace(/\.html$/, '').split('/').filter(Boolean)[0] || '';
   location.replace(pages.indexOf(first) > -1 ? '/' + first : '/');
 })();

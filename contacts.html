@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BISRARO — Kontaktlar</title>
+<meta name="description" content="BISRARO premium shokolad — barcha kontaktlar bir joyda: telefon, Telegram, WhatsApp, Instagram, manzil.">
+<meta name="theme-color" content="#1A120B">
+<link rel="canonical" href="https://bisraro.uz/contacts">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bisraro.uz/contacts">
+<meta property="og:title" content="BISRARO — Kontaktlar">
+<meta property="og:description" content="Premium shokolad. Qo'ng'iroq qiling, yozing yoki bizga tashrif buyuring.">
+<meta property="og:image" content="https://bisraro.uz/img/bisraro-logo.webp">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231A120B'/><text x='16' y='22' font-family='Georgia,serif' font-size='15' fill='%23C9A24B' text-anchor='middle'>B</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   BISRARO — Kontaktlar (link-in-bio) sahifasi
+   Raqam va havolalarni o'zgartirish uchun pastdagi <script> ichidagi
+   CONFIG obyektini tahrirlang. Boshqa hech narsaga tegish shart emas.
+   ===================================================================== */
+:root{
+  --ink:#1A120B; --ink-2:#120C07; --cocoa:#6B3F2A; --cocoa-deep:#3E2418;
+  --gold:#C9A24B; --gold-light:#E8CD82; --gold-deep:#8E6B24;
+  --cream:#F5E9DA; --milk:#FFF8F0; --muted:rgba(245,233,218,.62);
+  --foil:linear-gradient(110deg,#8E6B24 0%,#E8CD82 22%,#FFF3C9 32%,#C9A24B 46%,#8E6B24 60%,#E8CD82 78%,#C9A24B 100%);
+  --card:rgba(255,248,240,.045); --card-hover:rgba(255,248,240,.085);
+  --radius:20px;
+  --ease:cubic-bezier(.2,.8,.2,1); --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;background:var(--ink)}
+body{
+  min-height:100vh;min-height:100dvh;background:var(--ink);color:var(--cream);
+  font-family:Manrope,system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.45;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold-light);outline-offset:3px;border-radius:12px}
+
+/* ---------- Fon: suyuq shokolad, oltin chang, grain ---------- */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:radial-gradient(120% 80% at 50% -10%,#3E2418 0%,#1A120B 55%,#0E0905 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;will-change:transform}
+.blob.b1{width:60vmax;height:60vmax;left:-20vmax;top:-18vmax;background:radial-gradient(circle,#6B3F2A 0%,transparent 65%);animation:drift1 22s ease-in-out infinite alternate}
+.blob.b2{width:50vmax;height:50vmax;right:-18vmax;top:30vh;background:radial-gradient(circle,rgba(201,162,75,.38) 0%,transparent 62%);animation:drift2 26s ease-in-out infinite alternate}
+.blob.b3{width:55vmax;height:55vmax;left:10vw;bottom:-30vmax;background:radial-gradient(circle,#4A2A1B 0%,transparent 60%);animation:drift3 30s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(18vw,14vh) scale(1.15)}}
+@keyframes drift2{to{transform:translate(-22vw,-10vh) scale(.9)}}
+@keyframes drift3{to{transform:translate(-8vw,-18vh) scale(1.2)}}
+#dust{position:absolute;inset:0;width:100%;height:100%}
+.spot{position:absolute;width:520px;height:520px;left:0;top:0;margin:-260px 0 0 -260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(232,205,130,.13) 0%,transparent 60%);transform:translate3d(50vw,30vh,0);transition:opacity .4s}
+.grain{position:absolute;inset:-50%;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-5%,3%)}40%{transform:translate(4%,-6%)}60%{transform:translate(-3%,5%)}80%{transform:translate(6%,2%)}100%{transform:translate(0,0)}}
+
+/* ---------- Preloader ---------- */
+.loader{position:fixed;inset:0;z-index:50;display:grid;place-items:center;background:var(--ink);transition:opacity .7s var(--ease),visibility .7s}
+.loader.done{opacity:0;visibility:hidden}
+.loader svg{width:110px;height:110px}
+.loader circle{fill:none;stroke:url(#lg);stroke-width:1.5;stroke-dasharray:302;stroke-dashoffset:302;animation:draw 1.1s var(--ease) forwards}
+.loader text{font-family:Fraunces,Georgia,serif;font-size:44px;fill:url(#lg);opacity:0;animation:fadeIn .6s .5s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeIn{to{opacity:1}}
+
+/* ---------- Layout ---------- */
+.wrap{position:relative;z-index:1;width:100%;max-width:520px;margin:0 auto;
+  padding:calc(18px + env(safe-area-inset-top)) 16px calc(40px + env(safe-area-inset-bottom))}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 13px;border-radius:999px;font-size:12.5px;font-weight:600;
+  background:rgba(255,248,240,.06);border:1px solid rgba(232,205,130,.18);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:#5BD17A;box-shadow:0 0 0 0 rgba(91,209,122,.6);animation:pulse 2s infinite}
+.pill.closed .dot{background:#E0845C;box-shadow:0 0 0 0 rgba(224,132,92,.6)}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(91,209,122,0)}100%{box-shadow:0 0 0 0 rgba(91,209,122,0)}}
+.lang{display:flex;padding:3px;border-radius:999px;background:rgba(255,248,240,.06);border:1px solid rgba(232,205,130,.18);position:relative}
+.lang button{position:relative;z-index:1;padding:6px 10px;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--muted);border-radius:999px;transition:color .3s}
+.lang button.on{color:var(--ink)}
+.lang .knob{position:absolute;top:3px;bottom:3px;left:3px;border-radius:999px;background:var(--foil);background-size:200% 100%;transition:transform .45s var(--spring),width .45s var(--spring)}
+
+/* ---------- Hero ---------- */
+.hero{text-align:center;padding:14px 0 6px}
+.avatar{position:relative;width:176px;height:176px;margin:8px auto 18px}
+.avatar .ring{position:absolute;inset:0;animation:spin 24s linear infinite}
+.avatar .ring text{font-family:Manrope,sans-serif;font-size:9.6px;font-weight:700;letter-spacing:.34em;fill:var(--gold-light)}
+.avatar .halo{position:absolute;inset:18px;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 55%,rgba(232,205,130,.9) 70%,transparent 85%);
+  animation:spin 3.2s linear infinite;-webkit-mask:radial-gradient(circle,transparent 62%,#000 63%);mask:radial-gradient(circle,transparent 62%,#000 63%)}
+.avatar .disc{position:absolute;inset:24px;border-radius:50%;overflow:hidden;background:#FFF8F0;
+  box-shadow:0 0 0 1px rgba(232,205,130,.5),0 18px 50px -10px rgba(0,0,0,.8),0 0 60px -6px rgba(201,162,75,.45);
+  animation:float 6s ease-in-out infinite}
+.avatar .disc img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.04)}
+.avatar .disc::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.65) 50%,transparent 65%);transform:translateX(-120%);animation:sheen 5s 2s ease-in-out infinite}
+.avatar .orb{position:absolute;inset:0;animation:spin 9s linear infinite}
+.avatar .orb i{position:absolute;left:50%;top:-2px;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 14px 3px rgba(232,205,130,.8)}
+.avatar .orb.o2{animation-duration:14s;animation-direction:reverse}
+.avatar .orb.o2 i{top:auto;bottom:8px;width:6px;height:6px;background:#fff}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{50%{transform:translateY(-6px)}}
+@keyframes sheen{0%,70%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+
+.brand{font-family:Fraunces,Georgia,serif;font-weight:600;font-size:clamp(42px,12vw,58px);line-height:1;letter-spacing:.06em;
+  display:inline-flex;gap:.01em}
+.brand span{display:inline-block;background:var(--foil);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:foil 6s linear infinite;opacity:0;transform:translateY(40px) rotateX(-80deg);filter:blur(8px)}
+.ready .brand span{animation:foil 6s linear infinite,letterIn .9s var(--spring) forwards;animation-delay:0s,calc(var(--i)*70ms + .15s)}
+@keyframes foil{to{background-position:300% 0}}
+@keyframes letterIn{to{opacity:1;transform:none;filter:none}}
+.verified{display:inline-grid;place-items:center;width:24px;height:24px;margin-left:8px;vertical-align:super;border-radius:50%;background:var(--foil);background-size:200% 100%;color:var(--ink);
+  transform:scale(0);transition:transform .6s var(--spring) 1s}
+.ready .verified{transform:scale(1)}
+.verified svg{width:14px;height:14px}
+.tagline{margin-top:10px;font-size:15px;color:var(--muted);min-height:1.5em}
+.tagline .typed{color:var(--gold-light);font-weight:600}
+.tagline .caret{display:inline-block;width:2px;height:1em;margin-left:2px;vertical-align:-2px;background:var(--gold-light);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* Statistika */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:22px 0 8px}
+.stat{padding:12px 6px;border-radius:16px;text-align:center;background:var(--card);border:1px solid rgba(232,205,130,.12)}
+.stat b{display:block;font-family:Fraunces,Georgia,serif;font-size:24px;font-weight:600;color:var(--gold-light);line-height:1.1}
+.stat small{display:block;margin-top:3px;font-size:11px;color:var(--muted);line-height:1.25}
+
+/* ---------- Bo'limlar ---------- */
+.section{margin-top:26px}
+.section h2{display:flex;align-items:center;gap:12px;margin:0 4px 12px;font-size:11.5px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.section h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(201,162,75,.5),transparent)}
+.list{display:grid;gap:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ---------- Karta ---------- */
+.card{position:relative;display:flex;align-items:center;gap:14px;min-height:72px;padding:12px 14px 12px 12px;border-radius:var(--radius);
+  background:var(--card);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);
+  transform-style:preserve-3d;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+  transition:transform .35s var(--ease),background .35s,box-shadow .35s;isolation:isolate;overflow:hidden;
+  box-shadow:0 10px 30px -18px rgba(0,0,0,.9)}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;z-index:-1;
+  background:linear-gradient(140deg,rgba(232,205,130,.55),rgba(232,205,130,.08) 40%,rgba(232,205,130,.08) 60%,rgba(232,205,130,.4));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.card::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(232,205,130,.16),transparent 60%);opacity:0;transition:opacity .35s}
+.card .shine{position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 40%,rgba(255,243,201,.22) 50%,transparent 60%);transform:translateX(-110%)}
+.card:hover{background:var(--card-hover);box-shadow:0 20px 40px -18px rgba(0,0,0,.95),0 0 0 1px rgba(232,205,130,.08)}
+.card:hover::after{opacity:1}
+.card:hover .shine{transform:translateX(110%);transition:transform .9s var(--ease)}
+.card:active{transform:perspective(900px) scale(.975)}
+.card .main{position:absolute;inset:0;z-index:0;border-radius:inherit}
+.ico{position:relative;z-index:1;flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:14px;color:#fff;
+  background:var(--c,#6B3F2A);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 18px -8px var(--c,#000);transition:transform .5s var(--spring)}
+.ico svg{width:24px;height:24px}
+.card:hover .ico{transform:translateZ(30px) rotate(-8deg) scale(1.08)}
+.txt{position:relative;z-index:1;flex:1;min-width:0;pointer-events:none}
+.txt b{display:block;font-size:16px;font-weight:700;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.txt small{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.go{position:relative;z-index:1;flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;color:var(--gold-light);
+  background:rgba(232,205,130,.08);pointer-events:none;transition:transform .45s var(--spring),background .3s}
+.go svg{width:16px;height:16px}
+.card:hover .go{transform:translateX(3px) rotate(-45deg);background:rgba(232,205,130,.18)}
+.copy{position:relative;z-index:2;flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;color:var(--gold-light);
+  background:rgba(232,205,130,.08);border:1px solid rgba(232,205,130,.16);transition:background .25s,transform .3s var(--spring)}
+.copy:hover{background:rgba(232,205,130,.2)}
+.copy:active{transform:scale(.88)}
+.copy svg{width:18px;height:18px}
+.copy .ok{display:none}
+.copy.done .ok{display:block}.copy.done .cp{display:none}
+
+/* Asosiy (featured) karta */
+.card.hero-card{min-height:84px;background:linear-gradient(120deg,rgba(201,162,75,.22),rgba(107,63,42,.28))}
+.card.hero-card .ico{width:56px;height:56px;border-radius:16px;background:var(--foil);background-size:200% 100%;color:var(--ink);animation:foil 5s linear infinite}
+.card.hero-card .ico::before{content:"";position:absolute;inset:-6px;border-radius:20px;border:1.5px solid rgba(232,205,130,.7);animation:ring 2.2s var(--ease) infinite}
+@keyframes ring{0%{transform:scale(.85);opacity:1}100%{transform:scale(1.35);opacity:0}}
+.card.hero-card .txt b{font-size:18px}
+.card.hero-card .ico svg{animation:wiggle 2.2s ease-in-out infinite}
+@keyframes wiggle{0%,60%,100%{transform:rotate(0)}65%{transform:rotate(-14deg)}75%{transform:rotate(12deg)}85%{transform:rotate(-8deg)}}
+
+/* Kichik (ikki ustunli) kartalar */
+.tile{flex-direction:column;align-items:flex-start;justify-content:space-between;gap:18px;min-height:128px;padding:14px}
+.tile .go{position:absolute;right:12px;top:12px}
+.tile .txt b{font-size:15.5px}
+.tile .txt small{font-size:12.5px}
+.grid2 .tile:last-child:nth-child(odd){grid-column:1/-1;min-height:96px}
+
+/* Xarita */
+.map{position:relative;border-radius:var(--radius);overflow:hidden;height:190px;border:1px solid rgba(232,205,130,.2);background:#241810}
+.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(.35) sepia(.45) brightness(.78) contrast(1.05) hue-rotate(-10deg)}
+.map .pin{position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:var(--gold);pointer-events:none;box-shadow:0 0 0 0 rgba(201,162,75,.7);animation:pin 1.8s infinite}
+@keyframes pin{70%{box-shadow:0 0 0 22px rgba(201,162,75,0)}100%{box-shadow:0 0 0 0 rgba(201,162,75,0)}}
+.map-foot{margin-top:12px}
+
+/* Pastki amallar */
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px}
+.btn{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;height:54px;border-radius:16px;font-weight:700;font-size:15px;overflow:hidden;
+  transition:transform .35s var(--spring),box-shadow .35s}
+.btn svg{width:19px;height:19px}
+.btn.gold{color:var(--ink);background:var(--foil);background-size:250% 100%;animation:foil 7s linear infinite;box-shadow:0 12px 30px -12px rgba(201,162,75,.8)}
+.btn.ghost{border:1px solid rgba(232,205,130,.35);background:rgba(255,248,240,.04);color:var(--gold-light)}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:scale(.96)}
+
+footer{margin-top:34px;text-align:center;font-size:12.5px;color:rgba(245,233,218,.45);line-height:1.6}
+footer b{display:block;color:rgba(245,233,218,.7);font-weight:700;letter-spacing:.14em;font-size:11px;margin-bottom:4px}
+footer a{color:var(--gold)}
+
+/* Ripple */
+.ripple{position:absolute;z-index:0;border-radius:50%;pointer-events:none;transform:scale(0);background:radial-gradient(circle,rgba(255,243,201,.45),rgba(232,205,130,0) 70%);animation:rip .75s var(--ease) forwards}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;
+  font-size:14px;font-weight:600;color:var(--ink);background:var(--foil);background-size:200% 100%;box-shadow:0 18px 40px -12px rgba(0,0,0,.8);
+  transform:translate(-50%,calc(100% + 80px));transition:transform .5s var(--spring)}
+.toast.show{transform:translate(-50%,0)}
+.toast svg{width:18px;height:18px}
+
+/* Konfetti (bosilganda uchadigan shokolad bo'lakchalari) */
+.bit{position:fixed;z-index:45;pointer-events:none;width:8px;height:8px;border-radius:2px;will-change:transform,opacity}
+
+/* Kirish animatsiyasi */
+.reveal{opacity:0;transform:translateY(26px) scale(.98);filter:blur(6px)}
+.ready .reveal{animation:rise .9s var(--ease) forwards;animation-delay:calc(var(--d,0)*80ms + .35s)}
+@keyframes rise{to{opacity:1;transform:none;filter:none}}
+
+@media (max-width:360px){.stats small{font-size:10px}.txt b{font-size:15px}.avatar{width:156px;height:156px}}
+@media (hover:none){.card:hover .ico{transform:none}.card:hover .go{transform:none}}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .reveal,.brand span{opacity:1!important;transform:none!important;filter:none!important}
+  #dust,.grain{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <svg viewBox="0 0 110 110">
+    <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8E6B24"/><stop offset=".45" stop-color="#FFF3C9"/><stop offset="1" stop-color="#C9A24B"/></linearGradient></defs>
+    <circle cx="55" cy="55" r="48"/>
+    <text x="55" y="70" text-anchor="middle">B</text>
+  </svg>
+</div>
+
+<div class="bg" aria-hidden="true">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <canvas id="dust"></canvas>
+  <div class="spot" id="spot"></div>
+  <div class="grain"></div>
+</div>
+
+<main class="wrap">
+  <div class="topbar reveal" style="--d:0">
+    <span class="pill" id="status"><span class="dot"></span><span id="statusText">—</span></span>
+    <div class="lang" role="group" aria-label="Til">
+      <span class="knob" id="knob"></span>
+      <button data-lang="uz" class="on">UZ</button><button data-lang="ru">RU</button><button data-lang="en">EN</button>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="avatar reveal" style="--d:1">
+      <svg class="ring" viewBox="0 0 176 176" aria-hidden="true">
+        <defs><path id="circ" d="M88,88 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs>
+        <text><textPath href="#circ">BISRARO • PREMIUM CHOCOLATE • TASHKENT • SINCE 2016 •</textPath></text>
+      </svg>
+      <div class="halo"></div>
+      <div class="orb"><i></i></div><div class="orb o2"><i></i></div>
+      <div class="disc"><img src="img/bisraro-logo.webp" alt="BISRARO — Healthy Food Production" width="128" height="128"></div>
+    </div>
+    <h1 class="brand" aria-label="BISRARO" id="brand"></h1><span class="verified" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+    <p class="tagline"><span class="typed" id="typed"></span><span class="caret"></span></p>
+
+    <div class="stats reveal" style="--d:3">
+      <div class="stat"><b data-count="2016">0</b><small data-i18n="since">yildan beri</small></div>
+      <div class="stat"><b data-count="16" data-suffix="+">0</b><small data-i18n="products">mahsulot turi</small></div>
+      <div class="stat"><b>🥇</b><small data-i18n="medal">ProdExpo 2023 oltin medali</small></div>
+    </div>
+  </header>
+
+  <section class="section">
+    <h2 class="reveal" style="--d:4" data-i18n="h_contact">Bog'lanish</h2>
+    <div class="list" id="phones"></div>
+  </section>
+
+  <section class="section">
+    <h2 class="reveal" style="--d:6" data-i18n="h_social">Ijtimoiy tarmoqlar</h2>
+    <div class="grid2" id="socials"></div>
+  </section>
+
+  <section class="section" id="shopSec" hidden>
+    <h2 class="reveal" style="--d:8" data-i18n="h_shop">Onlayn xarid</h2>
+    <div class="list" id="shops"></div>
+  </section>
+
+  <section class="section">
+    <h2 class="reveal" style="--d:9" data-i18n="h_more">Ko'proq</h2>
+    <div class="list" id="more"></div>
+  </section>
+
+  <section class="section">
+    <h2 class="reveal" style="--d:11" data-i18n="h_visit">Bizga tashrif buyuring</h2>
+    <div class="map reveal" style="--d:12" id="map"><span class="pin"></span></div>
+    <div class="list map-foot" id="mapLink"></div>
+  </section>
+
+  <div class="actions reveal" style="--d:14">
+    <button class="btn gold" id="saveBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg><span data-i18n="save">Kontaktni saqlash</span></button>
+    <button class="btn ghost" id="shareBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg><span data-i18n="share">Ulashish</span></button>
+  </div>
+
+  <footer class="reveal" style="--d:15">
+    <b>HEALTHY FOOD PRODUCTION</b>
+    <span id="addr"></span><br>
+    <span id="hours"></span><br>
+    © <span id="yr"></span> BISRARO
+  </footer>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span id="toastText"></span></div>
+
+<script>
+/* =====================================================================
+   CONFIG — raqam va havolalarni shu yerda o'zgartiring.
+   Bo'sh qoldirilgan ('') havola sahifada ko'rinmaydi.
+   ===================================================================== */
+var CONFIG = {
+  name: 'BISRARO',
+  phones: [
+    // featured: true — eng yuqorida katta, oltin kartada chiqadi
+    { number: '+998977774440', label: { uz: 'Asosiy raqam', ru: 'Основной номер', en: 'Main line' }, featured: true },
+    { number: '+998338808880', label: { uz: 'Ulgurji savdo va hamkorlik', ru: 'Опт и сотрудничество', en: 'Wholesale & partnership' } }
+  ],
+  telegram:  'https://t.me/+998977774440',
+  whatsapp:  'https://wa.me/998977774440',
+  instagram: 'https://www.instagram.com/bisraro.uz/',
+  facebook:  '',
+  youtube:   '',
+  tiktok:    '',
+  email:     'info@bunibi.uz',
+  website:   'https://bisraro.uz/',
+  catalog:   'https://bisraro.uz/katalog',
+  // Onlayn do'konlar — havola qo'shilsa "Onlayn xarid" bo'limi o'zi paydo bo'ladi
+  shops: [
+    { name: 'Uzum Market',  url: '', color: '#7000FF' },
+    { name: 'Wildberries',  url: '', color: '#CB11AB' },
+    { name: 'Ozon',         url: '', color: '#005BFF' },
+    { name: 'Yandex Market',url: '', color: '#FC3F1D' }
+  ],
+  address: { uz: 'Toshkent shahri, Yangihayot tumani, Sputnik 17-mavze', ru: 'г. Ташкент, Янгихаётский район, Спутник 17', en: 'Sputnik 17, Yangihayot district, Tashkent' },
+  lat: 41.368813, lng: 69.115687,
+  hours: { open: 9, close: 18, days: [1, 2, 3, 4, 5, 6] } // 0 = yakshanba
+};
+
+/* ---------- Tarjimalar ---------- */
+var T = {
+  uz: { since:'yildan beri', products:'mahsulot turi', medal:'ProdExpo 2023 oltin medali', h_contact:"Bog'lanish", h_social:'Ijtimoiy tarmoqlar',
+        h_shop:'Onlayn xarid', h_more:"Ko'proq", h_visit:'Bizga tashrif buyuring', save:'Kontaktni saqlash', share:'Ulashish',
+        call:"Qo'ng'iroq qilish", tg:'Telegram', tgs:'Tezkor javob', wa:'WhatsApp', was:'Yozing', ig:'Instagram', igs:'Yangiliklar va aksiyalar',
+        fb:'Facebook', yt:'YouTube', tt:'TikTok', mail:'Email', site:'Rasmiy sayt', sites:'bisraro.uz', cat:'Katalog', cats:'Barcha mahsulotlar',
+        route:"Yo'nalish olish", routes:'Google Maps orqali', buy:'Xarid qilish', open:'Hozir ochiq', closed:'Hozir yopiq',
+        opens:'Ochiladi', hoursTxt:'Dushanba—Shanba, 09:00–18:00', copied:'Nusxa olindi', linkCopied:'Havola nusxalandi', saved:'Kontakt yuklab olindi',
+        typed:['Premium shokolad','Toshkentda ishlab chiqarilgan','Ulgurji savdo va hamkorlik',"Sovg'a to'plamlari"] },
+  ru: { since:'года на рынке', products:'видов продукции', medal:'Золотая медаль ПродЭкспо 2023', h_contact:'Связаться', h_social:'Соцсети',
+        h_shop:'Купить онлайн', h_more:'Ещё', h_visit:'Приезжайте к нам', save:'Сохранить контакт', share:'Поделиться',
+        call:'Позвонить', tg:'Telegram', tgs:'Быстрый ответ', wa:'WhatsApp', was:'Напишите нам', ig:'Instagram', igs:'Новости и акции',
+        fb:'Facebook', yt:'YouTube', tt:'TikTok', mail:'Email', site:'Официальный сайт', sites:'bisraro.uz', cat:'Каталог', cats:'Вся продукция',
+        route:'Построить маршрут', routes:'Через Google Maps', buy:'Купить', open:'Сейчас открыто', closed:'Сейчас закрыто',
+        opens:'Откроется', hoursTxt:'Понедельник—Суббота, 09:00–18:00', copied:'Скопировано', linkCopied:'Ссылка скопирована', saved:'Контакт загружен',
+        typed:['Премиальный шоколад','Произведено в Ташкенте','Опт и сотрудничество','Подарочные наборы'] },
+  en: { since:'since', products:'product lines', medal:'ProdExpo 2023 gold medal', h_contact:'Get in touch', h_social:'Social',
+        h_shop:'Shop online', h_more:'More', h_visit:'Visit us', save:'Save contact', share:'Share',
+        call:'Call now', tg:'Telegram', tgs:'Fast reply', wa:'WhatsApp', was:'Message us', ig:'Instagram', igs:'News & offers',
+        fb:'Facebook', yt:'YouTube', tt:'TikTok', mail:'Email', site:'Official website', sites:'bisraro.uz', cat:'Catalogue', cats:'All products',
+        route:'Get directions', routes:'Via Google Maps', buy:'Buy now', open:'Open now', closed:'Closed now',
+        opens:'Opens', hoursTxt:'Monday—Saturday, 09:00–18:00', copied:'Copied', linkCopied:'Link copied', saved:'Contact downloaded',
+        typed:['Premium chocolate','Made in Tashkent','Wholesale & partnership','Gift collections'] }
+};
+
+/* ---------- Ikonkalar ---------- */
+var I = {
+  phone:'<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  telegram:'<path fill="currentColor" d="M21.9 4.6 18.7 19.7c-.2 1-.9 1.3-1.7.8l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9 8.9-8c.4-.3-.1-.5-.6-.2L6.5 13.5l-4.7-1.5c-1-.3-1-1 .2-1.5L20.5 3.4c.9-.3 1.6.2 1.4 1.2z"/>',
+  whatsapp:'<path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.7 11.7 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/>',
+  instagram:'<rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.3" fill="currentColor"/>',
+  facebook:'<path fill="currentColor" d="M14 8.5V6.8c0-.8.2-1.3 1.4-1.3H17V2.2c-.3 0-1.3-.2-2.5-.2-2.5 0-4.2 1.5-4.2 4.3v2.2H7.5V12h2.8v10H14V12h2.8l.4-3.5H14z"/>',
+  youtube:'<path fill="currentColor" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8zM9.8 15V9l5.8 3-5.8 3z"/>',
+  tiktok:'<path fill="currentColor" d="M16.6 2h-3.3v13.4a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.2a6.3 6.3 0 1 0 5.3 6.2V8.6a8 8 0 0 0 4.4 1.4V6.7a4.5 4.5 0 0 1-4.4-4.7z"/>',
+  mail:'<rect x="2.5" y="4.5" width="19" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  globe:'<circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 12h19M12 2.5c2.6 2.8 3.8 6 3.8 9.5s-1.2 6.7-3.8 9.5c-2.6-2.8-3.8-6-3.8-9.5S9.4 5.3 12 2.5z" fill="none" stroke="currentColor" stroke-width="2"/>',
+  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 8h7M9 11.5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  pin:'<path d="M12 22s7.5-6.6 7.5-12.5a7.5 7.5 0 0 0-15 0C4.5 15.4 12 22 12 22z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="9.5" r="2.8" fill="none" stroke="currentColor" stroke-width="2"/>',
+  bag:'<path d="M5 8h14l-1.2 12.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
+  copy:'<rect x="9" y="9" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 15H4.5A1.5 1.5 0 0 1 3 13.5v-9A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5V5" fill="none" stroke="currentColor" stroke-width="2"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>'
+};
+function svg(n){ return '<svg viewBox="0 0 24 24" aria-hidden="true">' + I[n] + '</svg>'; }
+
+var lang = 'uz';
+try { lang = localStorage.getItem('bisraro-lang') || ((navigator.language || '').slice(0, 2) === 'ru' ? 'ru' : 'uz'); } catch (e) {}
+if (!T[lang]) lang = 'uz';
+function t(k){ return T[lang][k] || T.uz[k] || k; }
+function pretty(n){ return n.replace(/^\+998(\d{2})(\d{3})(\d{2})(\d{2})$/, '+998 $1 $2 $3 $4'); }
+function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function handle(u){ try { var p = new URL(u).pathname.replace(/\/+$/, '').split('/').pop(); return p ? '@' + p.replace(/^@/, '') : new URL(u).host; } catch (e) { return u; } }
+
+var d = 5; // animatsiya kechikishi hisoblagichi
+function card(o){
+  var cls = 'card reveal' + (o.cls ? ' ' + o.cls : '');
+  var ext = /^https?:/.test(o.href) ? ' target="_blank" rel="noopener"' : '';
+  return '<div class="' + cls + '" style="--d:' + (d++) + ';--c:' + (o.color || '#6B3F2A') + '">' +
+    '<a class="main" href="' + esc(o.href) + '"' + ext + ' aria-label="' + esc(o.title + ' — ' + o.sub) + '"></a>' +
+    '<span class="ico">' + svg(o.icon) + '</span>' +
+    '<span class="txt"><b>' + esc(o.title) + '</b><small>' + esc(o.sub) + '</small></span>' +
+    (o.copy ? '<button class="copy" data-copy="' + esc(o.copy) + '" aria-label="' + esc(t('copied')) + '"><span class="cp">' + svg('copy') + '</span><span class="ok">' + svg('check') + '</span></button>'
+            : '<span class="go">' + svg('arrow') + '</span>') +
+    '<span class="shine"></span></div>';
+}
+
+function render(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){ el.textContent = t(el.dataset.i18n); });
+  d = 5;
+  var c = CONFIG, h = '';
+  c.phones.forEach(function(p){
+    h += card({ href: 'tel:' + p.number, icon: 'phone', title: pretty(p.number), sub: (p.featured ? t('call') + ' · ' : '') + (p.label[lang] || p.label.uz),
+                copy: pretty(p.number), cls: p.featured ? 'hero-card' : '', color: '#6B3F2A' });
+  });
+  if (c.email) h += card({ href: 'mailto:' + c.email, icon: 'mail', title: c.email, sub: t('mail'), copy: c.email, color: '#8E6B24' });
+  document.getElementById('phones').innerHTML = h;
+
+  d = 7; h = '';
+  [['telegram','tg','tgs','#229ED9'],['whatsapp','wa','was','#25D366'],['instagram','ig','igs','linear-gradient(45deg,#F58529,#DD2A7B 50%,#8134AF)'],
+   ['facebook','fb','','#1877F2'],['youtube','yt','','#FF0033'],['tiktok','tt','','#111']].forEach(function(s){
+    if (!c[s[0]]) return;
+    h += card({ href: c[s[0]], icon: s[0], title: t(s[1]), sub: s[2] ? t(s[2]) : handle(c[s[0]]), cls: 'tile', color: s[3] });
+  });
+  document.getElementById('socials').innerHTML = h;
+
+  d = 9; h = '';
+  c.shops.forEach(function(s){ if (s.url) h += card({ href: s.url, icon: 'bag', title: s.name, sub: t('buy'), color: s.color }); });
+  document.getElementById('shops').innerHTML = h;
+  document.getElementById('shopSec').hidden = !h;
+
+  d = 10; h = '';
+  if (c.catalog) h += card({ href: c.catalog, icon: 'book', title: t('cat'), sub: t('cats'), color: '#3E2418' });
+  if (c.website) h += card({ href: c.website, icon: 'globe', title: t('site'), sub: t('sites'), color: '#3E2418' });
+  document.getElementById('more').innerHTML = h;
+
+  d = 13;
+  document.getElementById('mapLink').innerHTML = card({ href: 'https://www.google.com/maps/dir/?api=1&destination=' + c.lat + ',' + c.lng,
+    icon: 'pin', title: t('route'), sub: c.address[lang] || c.address.uz, color: '#C9A24B' });
+  document.getElementById('addr').textContent = c.address[lang] || c.address.uz;
+  document.getElementById('hours').textContent = t('hoursTxt');
+  status();
+  typer.reset();
+  bindCards();
+}
+
+/* ---------- Ish vaqti (Toshkent vaqti bilan) ---------- */
+function status(){
+  var now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Tashkent' }));
+  var H = CONFIG.hours, open = H.days.indexOf(now.getDay()) > -1 && now.getHours() >= H.open && now.getHours() < H.close;
+  document.getElementById('status').classList.toggle('closed', !open);
+  document.getElementById('statusText').textContent = open ? t('open') : t('closed') + ' · ' + t('opens') + ' ' + String(H.open).padStart(2, '0') + ':00';
+}
+
+/* ---------- Brend harflari ---------- */
+document.getElementById('brand').innerHTML = CONFIG.name.split('').map(function(ch, i){ return '<span style="--i:' + i + '">' + ch + '</span>'; }).join('');
+
+/* ---------- Typewriter ---------- */
+var typer = (function(){
+  var el = document.getElementById('typed'), w = 0, i = 0, del = false, tm;
+  function tick(){
+    var words = t('typed'), word = words[w % words.length];
+    i += del ? -1 : 1;
+    el.textContent = word.slice(0, i);
+    var wait = del ? 35 : 75;
+    if (!del && i === word.length) { del = true; wait = 1800; }
+    else if (del && i === 0) { del = false; w++; wait = 350; }
+    tm = setTimeout(tick, wait);
+  }
+  return { start: function(){ clearTimeout(tm); tick(); }, reset: function(){ w = 0; i = 0; del = false; if (tm) this.start(); } };
+})();
+
+/* ---------- Counterlar ---------- */
+function counters(){
+  document.querySelectorAll('[data-count]').forEach(function(el){
+    var end = +el.dataset.count, start = end > 1000 ? end - 60 : 0, t0 = performance.now(), dur = 1600;
+    (function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 4);
+      el.textContent = Math.round(start + (end - start) * e) + (p === 1 ? (el.dataset.suffix || '') : '');
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  });
+}
+
+/* ---------- Til almashtirish ---------- */
+var knob = document.getElementById('knob');
+function moveKnob(){
+  var b = document.querySelector('.lang button[data-lang="' + lang + '"]');
+  document.querySelectorAll('.lang button').forEach(function(x){ x.classList.toggle('on', x === b); });
+  knob.style.width = b.offsetWidth + 'px';
+  knob.style.transform = 'translateX(' + (b.offsetLeft - 3) + 'px)';
+}
+document.querySelectorAll('.lang button').forEach(function(b){
+  b.addEventListener('click', function(){
+    lang = b.dataset.lang; try { localStorage.setItem('bisraro-lang', lang); } catch (e) {}
+    moveKnob(); render();
+    document.querySelectorAll('.reveal').forEach(function(el){ el.style.animation = 'none'; el.offsetHeight; el.style.animation = ''; });
+  });
+});
+
+/* ---------- Karta effektlari: 3D tilt, yorug'lik, ripple, konfetti ---------- */
+var fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function bindCards(){
+  document.querySelectorAll('.card').forEach(function(c){
+    if (fine) {
+      c.addEventListener('pointermove', function(e){
+        var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        c.style.setProperty('--mx', x * 100 + '%'); c.style.setProperty('--my', y * 100 + '%');
+        c.style.setProperty('--ry', (x - .5) * 10 + 'deg'); c.style.setProperty('--rx', (.5 - y) * 10 + 'deg');
+      });
+      c.addEventListener('pointerleave', function(){ c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); });
+    }
+    c.addEventListener('pointerdown', function(e){
+      var r = c.getBoundingClientRect(), s = Math.max(r.width, r.height) * 2.2, rp = document.createElement('span');
+      rp.className = 'ripple'; rp.style.cssText = 'width:' + s + 'px;height:' + s + 'px;left:' + (e.clientX - r.left - s / 2) + 'px;top:' + (e.clientY - r.top - s / 2) + 'px';
+      c.appendChild(rp); setTimeout(function(){ rp.remove(); }, 800);
+      if (navigator.vibrate) navigator.vibrate(8);
+    });
+  });
+  document.querySelectorAll('.copy').forEach(function(b){
+    b.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      copy(b.dataset.copy, t('copied') + ': ' + b.dataset.copy);
+      b.classList.add('done'); burst(e.clientX, e.clientY);
+      setTimeout(function(){ b.classList.remove('done'); }, 1600);
+    });
+  });
+}
+
+function burst(x, y){
+  if (reduced) return;
+  var cols = ['#E8CD82', '#C9A24B', '#FFF3C9', '#6B3F2A', '#3E2418'];
+  for (var i = 0; i < 22; i++) (function(){
+    var b = document.createElement('i'); b.className = 'bit';
+    b.style.background = cols[i % cols.length]; b.style.left = x + 'px'; b.style.top = y + 'px';
+    if (i % 3 === 0) b.style.borderRadius = '50%';
+    document.body.appendChild(b);
+    var a = Math.random() * Math.PI * 2, v = 60 + Math.random() * 110;
+    b.animate([{ transform: 'translate(-50%,-50%) rotate(0)', opacity: 1 },
+               { transform: 'translate(' + Math.cos(a) * v + 'px,' + (Math.sin(a) * v + 80) + 'px) rotate(' + (Math.random() * 720 - 360) + 'deg) scale(.4)', opacity: 0 }],
+              { duration: 900 + Math.random() * 500, easing: 'cubic-bezier(.2,.8,.3,1)' }).onfinish = function(){ b.remove(); };
+  })();
+}
+
+/* ---------- Toast / nusxa ---------- */
+var toastEl = document.getElementById('toast'), toastT;
+function toast(msg){ document.getElementById('toastText').textContent = msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove('show'); }, 2200); }
+function copy(txt, msg){
+  var done = function(){ toast(msg); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(done, fallback); else fallback();
+  function fallback(){ var ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) {} ta.remove(); done(); }
+}
+
+/* ---------- Kontaktni saqlash (vCard) ---------- */
+document.getElementById('saveBtn').addEventListener('click', function(e){
+  var c = CONFIG, v = ['BEGIN:VCARD', 'VERSION:3.0', 'N:;' + c.name + ';;;', 'FN:' + c.name, 'ORG:HEALTHY FOOD PRODUCTION'];
+  c.phones.forEach(function(p, i){ v.push('TEL;TYPE=' + (i ? 'WORK' : 'CELL') + ':' + p.number); });
+  if (c.email) v.push('EMAIL:' + c.email);
+  if (c.website) v.push('URL:' + c.website);
+  if (c.instagram) v.push('X-SOCIALPROFILE;TYPE=instagram:' + c.instagram);
+  v.push('ADR;TYPE=WORK:;;' + c.address.uz + ';;;;Uzbekistan', 'END:VCARD');
+  var blob = new Blob([v.join('\r\n')], { type: 'text/vcard;charset=utf-8' }), a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'BISRARO.vcf'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  burst(e.clientX, e.clientY); toast(t('saved'));
+});
+
+/* ---------- Ulashish ---------- */
+document.getElementById('shareBtn').addEventListener('click', function(e){
+  var data = { title: document.title, url: location.href.split('?')[0] };
+  if (navigator.share) navigator.share(data).catch(function(){});
+  else { copy(data.url, t('linkCopied')); burst(e.clientX, e.clientY); }
+});
+
+/* ---------- Xarita (kechiktirib yuklanadi) ---------- */
+(function(){
+  var m = document.getElementById('map'), done = false;
+  function load(){
+    if (done) return; done = true;
+    var f = document.createElement('iframe');
+    f.src = 'https://www.google.com/maps?q=' + CONFIG.lat + ',' + CONFIG.lng + '&z=15&output=embed';
+    f.loading = 'lazy'; f.title = 'BISRARO — xarita'; f.referrerPolicy = 'no-referrer-when-downgrade';
+    m.insertBefore(f, m.firstChild);
+  }
+  if ('IntersectionObserver' in window) new IntersectionObserver(function(en, o){ if (en[0].isIntersecting) { load(); o.disconnect(); } }, { rootMargin: '300px' }).observe(m);
+  else load();
+})();
+
+/* ---------- Oltin chang (canvas) ---------- */
+(function(){
+  if (reduced) return;
+  var cv = document.getElementById('dust'), ctx = cv.getContext('2d'), W, H, dpr, P = [], mx = -999, my = -999;
+  function size(){
+    dpr = Math.min(2, window.devicePixelRatio || 1); W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var n = Math.round(Math.min(90, W * H / 9000));
+    P = []; for (var i = 0; i < n; i++) P.push(mk(true));
+  }
+  function mk(any){
+    return { x: Math.random() * W, y: any ? Math.random() * H : H + 10, r: Math.random() * 1.8 + .4, vy: -(Math.random() * .35 + .08),
+             vx: (Math.random() - .5) * .15, a: Math.random() * Math.PI * 2, s: Math.random() * .02 + .005, big: Math.random() < .08 };
+  }
+  function frame(){
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < P.length; i++) {
+      var p = P[i]; p.a += p.s; p.x += p.vx + Math.sin(p.a) * .2; p.y += p.vy;
+      var dx = p.x - mx, dy = p.y - my, dd = dx * dx + dy * dy;
+      if (dd < 14000) { var f = (14000 - dd) / 14000 * 1.6; p.x += dx / Math.sqrt(dd + 1) * f; p.y += dy / Math.sqrt(dd + 1) * f; }
+      if (p.y < -10 || p.x < -20 || p.x > W + 20) P[i] = mk(false);
+      var al = .35 + Math.sin(p.a * 2) * .3, r = p.big ? p.r * 2.2 : p.r;
+      ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.283);
+      ctx.fillStyle = 'rgba(232,205,130,' + Math.max(.05, al) + ')';
+      ctx.shadowColor = 'rgba(232,205,130,.9)'; ctx.shadowBlur = p.big ? 12 : 4; ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  addEventListener('resize', size); size(); frame();
+  var spot = document.getElementById('spot');
+  addEventListener('pointermove', function(e){ mx = e.clientX; my = e.clientY; spot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0)'; }, { passive: true });
+  addEventListener('pointerleave', function(){ mx = my = -999; });
+  // Telefonda — qurilmani qiyshaytirganda fon yorug'ligi siljiydi
+  addEventListener('deviceorientation', function(e){
+    if (e.gamma == null) return;
+    spot.style.transform = 'translate3d(' + (W / 2 + e.gamma * 6) + 'px,' + (H / 3 + (e.beta - 40) * 5) + 'px,0)';
+  });
+})();
+
+/* ---------- Ishga tushirish ---------- */
+document.getElementById('yr').textContent = new Date().getFullYear();
+render();
+var started = false;
+function start(){
+  if (started) return; started = true;
+  document.getElementById('loader').classList.add('done');
+  document.body.classList.add('ready');
+  moveKnob(); typer.start(); setTimeout(counters, 700);
+}
+if (document.readyState === 'complete') setTimeout(start, 900);
+else addEventListener('load', function(){ setTimeout(start, 700); });
+setTimeout(start, 3500); // tarmoq sekin bo'lsa ham sahifa ochiladi
+setInterval(status, 60000);
+</script>
+</body>
+</html>
