@@ -369,45 +369,21 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
 </div>
 
 <div class="wrap" id="tab-leads" style="display:none;padding-top:22px;padding-bottom:60px">
-  <!-- Ulanmagan bo'lsa: sozlash -->
-  <section class="panel setup" id="leadsSetup" style="display:none;max-width:760px">
-    <h2>Murojaatlarni ulash</h2>
-    <p class="hint">Saytdagi formalardan kelgan murojaatlar Google jadvalingizga yoziladi va shu yerda ko'rinadi. Bir marta sozlanadi (5 daqiqa).</p>
-    <ol>
-      <li><a href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a> — yangi Google jadval oching (nomi: <code>BISRARO murojaatlar</code>).</li>
-      <li>Menyudan <b>Kengaytmalar → Apps Script</b> (Extensions → Apps Script) ni oching.</li>
-      <li>U yerdagi kodni o'chirib, pastdagi <b>"Kodni nusxalash"</b> tugmasi bilan olingan kodni joylang va 💾 saqlang.</li>
-      <li><b>Deploy → New deployment</b> → ⚙ belgisidan <b>Web app</b> ni tanlang. <b>Execute as: Me</b>, <b>Who has access: Anyone</b> → <b>Deploy</b>. Ruxsat so'ralsa: hisobingizni tanlang → <i>Advanced → Go to ... (unsafe)</i> → <b>Allow</b>.</li>
-      <li>Chiqqan <b>Web app URL</b> ni nusxalab, pastga qo'ying va <b>"Saytga ulash"</b> ni bosing.</li>
-    </ol>
-    <textarea id="scriptCode" readonly rows="6" spellcheck="false"
-      style="font-family:ui-monospace,monospace;font-size:.72rem;line-height:1.45;margin-bottom:10px;white-space:pre"
-      placeholder="Kod yuklanmoqda…"></textarea>
-    <p style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 18px">
-      <button class="btn ghost sm" id="copyScript" type="button">Kodni nusxalash</button>
-      <span style="font-size:.78rem;color:var(--muted)">Ishlamasa: maydonni bosing → Ctrl+A → Ctrl+C</span>
-    </p>
-    <input type="text" id="formsUrlInput" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
-    <p style="margin:14px 0 0"><button class="btn" id="connectForms" type="button">Saytga ulash</button></p>
-  </section>
-
-  <!-- Ro'yxat -->
-  <section id="leadsView" style="display:none">
-    <div class="leads-bar">
-      <select id="leadFilter">
-        <option value="all">Barchasi</option>
-        <option value="yangi">Faqat yangilari</option>
-        <option value="bajarildi">Bajarilganlar</option>
-      </select>
-      <button class="btn ghost sm" id="leadsRefresh" type="button">Yangilash</button>
-      <span class="count" id="leadCount" style="margin-left:auto"></span>
-      <button class="btn ghost sm" id="leadsSettings" type="button" title="Google Script manzilini almashtirish">Sozlash</button>
-    </div>
-    <div class="list" id="leadList"></div>
-  </section>
+  <div class="warn" id="leadsWarn"></div>
+  <div class="leads-bar">
+    <select id="leadFilter">
+      <option value="all">Barchasi</option>
+      <option value="yangi">Faqat yangilari</option>
+      <option value="bajarildi">Bajarilganlar</option>
+    </select>
+    <button class="btn ghost sm" id="leadsRefresh" type="button">Yangilash</button>
+    <span class="count" id="leadCount" style="margin-left:auto"></span>
+  </div>
+  <div class="list" id="leadList"></div>
 </div>
 
 <div class="toast" id="toast"></div>
+<script src="js/nacl-fast.min.js"></script>
 <script src="site-config.js"></script>
 <script>
 var DEFAULT_PRODUCTS = [
@@ -1807,64 +1783,139 @@ $('#tokenBtn').addEventListener('click', function(){
 });
 try{ markDirty(localStorage.getItem(DIRTY_KEY) === '1'); }catch(e){}
 
-/* ---------- Murojaatlar (Google Apps Script orqali) ---------- */
-var FORMS_URL_KEY = 'hfp_forms_url';
-var leads = [], leadsLoaded = false;
-function formsUrl(){
-  var u = '';
-  try{ u = localStorage.getItem(FORMS_URL_KEY) || ''; }catch(e){}
-  return u || (window.BISRARO_CONFIG || {}).formsUrl || '';
-}
-function adminKey(){
-  var k = '';
-  try{ k = sessionStorage.getItem('hfp_pin') || ''; }catch(e){}
-  if(!k){
-    k = (prompt('Murojaatlarni ko\u2019rish uchun kirish kodini qayta kiriting:') || '').trim();
-    if(k && sha256(k) === PIN_HASH){ try{ sessionStorage.setItem('hfp_pin', k); }catch(e){} }
-    else { if(k) toast('Kod noto\u2019g\u2019ri', true); k = ''; }
+/* ---------- Murojaatlar ----------
+   Saytdagi forma murojaatni panel kalitining ochiq qismi bilan shifrlab ntfy.sh ga yuboradi
+   (u yerda 12 soat turadi). Panel ularni oladi, kirish kodi bilan ochadi va GitHub'dagi
+   murojaatlar.json fayliga (shifrlangan holda) doimiy saqlaydi. */
+var LEADS_CFG = window.BISRARO_CONFIG || {}, LEADS_FILE = 'murojaatlar.json';
+var leads = [], leadKeys = null, leadsBusy = false;
+
+function b64d(t){ var r = atob(t), u = new Uint8Array(r.length); for(var i = 0; i < r.length; i++) u[i] = r.charCodeAt(i); return u; }
+function utf8FromB64(t){ return decodeURIComponent(escape(atob(String(t).replace(/\s/g, '')))); }
+function leadKeyPair(){
+  if(leadKeys) return leadKeys;
+  var pin = '';
+  try{ pin = sessionStorage.getItem('hfp_pin') || ''; }catch(e){}
+  if(!pin){
+    pin = (prompt('Murojaatlarni ochish uchun kirish kodini qayta kiriting:') || '').trim();
+    if(!pin || sha256(pin) !== PIN_HASH){ if(pin) toast('Kod noto’g’ri', true); return null; }
+    try{ sessionStorage.setItem('hfp_pin', pin); }catch(e){}
   }
-  return k;
+  leadKeys = nacl.box.keyPair.fromSecretKey(nacl.hash(new TextEncoder().encode('bisraro-leads-v1:' + pin)).slice(0, 32));
+  return leadKeys;
 }
-function leadsApi(body){
-  return fetch(formsUrl(), {method: 'POST', body: JSON.stringify(body)}).then(function(r){ return r.json(); });
+function openLead(enc, keys){
+  try{
+    var pt = nacl.box.open(b64d(enc.c), b64d(enc.n), b64d(enc.e), keys.secretKey);
+    return pt ? JSON.parse(new TextDecoder().decode(pt)) : null;
+  }catch(e){ return null; }
 }
-function showLeadsSetup(on){
-  $('#leadsSetup').style.display = on ? '' : 'none';
-  $('#leadsView').style.display = on ? 'none' : '';
-  if(on){
-    $('#formsUrlInput').value = formsUrl();
-    if(!$('#scriptCode').value){
-      fetch('google-apps-script.gs?t=' + Date.now()).then(function(r){ return r.text(); })
-        .then(function(code){ $('#scriptCode').value = code; })
-        .catch(function(){ $('#scriptCode').placeholder = "Kodni yuklab bo'lmadi — sahifani yangilang"; });
-    }
+
+/* murojaatlar.json: token bo'lsa GitHub API orqali (eng yangi holat), aks holda saytdan */
+function leadsApiUrl(){ return 'https://api.github.com/repos/' + GH_REPO + '/contents/' + LEADS_FILE; }
+function readLeadsFile(){
+  var token = ghToken(false), empty = function(){ return {items: [], deleted: []}; };
+  if(!token){
+    return fetch(LEADS_FILE + '?t=' + Date.now(), {cache: 'no-store'})
+      .then(function(r){ return r.ok ? r.json() : empty(); })
+      .then(function(d){ return {data: d, sha: null}; });
   }
-}
-function openLeads(){
-  if(!formsUrl()){ showLeadsSetup(true); return; }
-  showLeadsSetup(false);
-  loadLeads();
-}
-function loadLeads(silent){
-  var url = formsUrl(), key = url && adminKey();
-  if(!url || !key) return;
-  if(!silent) $('#leadList').innerHTML = '<p class="empty-leads">Yuklanmoqda…</p>';
-  fetch(url + (url.indexOf('?') > -1 ? '&' : '?') + 'action=list&key=' + encodeURIComponent(key) + '&t=' + Date.now())
-    .then(function(r){ return r.json(); })
-    .then(function(j){
-      if(!j || !j.ok){
-        if(j && j.error === 'auth') throw new Error('Google Script\u2019dagi kod bu panel kodiga mos emas. Kodni qaytadan nusxalab joylang.');
-        throw new Error(j && j.error === 'script' ? 'Google Script xatosi: ' + (j.message || '') : 'Javob noto\u2019g\u2019ri');
-      }
-      leads = j.items || []; leadsLoaded = true; renderLeads();
-    })
-    .catch(function(err){
-      if(!silent) $('#leadList').innerHTML = '<p class="empty-leads">Murojaatlarni yuklab bo\u2019lmadi. '
-        + esc(err && err.message && err.message.length > 20 ? err.message : 'Internetni yoki Google Script manzilini tekshiring.') + '</p>';
+  var h = {'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json'};
+  return fetch(leadsApiUrl() + '?ref=' + GH_BRANCH + '&t=' + Date.now(), {headers: h, cache: 'no-store'})
+    .then(function(r){
+      if(r.status === 404) return {data: empty(), sha: null};
+      if(r.status === 401) throw new Error('auth');
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json().then(function(j){
+        if(j.content) return {data: JSON.parse(utf8FromB64(j.content)), sha: j.sha};
+        return fetch(j.download_url, {cache: 'no-store'}).then(function(x){ return x.json(); })
+          .then(function(d){ return {data: d, sha: j.sha}; });      /* 1 MB dan katta fayl */
+      });
     });
 }
-function fmtDate(iso){
-  var d = new Date(iso); if(isNaN(d)) return iso || '';
+/* Faylni o'qib, o'zgartirib, qayta yozadi (bir vaqtda yozilsa — qaytadan urinadi) */
+function updateLeadsFile(mutate, tries){
+  tries = tries || 0;
+  var token = ghToken(true);
+  if(!token) return Promise.reject(new Error('token'));
+  return readLeadsFile().then(function(f){
+    var d = f.data || {};
+    d.items = d.items || []; d.deleted = d.deleted || [];
+    if(mutate(d) === false) return d;
+    d.deleted = d.deleted.slice(-1000);
+    var body = {message: 'Murojaatlar yangilandi', branch: GH_BRANCH,
+                content: b64(JSON.stringify(d, null, 1) + '\n')};
+    if(f.sha) body.sha = f.sha;
+    return fetch(leadsApiUrl(), {method: 'PUT',
+      headers: {'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json'},
+      body: JSON.stringify(body)})
+      .then(function(r){
+        if(r.ok) return d;
+        if((r.status === 409 || r.status === 422) && tries < 3) return updateLeadsFile(mutate, tries + 1);
+        if(r.status === 401 || r.status === 403 || r.status === 404) throw new Error('auth');
+        throw new Error('HTTP ' + r.status);
+      });
+  });
+}
+function fetchNtfy(){
+  if(!LEADS_CFG.leadsTopic) return Promise.resolve([]);
+  return fetch('https://ntfy.sh/' + LEADS_CFG.leadsTopic + '/json?poll=1&since=all', {cache: 'no-store'})
+    .then(function(r){ return r.ok ? r.text() : ''; })
+    .then(function(txt){
+      return txt.split('\n').map(function(line){
+        try{
+          var m = JSON.parse(line), enc = m.event === 'message' ? JSON.parse(m.message) : null;
+          return enc && enc.v === 1 && enc.e && enc.n && enc.c ? {id: m.id, time: m.time, enc: {v: 1, e: enc.e, n: enc.n, c: enc.c}} : null;
+        }catch(e){ return null; }
+      }).filter(Boolean);
+    });
+}
+
+function leadsWarn(msg){ var w = $('#leadsWarn'); w.textContent = msg || ''; w.classList.toggle('show', !!msg); }
+function syncLeads(silent){
+  if(leadsBusy) return;
+  var keys = leadKeyPair(); if(!keys) return;
+  leadsBusy = true;
+  if(!silent && !leads.length) $('#leadList').innerHTML = '<p class="empty-leads">Yuklanmoqda…</p>';
+  Promise.all([
+    readLeadsFile().catch(function(e){ return {data: {items: [], deleted: []}, err: e}; }),
+    fetchNtfy().catch(function(){ return []; })
+  ]).then(function(res){
+    var f = res[0], d = f.data || {}, items = d.items || [], known = {};
+    items.forEach(function(x){ known[x.id] = 1; });
+    (d.deleted || []).forEach(function(id){ known[id] = 1; });
+    var fresh = res[1].filter(function(m){ return !known[m.id]; }).map(function(m){
+      return {id: m.id, time: m.time, enc: m.enc, status: 'yangi'};
+    });
+    var all = items.concat(fresh).map(function(x){
+      var data = openLead(x.enc, keys);
+      return data ? {id: x.id, time: x.time, enc: x.enc, status: x.status || 'yangi', data: data} : null;
+    }).filter(Boolean);
+    all.sort(function(a, b){ return b.time - a.time; });
+    leads = all;
+    var token = ghToken(false);
+    leadsWarn(!token ? 'Murojaatlarni doimiy saqlash uchun GitHub token kerak — yuqoridagi "Token" tugmasi orqali kiriting. '
+      + 'Tokensiz yangi murojaatlar faqat 12 soat ko’rinadi.' : (f.err ? 'Saqlangan murojaatlarni o’qib bo’lmadi: ' + f.err.message : ''));
+    renderLeads();
+    /* Yangi (hali saqlanmagan) murojaatlarni faylga yozib qo'yamiz */
+    var toSave = fresh.filter(function(x){ return leads.some(function(l){ return l.id === x.id; }); });
+    if(toSave.length && token && !f.err){
+      return updateLeadsFile(function(d2){
+        var ids = {};
+        d2.items.forEach(function(x){ ids[x.id] = 1; });
+        d2.deleted.forEach(function(id){ ids[id] = 1; });
+        var add = toSave.filter(function(x){ return !ids[x.id]; });
+        if(!add.length) return false;
+        add.forEach(function(x){ d2.items.push({id: x.id, time: x.time, enc: x.enc, status: 'yangi'}); });
+        d2.items.sort(function(a, b){ return a.time - b.time; });
+      }).catch(function(e){ leadsWarn('Yangi murojaatlarni saqlab bo’lmadi (' + e.message + '). Token to’g’riligini tekshiring.'); });
+    }
+  }).then(function(){ leadsBusy = false; }, function(){ leadsBusy = false; });
+}
+function openLeads(){ syncLeads(false); }
+
+function fmtDate(sec){
+  var d = new Date(sec * 1000); if(isNaN(d)) return '';
   var p = function(n){ return (n < 10 ? '0' : '') + n; };
   return p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
 }
@@ -1874,101 +1925,48 @@ function renderLeads(){
   $('#leadCount').textContent = leads.length + ' ta murojaat' + (fresh ? ' · ' + fresh + ' ta yangi' : '');
   var view = leads.filter(function(l){ return f === 'all' || (f === 'yangi' ? l.status !== 'bajarildi' : l.status === 'bajarildi'); });
   $('#leadList').innerHTML = view.length ? view.map(function(l){
-    var isNew = l.status !== 'bajarildi', tel = String(l.phone || '').replace(/[^\d+]/g, '');
+    var v = l.data, isNew = l.status !== 'bajarildi', tel = String(v.phone || '').replace(/[^\d+]/g, '');
     return '<article class="lead' + (isNew ? ' new' : '') + '" data-id="' + esc(l.id) + '">'
-      + '<div class="lead-head"><b>' + esc(l.name) + '</b>'
+      + '<div class="lead-head"><b>' + esc(v.name) + '</b>'
       + '<span class="pill' + (isNew ? ' new' : '') + '">' + (isNew ? 'YANGI' : 'BAJARILDI') + '</span>'
-      + (l.company ? '<span class="pill">' + esc(l.company) + '</span>' : '')
-      + '<span class="when">' + esc(fmtDate(l.date)) + '</span></div>'
-      + '<div class="lead-contacts"><a href="tel:' + esc(tel) + '">📞 ' + esc(l.phone) + '</a>'
-      + (l.email ? '<a href="mailto:' + esc(l.email) + '">✉ ' + esc(l.email) + '</a>' : '') + '</div>'
-      + (l.message ? '<p class="lead-msg">' + esc(l.message) + '</p>' : '')
-      + '<div class="lead-foot"><span class="sp">Forma: ' + esc(l.form || '—') + '</span>'
+      + (v.company ? '<span class="pill">' + esc(v.company) + '</span>' : '')
+      + '<span class="when">' + esc(fmtDate(l.time)) + '</span></div>'
+      + '<div class="lead-contacts"><a href="tel:' + esc(tel) + '">📞 ' + esc(v.phone) + '</a>'
+      + (v.email ? '<a href="mailto:' + esc(v.email) + '">✉ ' + esc(v.email) + '</a>' : '') + '</div>'
+      + (v.message ? '<p class="lead-msg">' + esc(v.message) + '</p>' : '')
+      + '<div class="lead-foot"><span class="sp">Forma: ' + esc(v.form || '—') + '</span>'
       + '<button class="btn ghost sm" data-toggle type="button">' + (isNew ? '✓ Bajarildi' : 'Yangi deb belgilash') + '</button>'
-      + '<button class="iconbtn del" data-del type="button" title="O\u2019chirish">&times;</button></div>'
+      + '<button class="iconbtn del" data-del type="button" title="O’chirish">&times;</button></div>'
       + '</article>';
-  }).join('') : '<p class="empty-leads">' + (leads.length ? 'Bu bo\u2019limda murojaat yo\u2019q.' : 'Hozircha murojaat yo\u2019q. Saytdagi forma to\u2019ldirilganda shu yerda paydo bo\u2019ladi.') + '</p>';
+  }).join('') : '<p class="empty-leads">' + (leads.length ? 'Bu bo’limda murojaat yo’q.'
+      : 'Hozircha murojaat yo’q. Saytdagi forma to’ldirilishi bilan shu yerda paydo bo’ladi.') + '</p>';
   $$('#leadList .lead').forEach(function(el){
     var id = el.dataset.id, l = leads.filter(function(x){ return x.id === id; })[0];
     el.querySelector('[data-toggle]').addEventListener('click', function(){
-      var st = l.status === 'bajarildi' ? 'yangi' : 'bajarildi', key = adminKey(); if(!key) return;
-      leadsApi({action: 'status', id: id, status: st, key: key}).then(function(j){
-        if(!j.ok) throw 0; l.status = st; renderLeads();
-      }).catch(function(){ toast("O'zgartirib bo'lmadi", true); });
+      var st = l.status === 'bajarildi' ? 'yangi' : 'bajarildi';
+      updateLeadsFile(function(d){
+        var it = d.items.filter(function(x){ return x.id === id; })[0];
+        if(!it){ it = {id: l.id, time: l.time, enc: l.enc}; d.items.push(it); }
+        it.status = st;
+      }).then(function(){ l.status = st; renderLeads(); })
+        .catch(function(e){ toast(e.message === 'token' ? 'GitHub token kiritilmadi' : "O'zgartirib bo'lmadi — tokenni tekshiring", true); });
     });
     el.querySelector('[data-del]').addEventListener('click', function(){
-      if(!confirm('"' + l.name + '" murojaatini o\u2019chirasizmi?')) return;
-      var key = adminKey(); if(!key) return;
-      leadsApi({action: 'delete', id: id, key: key}).then(function(j){
-        if(!j.ok) throw 0; leads = leads.filter(function(x){ return x.id !== id; }); renderLeads(); toast("O'chirildi");
-      }).catch(function(){ toast("O'chirib bo'lmadi", true); });
+      if(!confirm('"' + (l.data.name || '') + '" murojaatini o’chirasizmi?')) return;
+      updateLeadsFile(function(d){
+        d.items = d.items.filter(function(x){ return x.id !== id; });
+        if(d.deleted.indexOf(id) < 0) d.deleted.push(id);
+      }).then(function(){ leads = leads.filter(function(x){ return x.id !== id; }); renderLeads(); toast("O'chirildi"); })
+        .catch(function(e){ toast(e.message === 'token' ? 'GitHub token kiritilmadi' : "O'chirib bo'lmadi — tokenni tekshiring", true); });
     });
   });
 }
 $('#leadFilter').addEventListener('change', renderLeads);
-$('#leadsRefresh').addEventListener('click', function(){ loadLeads(); });
-$('#leadsSettings').addEventListener('click', function(){ showLeadsSetup(true); });
-/* Nusxalash bosish paytida (sinxron) bajariladi — aks holda http sahifada brauzer ruxsat bermaydi */
-$('#copyScript').addEventListener('click', function(){
-  var ta = $('#scriptCode');
-  if(!ta.value){ toast('Kod hali yuklanmadi, bir soniyadan keyin qayta bosing', true); return; }
-  ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length);
-  var ok = false;
-  try{ ok = document.execCommand('copy'); }catch(e){}
-  if(ok) toast('Kod nusxalandi — Apps Script oynasiga joylang');
-  else if(navigator.clipboard && window.isSecureContext)
-    navigator.clipboard.writeText(ta.value).then(function(){ toast('Kod nusxalandi — Apps Script oynasiga joylang'); },
-      function(){ toast("Nusxalanmadi — maydonni bosib Ctrl+A, Ctrl+C qiling", true); });
-  else toast("Nusxalanmadi — kod belgilandi, Ctrl+C bosing", true);
-});
-$('#connectForms').addEventListener('click', function(){
-  var btn = this, url = $('#formsUrlInput').value.trim(), key = adminKey();
-  if(!/^https:\/\/script\.google(usercontent)?\.com\/.+/.test(url)){ toast('Manzil https://script.google.com/... bilan boshlanishi kerak', true); return; }
-  if(!key) return;
-  btn.disabled = true; btn.textContent = 'Tekshirilmoqda…';
-  fetch(url + (url.indexOf('?') > -1 ? '&' : '?') + 'action=list&key=' + encodeURIComponent(key))
-    .then(function(r){ return r.json(); })
-    .then(function(j){
-      if(j && j.error === 'script') throw new Error('script:' + (j.message || ''));
-      if(!j || !j.ok) throw new Error(j && j.error === 'auth' ? 'auth' : 'bad');
-      try{ localStorage.setItem(FORMS_URL_KEY, url); }catch(e){}
-      var token = ghToken(true);
-      if(!token) throw new Error('token');
-      btn.textContent = 'Saytga ulanmoqda…';
-      var cfg = '/* Sayt sozlamalari \u2014 admin paneldagi "Murojaatlar \u2192 Saytga ulash" tugmasi yangilaydi */\n'
-        + 'window.BISRARO_CONFIG = {\n  formsUrl: ' + JSON.stringify(url) + '\n};\n';
-      return ghPut('site-config.js', null, token, b64(cfg)).catch(function(e){
-        throw new Error(e && e.message === 'auth' ? 'ghauth' : (e && e.message) || 'github');
-      });
-    })
-    .then(function(){
-      window.BISRARO_CONFIG = {formsUrl: url};
-      toast('Ulandi! 1–2 daqiqada saytdagi formalar murojaatlarni shu yerga yuboradi.');
-      openLeads();
-    })
-    .catch(function(err){
-      var m = err && err.message;
-      if(m && m.indexOf('script:') === 0) alert('Google Script ishga tushdi, lekin ichida xato bor:\n\n' + m.slice(7)
-        + '\n\n"Kodni nusxalash" bilan eng yangi kodni qayta joylang va yangi Deploy qiling.');
-      else if(m === 'auth') alert('Google Script ishlayapti, lekin undagi kod eski yoki boshqa. "Kodni nusxalash" bilan qaytadan joylab, yangi Deploy qiling.');
-      else if(m === 'token') toast('GitHub token kiritilmadi', true);
-      else if(m === 'ghauth'){
-        try{ localStorage.removeItem(GH_TOKEN_KEY); }catch(e){}
-        alert("Google Script ishlayapti, lekin saytga yozib bo'lmadi: GitHub token noto'g'ri. \"Token\" tugmasi bilan qayta kiriting.");
-      }
-      else if(m === 'bad' || err instanceof TypeError) alert("Bu manzildan javob kelmadi. Tekshiring:\n\n"
-        + "\u2022 Manzil /exec bilan tugashi kerak (/dev yoki /edit emas)\n"
-        + "\u2022 Deploy'da \"Who has access: Anyone\" tanlangan bo'lishi kerak\n"
-        + "\u2022 Kod o'zgargan bo'lsa: Deploy \u2192 New deployment qilib, YANGI manzilni qo'ying\n"
-        + "\u2022 Manzilni brauzerda alohida ochib ko'ring: {\"ok\":true,...} chiqishi kerak");
-      else toast("Ulab bo'lmadi: " + (m || 'xato'), true);
-    })
-    .then(function(){ btn.disabled = false; btn.textContent = 'Saytga ulash'; });
-});
-/* Yangi murojaatlar sonini tabda ko'rsatish */
-function pollLeads(){ var k = ''; try{ k = sessionStorage.getItem('hfp_pin'); }catch(e){} if(formsUrl() && k) loadLeads(true); }
+$('#leadsRefresh').addEventListener('click', function(){ syncLeads(false); });
+/* Yangi murojaatlarni har daqiqada tekshirish (panel ochiq bo'lsa) */
+function pollLeads(){ var k = ''; try{ k = sessionStorage.getItem('hfp_pin'); }catch(e){} if(k && window.nacl) syncLeads(true); }
 setTimeout(pollLeads, 1500);
-setInterval(pollLeads, 120000);
+setInterval(pollLeads, 60000);
 
 })();
 </script>

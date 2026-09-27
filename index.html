@@ -1279,7 +1279,7 @@ Biz zamonaviy ishlab chiqarish texnologiyalari va sifatli xomashyo asosida shoko
 
       <div class="collection">
         <div class="card" role="button" tabindex="0" data-reveal data-cursor="view" data-goto="/katalog" data-filter-target="konfet">
-          <img src="./img/konfet.PNG" class="art"  alt="Ichi to'ldirilgan konfetlar" loading="lazy">
+          <img src="img/kolleksiya/konfetlar-karta.webp" class="art"  alt="Ichi to'ldirilgan konfetlar" loading="lazy">
           <span class="shade"></span><span class="edge"></span>
           <span class="body">
             <span class="idx">01 — KONFETLAR</span>
@@ -1289,7 +1289,7 @@ Biz zamonaviy ishlab chiqarish texnologiyalari va sifatli xomashyo asosida shoko
         </div>
 
         <div class="card" role="button" tabindex="0" data-reveal style="--d:130ms" data-cursor="view" data-goto="/katalog" data-filter-target="plitka">
-          <img class="art" src="./img/plitka.PNG" alt="Shokolad plitkalari va botonchalar" loading="lazy">
+          <img class="art" src="img/kolleksiya/plitka-karta.webp" alt="Shokolad plitkalari va botonchalar" loading="lazy">
           <span class="shade"></span><span class="edge"></span>
           <span class="body">
             <span class="idx">02 — PLITKA VA BOTONCHIK</span>
@@ -1299,7 +1299,7 @@ Biz zamonaviy ishlab chiqarish texnologiyalari va sifatli xomashyo asosida shoko
         </div>
 
         <div class="card" role="button" tabindex="0" data-reveal style="--d:260ms" data-cursor="view" data-goto="/katalog" data-filter-target="premium">
-          <img class="art" src="./img/premium.PNG" alt="BISRARO premium liniyasi" loading="lazy">
+          <img class="art" src="img/kolleksiya/premium-karta.webp" alt="BISRARO premium liniyasi" loading="lazy">
           <span class="shade"></span><span class="edge"></span>
           <span class="body">
             <span class="idx">03 — PREMIUM</span>
@@ -1397,7 +1397,7 @@ Biz zamonaviy ishlab chiqarish texnologiyalari va sifatli xomashyo asosida shoko
         </div>
         <div class="frame" data-reveal="right">
           <div class="shot photo-shot" data-cursor="view" data-photo="diplom" data-cap="ProdExpo 2023 — laureat diplomi">
-            <img src="./img/diplom.PNG" alt="ProdExpo 2023 laureat diplomi va oltin medal" loading="lazy">
+            <img src="img/mukofot/prodexpo-diplom-medal.webp" alt="ProdExpo 2023 laureat diplomi va oltin medal" loading="lazy">
           </div>
         </div>
       </div>
@@ -1835,6 +1835,7 @@ Biz zamonaviy ishlab chiqarish texnologiyalari va sifatli xomashyo asosida shoko
   </div>
 </div>
 
+<script src="js/nacl-fast.min.js"></script>
 <script src="site-config.js"></script>
 <script>
 /* ============================================================
@@ -2219,7 +2220,7 @@ function renderAwards(){
 
   if(track) track.innerHTML = list.map(function(a){
     return '<article class="glass award-card" data-cursor="view" data-photo="'+esc(a.img)+'" data-cap="'+esc(a.title)+'">'
-      + '<span class="ph"><img src="'+esc(awardSrc(a))+'" alt="'+esc(a.title)+'" loading="lazy"></span>'
+      + '<span class="ph"><img src="'+esc(awardSrc(a))+'" alt="'+esc(a.title)+'" decoding="async"></span>'
       + '<p class="yr">'+esc(a.year)+(a.place ? ' · '+esc(a.place).toUpperCase() : '')+'</p>'
       + '<h3>'+esc(a.title)+'</h3><p>'+esc(a.desc)+'</p></article>';
   }).join('');
@@ -3047,20 +3048,33 @@ $$('[data-close]').forEach(function(b){ b.addEventListener('click', closeOverlay
 document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeOverlays(); closeMenu(); } });
 
 /* ---------- 13. Formalar ---------- */
-var MAIL_TO = 'chempme@gmail.com';   /* <-- xabarlar shu pochtaga tushadi */
-var FORMS_URL = (window.BISRARO_CONFIG || {}).formsUrl || '';   /* admin panel murojaatlari (site-config.js) */
-function sendToPanel(lead){
-  if(!FORMS_URL) return Promise.reject('no-url');
-  /* text/plain — Google Apps Script CORS so'rovisiz qabul qiladi */
-  return fetch(FORMS_URL, {method:'POST', body: JSON.stringify(lead)})
-    .then(function(r){ return r.json(); })
-    .then(function(j){ return j && j.ok ? j : Promise.reject(j); });
+var MAIL_TO = 'chempme@gmail.com';   /* <-- zaxira: panelga yuborib bo'lmasa, shu pochtaga */
+var LEADS = window.BISRARO_CONFIG || {};   /* admin panel murojaatlari (site-config.js) */
+function b64enc(u8){ var t = ''; for(var i = 0; i < u8.length; i++) t += String.fromCharCode(u8[i]); return btoa(t); }
+function b64dec(t){ var r = atob(t), u = new Uint8Array(r.length); for(var i = 0; i < r.length; i++) u[i] = r.charCodeAt(i); return u; }
+/* Murojaat admin panel kalitining ochiq qismi bilan shifrlanadi — uni faqat panel (kirish kodi bilan) ochadi */
+function sealLead(lead){
+  var enc = new TextEncoder(), msg = lead.message || '', bytes;
+  for(;;){
+    bytes = enc.encode(JSON.stringify(Object.assign({}, lead, {message: msg})));
+    if(bytes.length <= 2600 || !msg) break;      /* ntfy xabari 4 KB dan oshmasin */
+    msg = msg.slice(0, Math.floor(msg.length * 0.8));
+  }
+  var eph = nacl.box.keyPair(), nonce = nacl.randomBytes(24);
+  return JSON.stringify({v: 1, e: b64enc(eph.publicKey), n: b64enc(nonce),
+    c: b64enc(nacl.box(bytes, nonce, b64dec(LEADS.leadsKey), eph.secretKey))});
 }
-function anySuccess(list){
-  return new Promise(function(res, rej){
-    var left = list.length;
-    list.forEach(function(p){ p.then(res, function(){ if(--left === 0) rej(); }); });
-  });
+function sendToPanel(lead){
+  if(!window.nacl || !window.TextEncoder || !LEADS.leadsTopic || !LEADS.leadsKey) return Promise.reject('config');
+  return fetch('https://ntfy.sh/' + LEADS.leadsTopic, {method: 'POST', body: sealLead(lead)})
+    .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); });
+}
+function sendToMail(fd){
+  return fetch('https://formsubmit.co/ajax/' + MAIL_TO, {
+    method:'POST',
+    headers:{'Content-Type':'application/json', 'Accept':'application/json'},
+    body: JSON.stringify(fd)
+  }).then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); });
 }
 function validate(form){
   var ok = true;
@@ -3082,30 +3096,22 @@ function validate(form){
   form.addEventListener('submit', function(e){
     e.preventDefault();
     if(!validate(form)){ var bad = form.querySelector('.invalid input, .invalid textarea'); if(bad) bad.focus(); return; }
-    /* Xabar FormSubmit xizmati orqali info-pochtaga yuboriladi.
-       Qabul qiluvchi manzilni o'zgartirish uchun MAIL_TO qiymatini almashtiring. */
     var fd = {};
     $$('input, textarea', form).forEach(function(i){ if(i.name) fd[i.name] = i.value.trim(); });
     if(fd.website) return;                       /* spam-bot */
     delete fd.website;
     var lead = {name: fd.name, phone: fd.phone, email: fd.email || '', company: fd.company || '',
                 message: fd.message || '', form: form.id === 'leadForm' ? 'bosh sahifa' : 'kontakt',
-                page: location.pathname};
+                page: location.pathname, date: new Date().toISOString()};
     fd._subject = 'Saytdan yangi so\u2019rov — BISRARO';
     fd._template = 'table';
     var btn = form.querySelector('button[type=submit]');
     var label = btn.textContent;
     btn.textContent = 'Yuborilmoqda…'; btn.disabled = true;
 
-    /* 1) Admin panelga (Google jadval orqali)  2) pochtaga (FormSubmit).
-       Ikkalasidan biri muvaffaqiyatli bo'lsa — xabar yuborilgan hisoblanadi. */
-    var toPanel = sendToPanel(lead);
-    var toMail = fetch('https://formsubmit.co/ajax/' + MAIL_TO, {
-      method:'POST',
-      headers:{'Content-Type':'application/json', 'Accept':'application/json'},
-      body: JSON.stringify(fd)
-    }).then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); });
-    anySuccess([toPanel, toMail])
+    /* Murojaat admin panelga yuboriladi; u ishlamay qolsa — zaxira sifatida pochtaga */
+    sendToPanel(lead)
+      .catch(function(){ return sendToMail(fd); })
       .then(function(){
         form.style.display = 'none';
         sent.classList.add('show');

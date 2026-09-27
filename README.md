@@ -270,8 +270,14 @@ shu buyruqni qayta ishga tushiring. `404.html` noto'g'ri manzillarni to'g'ri sah
 
 ## Murojaatlar (saytdagi formalar)
 
-Bosh sahifa va Kontakt formalaridan kelgan murojaatlar ikki joyga ketadi: pochtaga (FormSubmit,
-`MAIL_TO`) va Google jadvalga — admin panelning **"Murojaatlar"** bo'limida ko'rinadi
-(yangi/bajarildi, o'chirish). Google jadval tomoni — `google-apps-script.gs` (o'rnatish yo'riqnomasi
-fayl boshida va panelda). Script manzili `site-config.js` da saqlanadi, panel uni o'zi yangilaydi.
-Panel kirish kodi almashtirilsa, `google-apps-script.gs` dagi `KEY_HASH` ni ham yangilang.
+Bosh sahifa va Kontakt formalaridan kelgan murojaatlar to'g'ridan-to'g'ri admin panelning
+**"Murojaatlar"** bo'limiga tushadi — hech qanday tashqi sozlash kerak emas:
+
+1. Sayt murojaatni panel kalitining ochiq qismi (`site-config.js` → `leadsKey`) bilan shifrlaydi
+   (`js/nacl-fast.min.js`, TweetNaCl) va ntfy.sh kanaliga (`leadsTopic`) yuboradi. ntfy.sh xabarni 12 soat saqlaydi.
+2. Admin panel ochilganda (va ochiq tursa har daqiqada) murojaatlarni oladi, kirish kodi bilan ochadi
+   va `murojaatlar.json` ga shifrlangan holda doimiy saqlaydi (GitHub token orqali).
+3. ntfy.sh ishlamay qolsa, sayt zaxira sifatida murojaatni pochtaga (`MAIL_TO`) yuboradi.
+
+Muhim: panelni **kuniga kamida bir marta** oching — aks holda 12 soatdan eski murojaatlar ntfy.sh da o'chadi.
+Panel kirish kodi almashtirilsa, `site-config.js` dagi `leadsKey` ni ham yangi kod bilan qayta yaratish kerak.
