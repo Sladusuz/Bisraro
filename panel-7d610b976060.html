@@ -1077,9 +1077,9 @@ var IMG_PATHS = {
   'diplom': 'img/mukofot/prodexpo-2023-laureat-diplomi.webp',
   'plaque': 'img/mukofot/f-istanbul-plaketa.webp',
   'guvohnoma': 'img/mukofot/davlat-guvohnomasi.webp',
-  'c_konfet': 'img/kolleksiya/bisraro-konfetlar.webp',
-  'c_plitka': 'img/kolleksiya/bisraro-shokolad-plitka.webp',
-  'c_premium': 'img/kolleksiya/bisraro-premium-sovga.webp',
+  'c_konfet': 'img/kolleksiya/konfetlar-karta.webp',
+  'c_plitka': 'img/kolleksiya/plitka-karta.webp',
+  'c_premium': 'img/kolleksiya/premium-karta.webp',
   'p_bisraro-buni': 'img/mahsulot/zaxira/bisraro-buni.webp',
   'p_bisraro': 'img/mahsulot/zaxira/bisraro.webp',
   'p_dorro': 'img/mahsulot/zaxira/dorro.webp',
@@ -1733,7 +1733,9 @@ function buildSitemap(prods, awds){
     return '  <url>\n    <loc>' + SITE_URL + path + '</loc>\n    <lastmod>' + today + '</lastmod>\n'
       + '    <changefreq>weekly</changefreq>\n    <priority>' + prio + '</priority>\n' + images + '  </url>\n';
   }
-  var home = img('logo', 'BISRARO logotipi') + img('c_konfet', 'BISRARO konfetlari')
+  var home = img('img/share/bisraro-1200x1200.jpg', 'BISRARO — premium shokolad va qandolat')
+    + img('img/share/bisraro-1200x630.jpg', 'BISRARO — premium shokolad va qandolat')
+    + img('logo', 'BISRARO logotipi') + img('c_konfet', 'BISRARO konfetlari')
     + img('c_plitka', 'BISRARO shokolad plitkalari') + img('c_premium', "BISRARO premium sovg'a to'plamlari");
   var cat = prods.map(function(p){ return img(p.img, p.title + ' — BISRARO shokolad mahsuloti'); }).join('');
   var aw  = awds.map(function(a){ return img(a.img, a.title + ' — BISRARO'); }).join('');
