@@ -24,7 +24,7 @@ awards.json o'zgarganda avtomatik ishga tushadi — qo'lda ishga tushirish shart
 """
 import html, json, re
 
-SITE = 'http://bisraro.uz'
+SITE = 'https://bisraro.uz'
 PAGES = {
     'biz-haqimizda': ('Biz haqimizda — BISRARO',
         "BISRARO va «HEALTHY FOOD PRODUCTION» MCHJ haqida: 2016-yildan beri Toshkentda shokolad va qandolat mahsulotlari ishlab chiqaramiz."),
