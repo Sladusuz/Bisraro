@@ -70,18 +70,16 @@ def products_grid_html(products):
 
 
 def product_schema_block(products, site):
+    # Diqqat: "Product" turi ishlatilmaydi — Google unga offers/review/aggregateRating
+    # talab qiladi (narx yo'q), aks holda Search Console'da "critical issue" chiqadi.
     items = []
     for i, p in enumerate(products):
-        item = {
-            '@type': 'Product',
-            'name': p.get('title', ''),
-            'description': p.get('desc') or p.get('short') or '',
-            'brand': {'@type': 'Brand', 'name': p.get('tag') or 'BISRARO'},
-        }
+        entry = {'@type': 'ListItem', 'position': i + 1, 'name': p.get('title', ''),
+                 'url': site.rstrip('/') + '/katalog'}
         img = p.get('img')
         if img and not img.startswith('data:'):
-            item['image'] = site.rstrip('/') + '/' + img.lstrip('/')
-        items.append({'@type': 'ListItem', 'position': i + 1, 'item': item})
+            entry['image'] = site.rstrip('/') + '/' + img.lstrip('/')
+        items.append(entry)
     data = {
         '@context': 'https://schema.org', '@type': 'ItemList', 'name': 'BISRARO katalogi',
         'itemListElement': items,
