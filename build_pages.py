@@ -18,6 +18,9 @@ sifatida ko'radi. index.html yoki products.json o'zgarganda shu skriptni
 qayta ishga tushiring:
 
     python3 build_pages.py
+
+Bu skript GitHub Actions orqali (.github/workflows/build-pages.yml) products.json yoki
+awards.json o'zgarganda avtomatik ishga tushadi — qo'lda ishga tushirish shart emas.
 """
 import html, json, re
 
@@ -121,3 +124,45 @@ for slug, (title, desc) in PAGES.items():
     page = page.replace('<!DOCTYPE html>', '<!DOCTYPE html>\n<!-- Avtomatik yaratilgan (build_pages.py) — index.html ni tahrirlang -->', 1)
     open(slug + '.html', 'w', encoding='utf-8').write(page)
     print('yaratildi:', slug + '.html')
+
+# ---------- sitemap.xml (rasmlar ro'yxati bilan) ----------
+# Panel ham sitemap.xml yozadi, lekin u faqat brauzerdagi ro'yxatdan quriladi.
+# Shu yerda ham products.json / awards.json dan qayta quramiz — statik HTML bilan
+# bir xil manbadan, shunda Google rasmlar ro'yxati va sahifalar doim mos bo'ladi.
+import datetime
+
+def _img(src, title, seen):
+    if not src or src.startswith('data:') or src in seen:
+        return ''
+    seen.add(src)
+    return ('    <image:image>\n      <image:loc>%s</image:loc>\n      <image:title>%s</image:title>\n'
+            '    </image:image>\n') % (esc(SITE + '/' + src.lstrip('/')), esc(title))
+
+
+def _page(path, prio, images, today):
+    return ('  <url>\n    <loc>%s/%s</loc>\n    <lastmod>%s</lastmod>\n    <changefreq>weekly</changefreq>\n'
+            '    <priority>%s</priority>\n%s  </url>\n') % (SITE, path, today, prio, images)
+
+
+def build_sitemap(products, awards):
+    seen, today = set(), datetime.date.today().isoformat()
+    home = ''.join(_img(s, t, seen) for s, t in [
+        ('img/share/bisraro-1200x1200.jpg', 'BISRARO — premium shokolad va qandolat'),
+        ('img/share/bisraro-1200x630.jpg', 'BISRARO — premium shokolad va qandolat'),
+        ('img/bisraro-logo.webp', 'BISRARO logotipi'),
+        ('img/kolleksiya/konfetlar-karta.webp', 'BISRARO konfetlari'),
+        ('img/kolleksiya/plitka-karta.webp', 'BISRARO shokolad plitkalari'),
+        ('img/kolleksiya/premium-karta.webp', "BISRARO premium sovg'a to'plamlari")])
+    cat = ''.join(_img(p.get('img'), '%s — BISRARO shokolad mahsuloti' % p.get('title', ''), seen) for p in products)
+    aw = ''.join(_img(a.get('img'), '%s — BISRARO' % a.get('title', ''), seen) for a in awards)
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+            '        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
+            + _page('', '1.0', home, today) + _page('katalog', '0.9', cat, today)
+            + _page('yutuqlarimiz', '0.7', aw, today) + _page('biz-haqimizda', '0.7', '', today)
+            + _page('kontakt', '0.8', '', today) + '</urlset>\n')
+
+
+awards = json.load(open('awards.json', encoding='utf-8'))
+open('sitemap.xml', 'w', encoding='utf-8').write(build_sitemap(products, awards))
+print('yangilandi: sitemap.xml')

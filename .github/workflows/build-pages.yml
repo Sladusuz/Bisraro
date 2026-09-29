@@ -1,0 +1,36 @@
+name: Sahifalarni yangilash
+
+# Admin paneldan "Saytga chiqarish" bosilganda products.json / awards.json yangilanadi.
+# Google o'qiydigan statik HTML (katalog.html, index.html ...), schema.org ma'lumotlari va
+# sitemap.xml shu yerda avtomatik qayta quriladi — shunda yangi rasm va mahsulotlar
+# Google'da ham chiqadi.
+on:
+  push:
+    branches: [main]
+    paths: [products.json, awards.json, build_pages.py]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: python3 build_pages.py
+      - name: O'zgarishlarni saqlash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "Sahifalar va sitemap avtomatik yangilandi"
+          git push
