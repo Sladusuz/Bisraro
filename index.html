@@ -864,6 +864,111 @@ body.is-locked .site-header{background:transparent;box-shadow:none;backdrop-filt
 .page.active{display:block}
 .deco-bg{position:absolute;pointer-events:none;opacity:.055;z-index:0}
 .section>.container{position:relative;z-index:1}
+
+/* ============================================================
+   YORUG' "FIL SUYAGI" MAVZUSI — tokenlarni qayta belgilaydi
+   (qolgan barcha qoidalar yuqoridagi tizimdan foydalanadi)
+   ============================================================ */
+:root{
+  --ink:#FAF4EA;--ink-2:#F6EDDF;--ink-3:#FFFFFF;
+  --cocoa:#6B3F2A;--cocoa-deep:#2E1A10;
+  --gold:#9A6A2B;--gold-light:#B27A33;--gold-deep:#8A5A22;
+  --cream:#F0E3CF;--milk:#FFFFFF;
+  --line-dark:rgba(110,70,30,.22);--line-light:rgba(46,26,16,.14);
+  --txt-dark-bg:rgba(46,26,16,.74);--txt-light-bg:rgba(46,26,16,.74);
+  --foil:linear-gradient(135deg,#8A5A22 0%,#B27A33 40%,#9A6A2B 64%,#6F4A1E 100%);
+  --ivory-text:#2E1A10;
+}
+body{background:var(--ink);color:var(--ivory-text)}
+::selection{background:var(--gold);color:#FFF8F0}
+.panel-dark{background:#FAF4EA;color:var(--ivory-text)}
+.panel-deep{background:linear-gradient(180deg,#F6EBDA 0%,#F1E3CD 100%);color:var(--ivory-text)}
+.panel-cream{background:#F0E3CF;color:var(--ivory-text)}
+.btn{color:#FFF8F0;box-shadow:0 12px 30px -12px rgba(138,90,34,.7)}
+.btn:hover{box-shadow:0 18px 40px -12px rgba(138,90,34,.8)}
+.btn--ghost{color:var(--gold-deep);box-shadow:inset 0 0 0 1px rgba(138,90,34,.5);background:transparent}
+.btn--ghost:hover{background:rgba(138,90,34,.08)}
+.panel-cream .btn--ghost{color:var(--cocoa-deep)}
+.kicker{color:var(--gold-deep)}.kicker::before{background:var(--gold-deep)}
+#loader{background:#FAF4EA}
+.cursor{border-color:rgba(138,90,34,.7)}.cursor span{color:#FFF8F0}
+
+/* Header */
+.site-header.solid{background:rgba(250,244,234,.86)}
+.brand small{color:rgba(46,26,16,.55)}
+.nav-links a{color:rgba(46,26,16,.78)}.nav-links a:hover{color:var(--gold-deep)}
+.lang button{color:rgba(46,26,16,.55)}.lang button:hover{color:var(--cocoa-deep)}
+.mobile-menu{background:linear-gradient(160deg,#FAF4EA,#F0E3CF)}
+.mobile-menu a{color:var(--cocoa-deep)}
+.burger span{background:var(--cocoa-deep)}
+
+/* Hero */
+.hero{background:#FAF4EA}
+.hero-bg .plate{background:radial-gradient(90% 80% at 80% 30%,rgba(214,170,110,.38),transparent 62%),radial-gradient(70% 60% at 8% 95%,rgba(234,205,170,.6),transparent 65%),linear-gradient(160deg,#FCF7EF,#F6EBDA)}
+.hero-bg .grain{opacity:.12}
+.hero-bg .vignette{background:none}
+.hero-tile,.hero-bean{display:none}
+.hero .hero-sub{color:rgba(46,26,16,.72)}
+.hero-meta span{color:rgba(46,26,16,.6)}
+.scroll-hint{color:rgba(46,26,16,.45)}
+.hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(28px,5vw,80px);align-items:center}
+.hero-inner>.hero-copy{min-width:0}
+.hero-arch{position:relative;justify-self:end;width:min(100%,440px);aspect-ratio:4/5.5;z-index:3}
+.hero-arch::before{content:"";position:absolute;inset:-22px;border-radius:999px 999px 36px 36px;border:1px solid var(--line-dark)}
+.hero-arch .fr{position:absolute;inset:0;border-radius:999px 999px 26px 26px;padding:11px;border:1px solid var(--gold);background:rgba(255,255,255,.4)}
+.hero-arch .fr div{width:100%;height:100%;border-radius:999px 999px 16px 16px;overflow:hidden}
+.hero-arch img{width:100%;height:100%;object-fit:cover}
+.hero-arch .chip2{position:absolute;right:-18px;top:80px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border:1px solid var(--line-dark);border-radius:16px;padding:12px 18px;font-size:.78rem;color:var(--txt-light-bg);box-shadow:0 18px 40px -14px rgba(60,35,15,.3)}
+.hero-arch .chip2 b{display:block;font-family:var(--serif);font-size:1.4rem;color:var(--gold-deep);font-weight:500;line-height:1.1}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-arch{justify-self:center;width:min(78vw,340px);margin-top:20px}.hero-arch .chip2{right:-6px}}
+
+/* Matn ranglari */
+.stat span{color:rgba(46,26,16,.65)}
+.glass{background:#fff;border:1px solid var(--line-light);box-shadow:0 14px 40px -22px rgba(60,35,15,.25)}
+.glass p{color:rgba(46,26,16,.7)}
+.glass:hover{border-color:rgba(138,90,34,.5)}
+.field label{color:rgba(46,26,16,.5)}.form-note{color:rgba(46,26,16,.55)}
+.page-hero{background:radial-gradient(70% 80% at 78% 30%,rgba(214,170,110,.3),transparent 60%),linear-gradient(150deg,#FCF7EF,#F3E7D3 60%,#EDDDC4)}
+.page-hero .lead{color:rgba(46,26,16,.72)}
+.contact-list a,.contact-list span{color:var(--ivory-text)}
+.value{background:linear-gradient(155deg,rgba(255,255,255,.9),rgba(255,255,255,.5))}
+.chip{color:rgba(46,26,16,.72)}.chip:hover{color:var(--cocoa-deep);border-color:var(--gold)}
+.chip.is-active,.chip[aria-pressed="true"]{color:#FFF8F0}
+
+/* Mahsulot kartalari */
+.product{background:#fff;box-shadow:0 14px 40px -24px rgba(60,35,15,.3)}
+.product .thumb{background:linear-gradient(150deg,#F6EBDA,#EBDAC0)}
+.product .tag{background:rgba(255,255,255,.88);color:var(--gold-deep);border-color:rgba(138,90,34,.4)}
+.product .pbody p{color:rgba(46,26,16,.65)}
+.modal .specs span:first-child{color:rgba(46,26,16,.55)}
+.modal .visual{background:linear-gradient(150deg,#F6EBDA,#EBDAC0)}
+.shot-card{background:#fff}.shot-card figcaption span{color:rgba(46,26,16,.65)}
+
+/* Rasm ustidagi yozuvlar — qorong'i gradient ustida och rangda qoladi */
+.card .body h3,.masonry figure .cap{color:#F6EBDC}
+.card .desc{color:rgba(246,235,220,.82)}
+
+/* Xarita yorlig'i */
+.map-pill,.map .pill{background:rgba(255,255,255,.9)}
+
+/* Footer — qorong'i qoladi (kontrast uchun) */
+.site-footer{--gold:#D4AF62;--gold-light:#F1D894;--cream:#F6EBDC;--line-dark:rgba(212,175,98,.24);--txt-dark-bg:rgba(246,235,220,.72);
+  --foil:linear-gradient(135deg,#C9A24B 0%,#E8CD82 38%,#C9A24B 64%,#8F6E2E 100%);background:#150E09;color:#F6EBDC}
+.site-footer .brand small{color:rgba(246,235,220,.5)}
+.site-footer .brand,.site-footer h4{color:#F6EBDC}
+.site-footer .btn{color:#20170E}
+
+/* Xarita ramkasi — yorug' */
+.map-frame{background:linear-gradient(155deg,#FFFFFF 0%,#F6EBDA 100%);box-shadow:0 40px 80px -36px rgba(60,35,15,.35),0 0 0 1px rgba(138,90,34,.35) inset}
+.map-frame::before{border-color:rgba(138,90,34,.25)}
+.map-frame .ornament svg path{stroke:var(--gold)}.map-frame .ornament svg circle{fill:var(--gold)}
+.map-tag{color:#FFF8F0}.map-tag svg{fill:#FFF8F0}
+.map{background:#EFE2CC}
+.map::after{background:radial-gradient(120% 90% at 50% 38%,transparent 55%,rgba(138,90,34,.18) 100%)}
+.map .marker svg{filter:drop-shadow(0 8px 14px rgba(60,35,15,.35))}
+.map .marker b{background:rgba(255,255,255,.92);color:var(--gold-deep)}
+.map iframe{filter:saturate(.85) sepia(.12)}
+.map-caption b{color:var(--cocoa-deep)}.map-caption span{color:var(--txt-light-bg)}
 </style>
 </head>
 <body>
@@ -1095,6 +1200,7 @@ body.is-locked .site-header{background:transparent;box-shadow:none;backdrop-filt
     <svg class="hero-bean" data-parallax="0.22" viewBox="0 0 200 200" aria-hidden="true"><use href="#deco-bean"/></svg>
 
     <div class="container hero-inner">
+<div class="hero-copy">
       <p class="kicker" data-reveal>HEALTHY FOOD PRODUCTION MChJ • 2016-yildan buyon</p>
       <h1 class="split" data-reveal="none">Shokolad san'ati. O'zbekistondan dunyoga.</h1>
       <p class="hero-sub" data-reveal style="--d:220ms">
@@ -1112,6 +1218,8 @@ Biz zamonaviy ishlab chiqarish texnologiyalari va sifatli xomashyo asosida shoko
         <div><b>Toshkent</b><span>o'z ishlab chiqarishimiz</span></div>
       </div>
     </div>
+<div class="hero-arch" data-reveal="none"><div class="fr"><div><img src="img/kolleksiya/premium-karta.webp" alt="BISRARO premium shokolad" width="800" height="1200"></div></div><div class="chip2"><b>Oltin medal</b>ProdExpo 2023</div></div>
+</div>
 
     <div class="scroll-hint" aria-hidden="true"><i></i>PASTGA</div>
   </section>
